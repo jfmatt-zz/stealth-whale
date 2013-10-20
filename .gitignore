@@ -1,4 +1,4 @@
-### Emacs clutter
+### Emacs
 *~
 \#*\#
 /.emacs.desktop
@@ -12,3 +12,9 @@ tramp
 node_modules
 vendor
 dist
+
+### For any OSX users...
+.DS_STORE
+
+### Other
+.grunt

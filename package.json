@@ -9,7 +9,6 @@
 		"Andrew Davis <theandrewdavis@gmail.com> (http://github.com/theandrewdavis)",
 		"Jon Dell Isola <jondell518@gmail.com> (http://github.com/jondell518)",
 		"James Matthews <jfmatt8067@gmail.com> (http://github.com/jfmatt)",
-		"Taro Omiya <taro.omiya@omiyagames.com> (http://taroomiya.com)",
 		"Greg Weaver <dreamweaverDD3@gmail.com> (http://scorevgm.com)"
 	],
 
@@ -24,6 +23,7 @@
 		"grunt-contrib-copy": "latest",
 		"grunt-requirejs": "latest",
 		"grunt-contrib-watch": "latest",
+		"grunt-gh-pages": "latest",
 			
 		"grunt-mocha": "latest"
 	}
