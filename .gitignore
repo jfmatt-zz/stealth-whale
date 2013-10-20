@@ -1,0 +1,14 @@
+### Emacs clutter
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+.elc
+auto-save-list
+tramp
+.\#*
+
+### Node artifacts
+node_modules
+vendor
+dist
