@@ -5,7 +5,12 @@ module.exports = function(grunt) {
 		copy: {
 			build: {
 				files: [
-					{ expand: true, cwd: 'src', src: ['**'], dest: 'dist/' }
+					{
+						expand: true,
+						cwd: 'src',
+						src: ['**'],
+						dest: 'dist/'
+					}
 				]
 			}
 		},
@@ -14,14 +19,14 @@ module.exports = function(grunt) {
 				banner: '/*! <%= pkg.name %> <%= grunt.template.today("dd-mm-yyyy") %> */\n'
 			}
 		},
-		mocha: {
-			files: ['test/**/*.html']
-		},
 		jshint: {
 			files: ['Gruntfile.js', 'src/**/*.js', 'test/**/*.js'],
 			options: {
 				// options here to override JSHint defaults
 			}
+		},
+		mocha: {
+			files: ['test/**/*.html']
 		},
 		'gh-pages': {
 			options: {
@@ -43,7 +48,7 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-mocha');
 	grunt.loadNpmTasks('grunt-gh-pages');
 
-	grunt.registerTask('test', ['jshint'/*, 'mocha'*/]);
+	grunt.registerTask('test', ['jshint', 'mocha']);
 	grunt.registerTask('build', ['copy:build', /*'requirejs', */'uglify']);
 	grunt.registerTask('deploy', ['test', 'build', 'gh-pages']);
 

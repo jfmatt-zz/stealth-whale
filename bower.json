@@ -5,6 +5,8 @@
 	"dependencies": {
 		"modernizr": "latest",
 
+		"mocha": "latest",
+		"requirejs": "latest",
 		"chai": "latest"
 	}
 }
