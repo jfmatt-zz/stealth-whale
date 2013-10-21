@@ -1,4 +1,4 @@
-/<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 	<head>
 		<meta http-equiv="Content-type" content="text/html; charset=utf-8">
@@ -27,11 +27,12 @@
 		<!-- run mocha -->
 		<script type="text/javascript" charset="utf-8">
 			require([
-			  //list all test specs here
+				//list all test specs here
+				'./spec/test.js'
 			],
 			function () {
 				mocha.run();
 			});
-    </script>
+		</script>
 	</body>
 </html>
