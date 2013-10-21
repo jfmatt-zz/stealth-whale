@@ -24,7 +24,7 @@
 		"grunt-requirejs": "latest",
 		"grunt-contrib-watch": "latest",
 		"grunt-gh-pages": "latest",
-			
+
 		"grunt-mocha": "latest"
 	}
 }
