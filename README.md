@@ -34,4 +34,4 @@ bower install
 
 Compilation tasks are triggered by Grunt. To test and build, just type `grunt` from the project root.
 
-Unit tests get dropped in `test/specs`; the test harness will pick them all up.
+To add tests, drop them in `test/specs` and add the path to the list in `test/index.html`.
