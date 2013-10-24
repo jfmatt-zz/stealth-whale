@@ -14,7 +14,6 @@
 	"devDependencies": {
 		"grunt": "~0.4",
 		"grunt-contrib-jshint": "latest",
-		"grunt-contrib-uglify": "latest",
 		"grunt-requirejs": "latest",
 		"grunt-contrib-watch": "latest",
 		"grunt-gh-pages": "latest",

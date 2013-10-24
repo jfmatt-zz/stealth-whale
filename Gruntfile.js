@@ -43,7 +43,7 @@ module.exports = function(grunt) {
 					//Follow the tree
           findNestedDependencies: true,
 
-					optimize: "none",
+					optimize: "uglify2",
 
           // Wrap everything in an IIFE.
           wrap: true
@@ -67,7 +67,6 @@ module.exports = function(grunt) {
 		}
 	});
 
-	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-contrib-jshint');
 	grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt.loadNpmTasks('grunt-requirejs');
@@ -76,7 +75,7 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-processhtml');
 	
 	grunt.registerTask('test', ['jshint', 'mocha']);
-	grunt.registerTask('build', ['requirejs', 'processhtml', 'uglify']);
+	grunt.registerTask('build', ['requirejs', 'processhtml']);
 	grunt.registerTask('deploy', ['test', 'build', 'gh-pages']);
 
 	grunt.registerTask('default', ['test', 'build']);
