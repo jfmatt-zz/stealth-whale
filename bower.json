@@ -7,6 +7,11 @@
 
 		"mocha": "latest",
 		"requirejs": "latest",
-		"chai": "latest"
+		"chai": "latest",
+
+		"jquery": "latest",
+		"lodash": "latest",
+		"pixi": "git://github.com/GoodBoyDigital/pixi.js",
+		"phaser": "git://github.com/photonstorm/phaser"
 	}
 }

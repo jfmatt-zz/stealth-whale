@@ -20,9 +20,9 @@ module.exports = function(grunt) {
 			}
 		},
 		jshint: {
-			files: ['Gruntfile.js', 'src/**/*.js', 'test/**/*.js'],
+			files: ['Gruntfile.js', 'src/**/*.js', '!src/js/vendor/**', 'test/**/*.js'],
 			options: {
-				// options here to override JSHint defaults
+				asi: true
 			}
 		},
 		mocha: {
