@@ -2,18 +2,6 @@ module.exports = function(grunt) {
 
 	grunt.initConfig({
 		pkg: grunt.file.readJSON('package.json'),
-		copy: {
-			build: {
-				files: [
-					{
-						expand: true,
-						cwd: 'src',
-						src: ['**', '!**/*~', '!**/#*#'],
-						dest: 'dist/'
-					}
-				]
-			}
-		},
 
 		uglify: {
 			options: {
@@ -43,8 +31,8 @@ module.exports = function(grunt) {
 			release: {
 				options: {
 
-          baseUrl: "dist/js",
-          mainConfigFile: "dist/js/main.js",
+          baseUrl: "src/js",
+          mainConfigFile: "src/js/main.js",
 
 					//Compile Almond with main required
 					name: "almond",
@@ -79,7 +67,6 @@ module.exports = function(grunt) {
 		}
 	});
 
-	grunt.loadNpmTasks('grunt-contrib-copy');
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-contrib-jshint');
 	grunt.loadNpmTasks('grunt-contrib-watch');
@@ -89,7 +76,7 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-processhtml');
 	
 	grunt.registerTask('test', ['jshint', 'mocha']);
-	grunt.registerTask('build', ['copy:build', 'requirejs', 'processhtml', 'uglify']);
+	grunt.registerTask('build', ['requirejs', 'processhtml', 'uglify']);
 	grunt.registerTask('deploy', ['test', 'build', 'gh-pages']);
 
 	grunt.registerTask('default', ['test', 'build']);
