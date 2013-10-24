@@ -4,7 +4,7 @@ define(
 		return {
 
 			colors: {
-				SKY: 0xFF0000
+				SKY: 0xFFFFFF
 			}
 
 		}

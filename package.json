@@ -3,7 +3,6 @@
 	"description": "German Whale of Mystery, for Bmore Indie Game Jam 2013",
 	"version": "0.0.1",
 	"repository": "http://github.com/jfmatt/stealth-whale.git",
-
 	"contributors": [
 		"Stephen Baur <stephenmbaur@gmail.com>",
 		"Andrew Davis <theandrewdavis@gmail.com> (http://github.com/theandrewdavis)",
@@ -11,20 +10,16 @@
 		"James Matthews <jfmatt8067@gmail.com> (http://github.com/jfmatt)",
 		"Greg Weaver <dreamweaverDD3@gmail.com> (http://scorevgm.com)"
 	],
-
-	"dependencies": {
-	},
-
+	"dependencies": {},
 	"devDependencies": {
 		"grunt": "~0.4",
-
 		"grunt-contrib-jshint": "latest",
 		"grunt-contrib-uglify": "latest",
 		"grunt-contrib-copy": "latest",
 		"grunt-requirejs": "latest",
 		"grunt-contrib-watch": "latest",
 		"grunt-gh-pages": "latest",
-
-		"grunt-mocha": "latest"
+		"grunt-mocha": "latest",
+		"grunt-processhtml": "~0.2.3"
 	}
 }
