@@ -6,9 +6,10 @@ define(
 
 		"config",
 
+		"./core/clock",
 		"./core/vision"
 	],
-	function (_, $, P, config, Vision) {
+	function (_, $, P, config, Clock, Vision) {
 		var requestFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame
 
 		function App (selector) {
@@ -16,6 +17,9 @@ define(
 			this.stage = new P.Stage(config.colors.SKY)
 			this.renderer = P.autoDetectRenderer($el.width(), $el.height())
 
+			this.clock = new Clock(config.fps)
+			this._ticks = 0
+			
 			this.vision = new Vision()
 			this.vision.x = 50
 			this.vision.y = 100
@@ -38,11 +42,23 @@ define(
 			},
 
 			frame: function () {
-				console.log("frame!")
+				if (this.clock.tick())
+					this.update()
 
+				this.render(this.clock.interpolate())
 				
 				this.renderer.render(this.stage)
-				requestFrame(_.bind(this.frame, this))
+
+				if (this._ticks < 100)
+					requestFrame(_.bind(this.frame, this))
+			},
+
+			update: function () {
+				console.log("update #" + this._ticks++ + " at " + this.clock.elapsed)
+			},
+
+			render: function (i) {
+				console.log("rendering with interpolation: " + i)
 			}
 
 		})
