@@ -10,7 +10,7 @@ var pFloor = Y-220;
 var GAMEOBJECTS = [];
 // create an new instance of a pixi stage
 var backGround = new PIXI.Stage(0xffffff);
-var floor = new PIXI.Stage(0xffffff);
+
 
 	// create a renderer instance
 	var renderer = PIXI.autoDetectRenderer(X-20, Y-22);
@@ -18,99 +18,56 @@ var floor = new PIXI.Stage(0xffffff);
 	// add the renderer view element to the DOM
 	document.body.appendChild(renderer.view);
 
+	function init(){
 
-
-
-	//Floor Objects, have an x, y, width, and height, from there the collision box can be made. Also have a type designating it as what type of object
-	//Also has a solid value, true is solid, false is not. If an object is solid nothing can move through it.
-	var FLOOROBJ = function(){
-		FLOOROBJ = {};
-		FLOOROBJ.x;
-		FLOOROBJ.y;
-		FLOOROBJ.width;
-		FLOOROBJ.height;
-
-		FLOOROBJ.type;
-		FLOOROBJ.solid;
-
-		return FLOOROBJ;
-	};
-
-	
-
-	//Ladder Objects, follow the same principle as above, should probably just be one object but for now this will make it easier to see.
-	var LADDEROBJ = function(){
-		LADDEROBJ = {};
-		LADDEROBJ.x;
-		LADDEROBJ.y;
-		LADDEROBJ.width;
-		LADDEROBJ.height;
-
-		LADDEROBJ.type;
-		LADDEROBJ.solid;
-
-		return LADDEROBJ;
-	};
-
-	var PLAYEROBJ = function(){
-		PLAYEROBJ = {};
-		PLAYEROBJ.x;
-		PLAYEROBJ.y;
-		PLAYEROBJ.width;
-		PLAYEROBJ.height;
-
-		PLAYEROBJ.type;
-		LADDEROBJ.solid;
-
-
-		return PLAYEROBJ;
-	};
-
-
-	var FLOOR = new FLOOROBJ();
-	FLOOR.x = 0;
-	FLOOR.y = Y-200;
-	FLOOR.width = X;
-	FLOOR.height = 200;
-	FLOOR.type = "FLOOR";
-	FLOOR.solid = true;
-	
+	//Initializes all of the objects on the map except for the player and NPCs
+	//Since these are all static elements, they are drawn once.
+	//Once there are maps bigger than one screen the drawing aspect will need to be reworked.
+	var FLOOR = GAMEOBJ(0,	Y-200, X, 200, "FLOOR", true, 0x000000);
 	GAMEOBJECTS.push(FLOOR);
 
-
-	var LADDER = new LADDEROBJ();
-	LADDER.x = 300;
-	LADDER.height = 200;
-	LADDER.y = (FLOOR.y - LADDER.height);
-	console.log(LADDER.y);
-	LADDER.width = 100;
-	LADDER.type = "LADDER";
-	LADDER.solid = false;
-
+	var ladderY = FLOOR.y - 200;
+	var LADDER = GAMEOBJ(300,ladderY,50,200, "LADDER", false, 0xf5f5dc);
+	LADDER.closestFloor = FLOOR;
 	GAMEOBJECTS.push(LADDER);
 
+	var FLOOR2 = GAMEOBJ(0,ladderY, 300, 10, "FLOOR", true, 0x000000);
+	FLOOR2.closestFloor = FLOOR2;
+	GAMEOBJECTS.push(FLOOR2);
 
-	var ladderDraw = new PIXI.Graphics();
-	backGround.addChild(ladderDraw);
-	ladderDraw.beginFill(0xf5f5dc);
-	ladderDraw.drawRect(LADDER.x,LADDER.y,LADDER.width,LADDER.height);
+	var FLOOR3 = GAMEOBJ(FLOOR2.width + LADDER.width, ladderY, X-FLOOR2.width, 10, "FLOOR", true, 0x000000);
+	FLOOR3.closestFloor = FLOOR3;
+	GAMEOBJECTS.push(FLOOR3);
+
+	var LADDER2 = GAMEOBJ(500+ FLOOR2.width + LADDER.width, ladderY - 200, 50, 200, "LADDER", false, 0xf5f5dc);
+	LADDER2.closestFloor = FLOOR3;
+	GAMEOBJECTS.push(LADDER2);
+
+	var FLOOR4 = GAMEOBJ(0,LADDER2.y, LADDER2.x, 10, "FLOOR", true, 0x000000);
+	FLOOR4.closestFloor = FLOOR4;
+	GAMEOBJECTS.push(FLOOR4);
+
+	var FLOOR5 = GAMEOBJ(LADDER2.x + LADDER2.width, LADDER2.y, X-FLOOR4.width, 10, "FLOOR", true, 0x000000);
+	FLOOR5.closestFloor = FLOOR5;
+	GAMEOBJECTS.push(FLOOR5);
+
+	//loop that draws the objects on the screen, since these objects don't move, it is currently only run once
+	for(var i = 0; i < GAMEOBJECTS.length; i++)
+	{
+		var draw = new PIXI.Graphics();
+		backGround.addChild(draw);
+		draw.beginFill(GAMEOBJECTS[i].color);
+		draw.drawRect(GAMEOBJECTS[i].x,GAMEOBJECTS[i].y, GAMEOBJECTS[i].width, GAMEOBJECTS[i].height);
+	}
+}
+init();
 
 
-
-
-
-	var thing = new PIXI.Graphics();
-	backGround.addChild(thing);
-	thing.beginFill(0x000000);
-	thing.drawRect(FLOOR.x,FLOOR.y,FLOOR.width,FLOOR.height);
-
-
-
-	
-
+	//creates a new player object
 	var PLAYER = new PLAYEROBJ();
 	PLAYER.x = 200;
 	PLAYER.y = pFloor;
+	PLAYER.closestFloor = GAMEOBJECTS[0];
 
 
   	// create a texture from an image path
@@ -118,14 +75,10 @@ var floor = new PIXI.Stage(0xffffff);
 	// create a new Sprite using the texture
 	var sprite = new PIXI.Sprite(texture);   
 	
-	// center the sprites anchor point
+	
 	sprite.anchor.x = 0.5;
 	sprite.anchor.y = 0.65;
-
-	// move the sprite t the center of the screen
-	console.log("X: " + PLAYER.x + " Y: " + PLAYER.y);
-	sprite.position.x = PLAYER.x;
-	sprite.position.y = PLAYER.y;
+	
 	
 	backGround.addChild(sprite);
 
@@ -142,7 +95,7 @@ var floor = new PIXI.Stage(0xffffff);
 			if(!onLadder)
 			{
 				LEFT();
-				moveLeft = false;
+				
 				switch(frame)
 				{
 					case 0:
@@ -166,12 +119,14 @@ var floor = new PIXI.Stage(0xffffff);
 			//texture = PIXI.Texture.fromImage("assets/walkingL1.png");
 			sprite.setTexture(texture);
 		}
+		
+		moveLeft = false;
 	}
 	else if(moveRight)
 	{
 		if(!onLadder){
 			RIGHT();
-			moveRight = false;
+			
 			switch(frame)
 			{
 				case 0:
@@ -195,6 +150,8 @@ var floor = new PIXI.Stage(0xffffff);
 			//texture = PIXI.Texture.fromImage("assets/walkingL1.png");
 			sprite.setTexture(texture);
 		}
+		
+		moveRight = false;
 
 	}
 	else if(moveUp)
@@ -208,8 +165,11 @@ var floor = new PIXI.Stage(0xffffff);
 		moveDown = false;
 	}
 
-	setTimeout(function(){requestAnimFrame( animate );},75);
 
+	sprite.position.x = PLAYER.x;
+	sprite.position.y = PLAYER.y;
+	// setTimeout(function(){requestAnimFrame( animate );},75);
+	requestAnimFrame(animate);
 
 
 
@@ -220,68 +180,92 @@ var floor = new PIXI.Stage(0xffffff);
 
 
 	var RIGHT = function(){
+		//moves the player right, so that it never goes off screen.
+		//Still in progress for solid obstacles
 		if(PLAYER.x + 5 <= X-20)
 		{
 			PLAYER.x += 5;
-			sprite.position.x = PLAYER.x;
+			
 		}
 		
 	}
 	var LEFT = function(){
+		//moves the player left, so that it never goes off screen.
+		//Still in progress for solid obstacles
 		if(PLAYER.x -5 >=0)
 		{	
 			PLAYER.x -= 5;
-			sprite.position.x = PLAYER.x;
+			
 		}
 
 	}
 	var UP = function(){
-		
-		if(PLAYER.x >= LADDER.x && PLAYER.x <= LADDER.x+LADDER.width)
+		//loops through the GAMEOBJECTS array and checks to see if it is type ladder, if it is it performs the check to see if you are close enough
+		for(var i = 0; i < GAMEOBJECTS.length; i++)
 		{
-			if(PLAYER.y >= LADDER.y-5)
+			if(GAMEOBJECTS[i].type === "LADDER")
 			{
-				if(PLAYER.y - 5 >= 0)
+				if(PLAYER.x >= GAMEOBJECTS[i].x && PLAYER.x <= GAMEOBJECTS[i].x+GAMEOBJECTS[i].width)
 				{
-					onLadder = true;
-					PLAYER.y -= 5;
-					sprite.position.y = PLAYER.y;
+					if(PLAYER.y >= GAMEOBJECTS[i].y-10 && GAMEOBJECTS[i].y - 5 >= 0)
+					{
+						//sets that you are on the ladder to true, so that you cant walk off the side of the ladder
+						//then adjusts the players y coordinate 
+						onLadder = true;
+						PLAYER.y -= 5;
+						
+						break;
+					}	
+					else
+					{
+						//this is when you are unable to move any higher, aka you have reached the top of the ladder
+						//this links the player to the closest floor so the player is "stuck" to it
+						//also sets onLadder to false so you can move left and right again
+						PLAYER.closestFloor = GAMEOBJECTS[i].closestFloor;
+						onLadder = false;
+					}		
 				}
-				else
-				{
-					onLadder = false;
-				}
-				
-			}			
+			}
+			
+			
 		}
 		
-		
-
 	}
+
 	var DOWN = function(){
-		//console.log(sprite.position.y +5);
-		//checks to make sure the sprites projected movement is not below the floor, if it is then it does nothing. 
-		if(PLAYER.x >= LADDER.x && PLAYER.x <= LADDER.x + LADDER.width)
+		//loops through the GAMEOBJECTS array and checks to see if it is type ladder, if it is it performs the check to see if you are close enough
+		for(var i =0; i<GAMEOBJECTS.length; i++)
 		{
-			console.log(PLAYER.y + " " + pFloor);
-			if(PLAYER.y + 5 <= pFloor)
+			if(GAMEOBJECTS[i].type === "LADDER")
 			{
-				onLadder = true;
-				PLAYER.y += 5;
-				sprite.position.y = PLAYER.y;
-			}
-			else
-			{
-				onLadder = false;
-			}
-			
-			
-		}
-		
+				if(PLAYER.x >= GAMEOBJECTS[i].x && PLAYER.x <= GAMEOBJECTS[i].x + GAMEOBJECTS[i].width)
+				{
 
+					if(PLAYER.y + 5 <= PLAYER.closestFloor.y-20)
+					{
+						//sets that you are on the ladder to true, so that you cant walk off the side of the ladder
+						//then adjusts the players y coordinate 
+						onLadder = true;
+						PLAYER.y += 5;
+						
+					}
+					else
+					{
+						//this is when you are unable to move any higher, aka you have reached the top of the ladder
+						//this links the player to the closest floor so the player is "stuck" to it
+						//also sets onLadder to false so you can move left and right again
+						PLAYER.closestFloor = GAMEOBJECTS[i].closestFloor;
+						onLadder = false;
+					}
+
+				}
+			}
+		}
 		
 		
 	}
+
+
 	var moveLeft = false;
 	var moveRight = false;
 	var moveUp = false;
@@ -299,4 +283,4 @@ var floor = new PIXI.Stage(0xffffff);
 	keypress.combo("up", function(){
 		moveUp = true;
 	});
-	
+
