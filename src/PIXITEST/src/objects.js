@@ -1,33 +1,56 @@
+	
+
+
+
 	//Game object for non player/NPC objects. Basically the background, ladders, etc. Also any objects that can be hidden behind. 
-	var GAMEOBJ = function(x,y,width, height, type, solid, color)
+	var GAMEOBJ = function(x,y,width, height,solid, color)
 	{
-		var gameObj = {};
-		gameObj.x = x;
-		gameObj.y = y;
-		gameObj.width = width;
-		gameObj.height = height;
+		
 
-		gameObj.type = type;
-		gameObj.solid = solid;
-		gameObj.color = color;
 
-		gameObj.closestFloor;
+		this.x = x;
+		this.y = y;
+		this.width = width;
+		this.height = height;
 
-		return gameObj;
+		this.solid = solid;
+		this.color = color;
+
+		
+
+		
 	};
 
 	//generic player object
 	var PLAYEROBJ = function(){
-		PLAYEROBJ = {};
-		PLAYEROBJ.x;
-		PLAYEROBJ.y;
-		PLAYEROBJ.width;
-		PLAYEROBJ.height;
-
-		PLAYEROBJ.type;
-		PLAYEROBJ.solid;
-		PLAYEROBJ.closestFloor;
-
-
-		return PLAYEROBJ;
+		GAMEOBJ.apply(this, arguments);
 	};
+
+	PLAYEROBJ.prototype = new GAMEOBJ();
+
+	PLAYEROBJ.prototype.collide = function () {
+
+	};
+
+
+	var LADDEROBJ = function(){
+		GAMEOBJ.apply(this, arguments);
+	}
+
+	LADDEROBJ.prototype = new GAMEOBJ();
+
+	LADDEROBJ.prototype.collide = function(PLAYER){
+
+		if(PLAYER.x >= this.x && PLAYER.x <= this.x+this.width)
+		{
+			return true;
+		};
+
+	};
+
+
+	var player = new PLAYEROBJ(20,20, 20, 20, "player", true, 0x000000);
+	var ladder = new LADDEROBJ(1, 1, 1, 1, "ladder", false, 0);
+
+	player.collide();
+	ladder.collide();

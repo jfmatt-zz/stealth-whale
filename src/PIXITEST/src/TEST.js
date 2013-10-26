@@ -203,11 +203,9 @@ init();
 		//loops through the GAMEOBJECTS array and checks to see if it is type ladder, if it is it performs the check to see if you are close enough
 		for(var i = 0; i < GAMEOBJECTS.length; i++)
 		{
-			if(GAMEOBJECTS[i].type === "LADDER")
+			if(GAMEOBJECTS[i].collide(PLAYER) === true)
 			{
-				if(PLAYER.x >= GAMEOBJECTS[i].x && PLAYER.x <= GAMEOBJECTS[i].x+GAMEOBJECTS[i].width)
-				{
-					if(PLAYER.y >= GAMEOBJECTS[i].y-10 && GAMEOBJECTS[i].y - 5 >= 0)
+				if(PLAYER.y >= GAMEOBJECTS[i].y-10 && GAMEOBJECTS[i].y - 5 >= 0)
 					{
 						//sets that you are on the ladder to true, so that you cant walk off the side of the ladder
 						//then adjusts the players y coordinate 
@@ -223,8 +221,10 @@ init();
 						//also sets onLadder to false so you can move left and right again
 						PLAYER.closestFloor = GAMEOBJECTS[i].closestFloor;
 						onLadder = false;
-					}		
-				}
+					}	
+			}
+				
+						
 			}
 			
 			
