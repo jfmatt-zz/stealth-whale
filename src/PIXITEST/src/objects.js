@@ -15,11 +15,21 @@
 
 		this.solid = solid;
 		this.color = color;
+		//this.closestFloor = closestFloor;
 
 		
 
 		
 	};
+	GAMEOBJ.prototype.getX = function()
+	{
+		return this.x;
+	};
+
+	GAMEOBJ.prototype.getY = function()
+	{
+		return this.y;
+	}
 
 	//generic player object
 	var PLAYEROBJ = function(){
@@ -28,7 +38,7 @@
 
 	PLAYEROBJ.prototype = new GAMEOBJ();
 
-	PLAYEROBJ.prototype.collide = function () {
+	PLAYEROBJ.prototype.collide = function (PLAYER) {
 
 	};
 
@@ -49,8 +59,14 @@
 	};
 
 
-	var player = new PLAYEROBJ(20,20, 20, 20, "player", true, 0x000000);
-	var ladder = new LADDEROBJ(1, 1, 1, 1, "ladder", false, 0);
+	var FLOOROBJ = function()
+	{
+		GAMEOBJ.apply(this, arguments);
+	}
 
-	player.collide();
-	ladder.collide();
+	FLOOROBJ.prototype = new GAMEOBJ();
+
+	FLOOROBJ.prototype.collide = function(PLAYER)
+	{
+		return false;
+	}

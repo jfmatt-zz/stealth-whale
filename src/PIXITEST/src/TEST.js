@@ -23,31 +23,32 @@ var backGround = new PIXI.Stage(0xffffff);
 	//Initializes all of the objects on the map except for the player and NPCs
 	//Since these are all static elements, they are drawn once.
 	//Once there are maps bigger than one screen the drawing aspect will need to be reworked.
-	var FLOOR = GAMEOBJ(0,	Y-200, X, 200, "FLOOR", true, 0x000000);
+	var FLOOR = new FLOOROBJ(0,	Y-200, X, 200, true, 0x000000, FLOOR);
+	FLOOR.closestFloor = FLOOR;
 	GAMEOBJECTS.push(FLOOR);
 
 	var ladderY = FLOOR.y - 200;
-	var LADDER = GAMEOBJ(300,ladderY,50,200, "LADDER", false, 0xf5f5dc);
+	var LADDER = new LADDEROBJ(300,ladderY,50,200,  false, 0xfff000,FLOOR);
 	LADDER.closestFloor = FLOOR;
 	GAMEOBJECTS.push(LADDER);
 
-	var FLOOR2 = GAMEOBJ(0,ladderY, 300, 10, "FLOOR", true, 0x000000);
+	var FLOOR2 = new FLOOROBJ(0,ladderY, 300, 10,  true, 0x000000, FLOOR2);
 	FLOOR2.closestFloor = FLOOR2;
 	GAMEOBJECTS.push(FLOOR2);
 
-	var FLOOR3 = GAMEOBJ(FLOOR2.width + LADDER.width, ladderY, X-FLOOR2.width, 10, "FLOOR", true, 0x000000);
+	var FLOOR3 = new FLOOROBJ(FLOOR2.width + LADDER.width, ladderY, X-FLOOR2.width, 10,  true, 0x000000, FLOOR3);
 	FLOOR3.closestFloor = FLOOR3;
 	GAMEOBJECTS.push(FLOOR3);
 
-	var LADDER2 = GAMEOBJ(500+ FLOOR2.width + LADDER.width, ladderY - 200, 50, 200, "LADDER", false, 0xf5f5dc);
+	var LADDER2 = new LADDEROBJ(500+ FLOOR2.width + LADDER.width, ladderY - 200, 50, 200,  false, 0xfff000, FLOOR3);
 	LADDER2.closestFloor = FLOOR3;
 	GAMEOBJECTS.push(LADDER2);
 
-	var FLOOR4 = GAMEOBJ(0,LADDER2.y, LADDER2.x, 10, "FLOOR", true, 0x000000);
+	var FLOOR4 = new FLOOROBJ(0,LADDER2.y, LADDER2.x, 10,  true, 0x000000, FLOOR4);
 	FLOOR4.closestFloor = FLOOR4;
 	GAMEOBJECTS.push(FLOOR4);
 
-	var FLOOR5 = GAMEOBJ(LADDER2.x + LADDER2.width, LADDER2.y, X-FLOOR4.width, 10, "FLOOR", true, 0x000000);
+	var FLOOR5 = new FLOOROBJ(LADDER2.x + LADDER2.width, LADDER2.y, X-FLOOR4.width, 10,  true, 0x000000, FLOOR5);
 	FLOOR5.closestFloor = FLOOR5;
 	GAMEOBJECTS.push(FLOOR5);
 
@@ -205,7 +206,7 @@ init();
 		{
 			if(GAMEOBJECTS[i].collide(PLAYER) === true)
 			{
-				if(PLAYER.y >= GAMEOBJECTS[i].y-10 && GAMEOBJECTS[i].y - 5 >= 0)
+				if(PLAYER.y >= GAMEOBJECTS[i].y-15 && GAMEOBJECTS[i].y - 5 >= 0)
 					{
 						//sets that you are on the ladder to true, so that you cant walk off the side of the ladder
 						//then adjusts the players y coordinate 
@@ -230,16 +231,15 @@ init();
 			
 		}
 		
-	}
+	
 
 	var DOWN = function(){
 		//loops through the GAMEOBJECTS array and checks to see if it is type ladder, if it is it performs the check to see if you are close enough
 		for(var i =0; i<GAMEOBJECTS.length; i++)
 		{
-			if(GAMEOBJECTS[i].type === "LADDER")
+			if(GAMEOBJECTS[i].collide(PLAYER) === true)
 			{
-				if(PLAYER.x >= GAMEOBJECTS[i].x && PLAYER.x <= GAMEOBJECTS[i].x + GAMEOBJECTS[i].width)
-				{
+				
 
 					if(PLAYER.y + 5 <= PLAYER.closestFloor.y-20)
 					{
@@ -263,7 +263,7 @@ init();
 		}
 		
 		
-	}
+	
 
 
 	var moveLeft = false;
