@@ -29,7 +29,7 @@ var backGround = new PIXI.Stage(0xffffff);
 
 	var ladderY = FLOOR.y - 200;
 	var LADDER = new LADDEROBJ(300,ladderY,50,200,  false, 0xfff000,FLOOR);
-	LADDER.closestFloor = FLOOR;
+	
 	GAMEOBJECTS.push(LADDER);
 
 	var FLOOR2 = new FLOOROBJ(0,ladderY, 300, 10,  true, 0x000000, FLOOR2);
@@ -41,7 +41,7 @@ var backGround = new PIXI.Stage(0xffffff);
 	GAMEOBJECTS.push(FLOOR3);
 
 	var LADDER2 = new LADDEROBJ(500+ FLOOR2.width + LADDER.width, ladderY - 200, 50, 200,  false, 0xfff000, FLOOR3);
-	LADDER2.closestFloor = FLOOR3;
+	
 	GAMEOBJECTS.push(LADDER2);
 
 	var FLOOR4 = new FLOOROBJ(0,LADDER2.y, LADDER2.x, 10,  true, 0x000000, FLOOR4);
@@ -51,6 +51,11 @@ var backGround = new PIXI.Stage(0xffffff);
 	var FLOOR5 = new FLOOROBJ(LADDER2.x + LADDER2.width, LADDER2.y, X-FLOOR4.width, 10,  true, 0x000000, FLOOR5);
 	FLOOR5.closestFloor = FLOOR5;
 	GAMEOBJECTS.push(FLOOR5);
+
+	LADDER.lowerFloor = FLOOR;
+	LADDER.upperFloor = FLOOR2;
+	LADDER2.lowerFloor = FLOOR3;
+	LADDER2.upperFloor = FLOOR4;
 
 	//loop that draws the objects on the screen, since these objects don't move, it is currently only run once
 	for(var i = 0; i < GAMEOBJECTS.length; i++)
@@ -220,7 +225,7 @@ init();
 						//this is when you are unable to move any higher, aka you have reached the top of the ladder
 						//this links the player to the closest floor so the player is "stuck" to it
 						//also sets onLadder to false so you can move left and right again
-						PLAYER.closestFloor = GAMEOBJECTS[i].closestFloor;
+						PLAYER.closestFloor = GAMEOBJECTS[i].upperFloor;
 						onLadder = false;
 					}	
 			}
@@ -254,7 +259,7 @@ init();
 						//this is when you are unable to move any higher, aka you have reached the top of the ladder
 						//this links the player to the closest floor so the player is "stuck" to it
 						//also sets onLadder to false so you can move left and right again
-						PLAYER.closestFloor = GAMEOBJECTS[i].closestFloor;
+						PLAYER.closestFloor = GAMEOBJECTS[i].lowerFloor;
 						onLadder = false;
 					}
 
