@@ -83,6 +83,10 @@ init();
 	GAMEOBJECTS.push(NPC1);
 	NPCOBJECTS.push(NPC1);
 
+	var NPC2 = new ENEMYOBJ(1200, GAMEOBJECTS[3].y-20, 10,50, true, false, 0x000fff);
+	GAMEOBJECTS.push(NPC2);
+	NPCOBJECTS.push(NPC2);
+
   	// create a texture from an image path
   	var texture = PIXI.Texture.fromImage("assets/standingL.png");
 	// create a new Sprite using the texture
@@ -90,8 +94,14 @@ init();
 
 	var NPC = new PIXI.Sprite(texture);
 
+	var NPC3 = new PIXI.Sprite(texture);
+
 	NPC.anchor.x = 0.5;
 	NPC.anchor.y = 0.65;
+
+	NPC3.anchor.x = 0.5;
+	NPC3.anchor.y = 0.65;
+
 
 	
 	
@@ -99,6 +109,7 @@ init();
 	sprite.anchor.x = 0.5;
 	sprite.anchor.y = 0.65;
 	
+	backGround.addChild(NPC3);
 	backGround.addChild(NPC);
 	backGround.addChild(sprite);
 
@@ -191,9 +202,13 @@ init();
 
 	NPCHANDLER(PLAYER);
 
-	NPC1.x += 0.1;
+	NPC1.x += 0.4;
 	NPC.position.x = NPC1.x;
 	NPC.position.y = NPC1.y;
+
+	NPC2.x -= 0.4;
+	NPC3.position.x = NPC2.x;
+	NPC3.position.y = NPC2.y;
 	// setTimeout(function(){requestAnimFrame( animate );},75);
 	requestAnimFrame(animate);
 
