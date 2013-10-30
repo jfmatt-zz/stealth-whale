@@ -8,6 +8,7 @@ var X = window.innerWidth
 
 var pFloor = Y-220;
 var GAMEOBJECTS = [];
+var NPCOBJECTS = [];
 // create an new instance of a pixi stage
 var backGround = new PIXI.Stage(0xffffff);
 
@@ -23,34 +24,36 @@ var backGround = new PIXI.Stage(0xffffff);
 	//Initializes all of the objects on the map except for the player and NPCs
 	//Since these are all static elements, they are drawn once.
 	//Once there are maps bigger than one screen the drawing aspect will need to be reworked.
-	var FLOOR = new FLOOROBJ(0,	Y-200, X, 200, true, 0x000000, FLOOR);
+	var FLOOR = new FLOOROBJ(0,	Y-200, X, 200, false, false,  0x000000);
 	FLOOR.closestFloor = FLOOR;
 	GAMEOBJECTS.push(FLOOR);
 
 	var ladderY = FLOOR.y - 200;
-	var LADDER = new LADDEROBJ(300,ladderY,50,200,  false, 0xfff000,FLOOR);
+	var LADDER = new LADDEROBJ(300,ladderY,50,200,  false, false,  0xfff000);
 	
 	GAMEOBJECTS.push(LADDER);
 
-	var FLOOR2 = new FLOOROBJ(0,ladderY, 300, 10,  true, 0x000000, FLOOR2);
+	var FLOOR2 = new FLOOROBJ(0,ladderY, 300, 10,  false, false, 0x000000);
 	FLOOR2.closestFloor = FLOOR2;
 	GAMEOBJECTS.push(FLOOR2);
 
-	var FLOOR3 = new FLOOROBJ(FLOOR2.width + LADDER.width, ladderY, X-FLOOR2.width, 10,  true, 0x000000, FLOOR3);
+	var FLOOR3 = new FLOOROBJ(FLOOR2.width + LADDER.width, ladderY, X-FLOOR2.width, 10,  false, false,  0x000000);
 	FLOOR3.closestFloor = FLOOR3;
 	GAMEOBJECTS.push(FLOOR3);
 
-	var LADDER2 = new LADDEROBJ(500+ FLOOR2.width + LADDER.width, ladderY - 200, 50, 200,  false, 0xfff000, FLOOR3);
+	var LADDER2 = new LADDEROBJ(500+ FLOOR2.width + LADDER.width, ladderY - 200, 50, 200,  false, false,  0xfff000);
 	
 	GAMEOBJECTS.push(LADDER2);
 
-	var FLOOR4 = new FLOOROBJ(0,LADDER2.y, LADDER2.x, 10,  true, 0x000000, FLOOR4);
+	var FLOOR4 = new FLOOROBJ(0,LADDER2.y, LADDER2.x, 10,  false, false,  0x000000);
 	FLOOR4.closestFloor = FLOOR4;
 	GAMEOBJECTS.push(FLOOR4);
 
-	var FLOOR5 = new FLOOROBJ(LADDER2.x + LADDER2.width, LADDER2.y, X-FLOOR4.width, 10,  true, 0x000000, FLOOR5);
+	var FLOOR5 = new FLOOROBJ(LADDER2.x + LADDER2.width, LADDER2.y, X-FLOOR4.width, 10,  false, false,  0x000000);
 	FLOOR5.closestFloor = FLOOR5;
 	GAMEOBJECTS.push(FLOOR5);
+
+	
 
 	LADDER.lowerFloor = FLOOR;
 	LADDER.upperFloor = FLOOR2;
@@ -76,16 +79,27 @@ init();
 	PLAYER.closestFloor = GAMEOBJECTS[0];
 
 
+	var NPC1 = new ENEMYOBJ(30, GAMEOBJECTS[5].y-20, 10,50, true, false, 0x000fff);
+	GAMEOBJECTS.push(NPC1);
+	NPCOBJECTS.push(NPC1);
+
   	// create a texture from an image path
   	var texture = PIXI.Texture.fromImage("assets/standingL.png");
 	// create a new Sprite using the texture
 	var sprite = new PIXI.Sprite(texture);   
+
+	var NPC = new PIXI.Sprite(texture);
+
+	NPC.anchor.x = 0.5;
+	NPC.anchor.y = 0.65;
+
+	
 	
 	
 	sprite.anchor.x = 0.5;
 	sprite.anchor.y = 0.65;
 	
-	
+	backGround.addChild(NPC);
 	backGround.addChild(sprite);
 
 	requestAnimFrame(animate);
@@ -174,6 +188,12 @@ init();
 
 	sprite.position.x = PLAYER.x;
 	sprite.position.y = PLAYER.y;
+
+	NPCHANDLER(PLAYER);
+
+	NPC1.x += 0.1;
+	NPC.position.x = NPC1.x;
+	NPC.position.y = NPC1.y;
 	// setTimeout(function(){requestAnimFrame( animate );},75);
 	requestAnimFrame(animate);
 
@@ -188,23 +208,40 @@ init();
 	var RIGHT = function(){
 		//moves the player right, so that it never goes off screen.
 		//Still in progress for solid obstacles
-		if(PLAYER.x + 5 <= X-20)
+		if(PLAYER.collide(GAMEOBJECTS) === true)
 		{
-			PLAYER.x += 5;
-			
+			console.log("Game Over!");
 		}
-		
+		else
+		{
+			if(PLAYER.x + 5 <= X-20)
+			{
+				PLAYER.x += 5;
+
+			}
+		}
+	
 	}
+
+
 	var LEFT = function(){
 		//moves the player left, so that it never goes off screen.
 		//Still in progress for solid obstacles
-		if(PLAYER.x -5 >=0)
-		{	
-			PLAYER.x -= 5;
-			
+		if(PLAYER.collide(GAMEOBJECTS) === true)
+		{
+			console.log("Game Over!");
 		}
+		else
+		{
+			if(PLAYER.x -5 >=0)
+			{	
+				PLAYER.x -= 5;
 
+			}
+		}
 	}
+
+
 	var UP = function(){
 		//loops through the GAMEOBJECTS array and checks to see if it is type ladder, if it is it performs the check to see if you are close enough
 		for(var i = 0; i < GAMEOBJECTS.length; i++)
@@ -212,7 +249,7 @@ init();
 			if(GAMEOBJECTS[i].collide(PLAYER) === true)
 			{
 				if(PLAYER.y >= GAMEOBJECTS[i].y-15 && GAMEOBJECTS[i].y - 5 >= 0)
-					{
+				{
 						//sets that you are on the ladder to true, so that you cant walk off the side of the ladder
 						//then adjusts the players y coordinate 
 						onLadder = true;
@@ -228,17 +265,17 @@ init();
 						PLAYER.closestFloor = GAMEOBJECTS[i].upperFloor;
 						onLadder = false;
 					}	
-			}
+				}
 				
-						
+
 			}
 			
 			
 		}
 		
-	
 
-	var DOWN = function(){
+
+		var DOWN = function(){
 		//loops through the GAMEOBJECTS array and checks to see if it is type ladder, if it is it performs the check to see if you are close enough
 		for(var i =0; i<GAMEOBJECTS.length; i++)
 		{
@@ -246,8 +283,8 @@ init();
 			{
 				
 
-					if(PLAYER.y + 5 <= PLAYER.closestFloor.y-20)
-					{
+				if(PLAYER.y + 5 <= PLAYER.closestFloor.y-20)
+				{
 						//sets that you are on the ladder to true, so that you cant walk off the side of the ladder
 						//then adjusts the players y coordinate 
 						onLadder = true;
@@ -267,25 +304,34 @@ init();
 			}
 		}
 		
-		
-	
+		var NPCHANDLER = function(PLAYER)
+		{
+			for(var i =0; i<NPCOBJECTS.length; i++)
+			{
+				if(NPCOBJECTS[i].collide(PLAYER))
+				{
+					console.log("GAME OVER");
+				}
+			}
+		}
 
 
-	var moveLeft = false;
-	var moveRight = false;
-	var moveUp = false;
-	var moveDown = false;
 
-	keypress.combo("right",function(){
-		moveRight = true;
-	});
-	keypress.combo("down",function(){
-		moveDown = true;
-	});
-	keypress.combo("left", function(){
-		moveLeft = true;
-	});
-	keypress.combo("up", function(){
-		moveUp = true;
-	});
+		var moveLeft = false;
+		var moveRight = false;
+		var moveUp = false;
+		var moveDown = false;
+
+		keypress.combo("right",function(){
+			moveRight = true;
+		});
+		keypress.combo("down",function(){
+			moveDown = true;
+		});
+		keypress.combo("left", function(){
+			moveLeft = true;
+		});
+		keypress.combo("up", function(){
+			moveUp = true;
+		});
 
