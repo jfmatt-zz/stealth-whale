@@ -54,7 +54,7 @@
 
 	ENEMYOBJ.prototype.collide = function(PLAYER)
 	{
-		if(PLAYER.x >= this.x && PLAYER.x <= this.x+this.width)
+		if(PLAYER.x >= this.x && PLAYER.x <= this.x+this.width && PLAYER.y >= this.y && PLAYER.y <= this.y+this.height)
 		{
 			return true;
 		};

@@ -1,3 +1,31 @@
+var app = {};
+
+app.Game = function () {
+    // Store the currently pressed keys in this.keys.
+    this.keys =  {};
+    var keyName = function (event) {
+        return jQuery.hotkeys.specialKeys[event.which] || String.fromCharCode(event.which).toLowerCase();
+    };
+    $(document).bind('keydown', $.proxy(function (event) { this.keys[keyName(event)] = true; }, this));
+    $(document).bind('keyup', $.proxy(function (event) { this.keys[keyName(event)] = false; }, this));
+};
+
+// Check for pressed keys and move the whale and camera.
+app.Game.prototype.checkKeys = function () {
+    // Check for horizontal movement.
+    if (this.keys['d'] && !this.keys['a']) {
+       moveLeft = true;
+    } else if (this.keys['a'] && !this.keys['d']) {
+        moveRight = true;
+    }
+
+    // Check for vertical movement.
+    if (this.keys['w'] && !this.keys['s']) {
+        moveUp = true;
+    } else if (this.keys['s'] && !this.keys['w']) {
+        moveDown = false;
+    }
+};
 
 
 //Tried to make it so that the canvas will fill the browser window, it kind of works.
@@ -68,7 +96,6 @@ var backGround = new PIXI.Stage(0xffffff);
 		draw.beginFill(GAMEOBJECTS[i].color);
 		draw.drawRect(GAMEOBJECTS[i].x,GAMEOBJECTS[i].y, GAMEOBJECTS[i].width, GAMEOBJECTS[i].height);
 	}
-	console.log("objects drawn!");
 }
 init();
 
@@ -116,12 +143,16 @@ init();
 
 	requestAnimFrame(animate);
 
-	var spriteFrames = ["standingR2.png", "walkingR1.png", "standingR.png", "standingL2.png","walkingL1.png","standingL.png","walkingR2.png","walkingL2.png"];
-	var gameOver = false;
-	var frame = 0;
+// Render the next game frame.
+
+var GAME = new app.Game();
+
+var frame = 0;
 	var onLadder = false;
 	function animate() {
-		console.log("made it to animate!");
+
+		GAME.checkKeys();
+
 		if(moveLeft)
 		{
 			if(!onLadder)
@@ -211,12 +242,7 @@ init();
 	NPC3.position.x = NPC2.x;
 	NPC3.position.y = NPC2.y;
 	// setTimeout(function(){requestAnimFrame( animate );},75);
-
-	if(!gameOver)
-	{
-		requestAnimFrame(animate);
-	}
-	
+	requestAnimFrame(animate);
 
 
 
@@ -226,12 +252,14 @@ init();
 	}
 
 
+
+
 	var RIGHT = function(){
 		//moves the player right, so that it never goes off screen.
 		//Still in progress for solid obstacles
 		if(PLAYER.collide(GAMEOBJECTS) === true)
 		{
-			gameOver = true;
+			console.log("Game Over!");
 		}
 		else
 		{
@@ -250,7 +278,7 @@ init();
 		//Still in progress for solid obstacles
 		if(PLAYER.collide(GAMEOBJECTS) === true)
 		{
-			gameOver = true;
+			console.log("Game Over!");
 		}
 		else
 		{
@@ -331,28 +359,7 @@ init();
 			{
 				if(NPCOBJECTS[i].collide(PLAYER))
 				{
-					gameOver = true;
+					console.log("GAME OVER");
 				}
 			}
 		}
-
-
-
-		var moveLeft = false;
-		var moveRight = false;
-		var moveUp = false;
-		var moveDown = false;
-
-		keypress.combo("right",function(){
-			moveRight = true;
-		});
-		keypress.combo("down",function(){
-			moveDown = true;
-		});
-		keypress.combo("left", function(){
-			moveLeft = true;
-		});
-		keypress.combo("up", function(){
-			moveUp = true;
-		});
-
