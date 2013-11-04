@@ -1,164 +1,72 @@
+var moveLeft = false;
+var moveRight = false;
+var moveUp = false;
+var moveDown = false;
+var frame = 0;
+var onLadder = false;
+var framCounter =0;
+var Y = document.height
+var X = document.width
+var GAMEOBJECTS = [];
+
 var app = {};
 
 app.Game = function () {
     // Store the currently pressed keys in this.keys.
     this.keys =  {};
     var keyName = function (event) {
-        return jQuery.hotkeys.specialKeys[event.which] || String.fromCharCode(event.which).toLowerCase();
+    	return jQuery.hotkeys.specialKeys[event.which] || String.fromCharCode(event.which).toLowerCase();
     };
     $(document).bind('keydown', $.proxy(function (event) { this.keys[keyName(event)] = true; }, this));
     $(document).bind('keyup', $.proxy(function (event) { this.keys[keyName(event)] = false; }, this));
+
+
+
+    this.world = new app.World(X, Y);
+    // this.camera = new app.Camera(this.world, this.whale.sprite.position.x, this.whale.sprite.position.y, 800, 600);
+    // this.renderer = new PIXI.autoDetectRenderer(this.camera.width, this.camera.height, $('#game')[0]);
+    this.renderer = new PIXI.autoDetectRenderer(X-5,Y-5);
 };
 
 // Check for pressed keys and move the whale and camera.
 app.Game.prototype.checkKeys = function () {
     // Check for horizontal movement.
     if (this.keys['d'] && !this.keys['a']) {
-       moveLeft = true;
+    	moveRight = true;
     } else if (this.keys['a'] && !this.keys['d']) {
-        moveRight = true;
+    	moveLeft = true;
+    }
+    else
+    {
+    	moveRight = false;
+    	moveLeft = false;
     }
 
     // Check for vertical movement.
     if (this.keys['w'] && !this.keys['s']) {
-        moveUp = true;
+    	moveUp = true;
     } else if (this.keys['s'] && !this.keys['w']) {
-        moveDown = false;
+    	moveDown = true;
+    }
+    else
+    {
+    	moveUp = false;
+    	moveDown = false;
     }
 };
 
-
-//Tried to make it so that the canvas will fill the browser window, it kind of works.
-var Y = document.height
-var X = document.width
-
-
-
-var pFloor = Y-220;
-var GAMEOBJECTS = [];
-var NPCOBJECTS = [];
-// create an new instance of a pixi stage
-var backGround = new PIXI.Stage(0xffffff);
-
-
-	// create a renderer instance
-	var renderer = PIXI.autoDetectRenderer(X-5, Y-5);
-	
-	// add the renderer view element to the DOM
-	document.body.appendChild(renderer.view);
-
-	function init(){
-
-	//Initializes all of the objects on the map except for the player and NPCs
-	//Since these are all static elements, they are drawn once.
-	//Once there are maps bigger than one screen the drawing aspect will need to be reworked.
-	var FLOOR = new FLOOROBJ(0,	Y-200, X, 200, false, false,  0x000000);
-	FLOOR.closestFloor = FLOOR;
-	GAMEOBJECTS.push(FLOOR);
-
-	var ladderY = FLOOR.y - 200;
-	var LADDER = new LADDEROBJ(300,ladderY,50,200,  false, false,  0xfff000);
-	
-	GAMEOBJECTS.push(LADDER);
-
-	var FLOOR2 = new FLOOROBJ(0,ladderY, 300, 10,  false, false, 0x000000);
-	FLOOR2.closestFloor = FLOOR2;
-	GAMEOBJECTS.push(FLOOR2);
-
-	var FLOOR3 = new FLOOROBJ(FLOOR2.width + LADDER.width, ladderY, X-FLOOR2.width, 10,  false, false,  0x000000);
-	FLOOR3.closestFloor = FLOOR3;
-	GAMEOBJECTS.push(FLOOR3);
-
-	var LADDER2 = new LADDEROBJ(500+ FLOOR2.width + LADDER.width, ladderY - 200, 50, 200,  false, false,  0xfff000);
-	
-	GAMEOBJECTS.push(LADDER2);
-
-	var FLOOR4 = new FLOOROBJ(0,LADDER2.y, LADDER2.x, 10,  false, false,  0x000000);
-	FLOOR4.closestFloor = FLOOR4;
-	GAMEOBJECTS.push(FLOOR4);
-
-	var FLOOR5 = new FLOOROBJ(LADDER2.x + LADDER2.width, LADDER2.y, X-FLOOR4.width, 10,  false, false,  0x000000);
-	FLOOR5.closestFloor = FLOOR5;
-	GAMEOBJECTS.push(FLOOR5);
-
-	
-
-	LADDER.lowerFloor = FLOOR;
-	LADDER.upperFloor = FLOOR2;
-	LADDER2.lowerFloor = FLOOR3;
-	LADDER2.upperFloor = FLOOR4;
-
-	//loop that draws the objects on the screen, since these objects don't move, it is currently only run once
-	for(var i = 0; i < GAMEOBJECTS.length; i++)
-	{
-		var draw = new PIXI.Graphics();
-		backGround.addChild(draw);
-		draw.beginFill(GAMEOBJECTS[i].color);
-		draw.drawRect(GAMEOBJECTS[i].x,GAMEOBJECTS[i].y, GAMEOBJECTS[i].width, GAMEOBJECTS[i].height);
-	}
-}
-init();
-
-
-	//creates a new player object
-	var PLAYER = new PLAYEROBJ();
-	PLAYER.x = 200;
-	PLAYER.y = pFloor;
-	PLAYER.closestFloor = GAMEOBJECTS[0];
-
-
-	var NPC1 = new ENEMYOBJ(30, GAMEOBJECTS[5].y-20, 10,50, true, false, 0x000fff);
-	GAMEOBJECTS.push(NPC1);
-	NPCOBJECTS.push(NPC1);
-
-	var NPC2 = new ENEMYOBJ(1200, GAMEOBJECTS[3].y-20, 10,50, true, false, 0x000fff);
-	GAMEOBJECTS.push(NPC2);
-	NPCOBJECTS.push(NPC2);
-
-  	// create a texture from an image path
-  	var texture = PIXI.Texture.fromImage("assets/standingL.png");
-	// create a new Sprite using the texture
-	var sprite = new PIXI.Sprite(texture);   
-
-	var NPC = new PIXI.Sprite(texture);
-
-	var NPC3 = new PIXI.Sprite(texture);
-
-	NPC.anchor.x = 0.5;
-	NPC.anchor.y = 0.65;
-
-	NPC3.anchor.x = 0.5;
-	NPC3.anchor.y = 0.65;
-
-
-	
-	
-	
-	sprite.anchor.x = 0.5;
-	sprite.anchor.y = 0.65;
-	
-	backGround.addChild(NPC3);
-	backGround.addChild(NPC);
-	backGround.addChild(sprite);
-
-	requestAnimFrame(animate);
-
 // Render the next game frame.
+app.Game.prototype.update = function () {
+    this.checkKeys();
 
-var GAME = new app.Game();
-
-var frame = 0;
-	var onLadder = false;
-	function animate() {
-
-		GAME.checkKeys();
-
-		if(moveLeft)
+    if(moveLeft)
+	{
+		if(!onLadder)
 		{
-			if(!onLadder)
+			LEFT();
+
+			/*if(framCounter%3 == 0)
 			{
-				LEFT();
-				
 				switch(frame)
 				{
 					case 0:
@@ -179,55 +87,63 @@ var frame = 0;
 					break;
 
 				}
-			//texture = PIXI.Texture.fromImage("assets/walkingL1.png");
-			sprite.setTexture(texture);
+				//texture = PIXI.Texture.fromImage("assets/walkingL1.png");
+				sprite.setTexture(texture);
+				//framCounter =0;
+			}*/
+			
 		}
 		
-		moveLeft = false;
+		
 	}
 	else if(moveRight)
 	{
 		if(!onLadder){
 			RIGHT();
 			
-			switch(frame)
-			{
-				case 0:
-				texture = PIXI.Texture.fromImage("assets/standingR.png");
-				frame = 1;
-				break;
-				case 1:
-				texture = PIXI.Texture.fromImage("assets/walkingR1.png");
-				frame = 2;
-				break;
-				case 2:
-				texture = PIXI.Texture.fromImage("assets/walkingR2.png");
-				frame = 3;
-				break;
-				case 3:
-				texture = PIXI.Texture.fromImage("assets/standingR2.png");
-				frame = 1;
-				break;
 
-			}
-			//texture = PIXI.Texture.fromImage("assets/walkingL1.png");
-			sprite.setTexture(texture);
+			/*if(framCounter% 3 == 0)
+			{
+				switch(frame)
+				{
+					case 0:
+					texture = PIXI.Texture.fromImage("assets/standingR.png");
+					frame = 1;
+					break;
+					case 1:
+					texture = PIXI.Texture.fromImage("assets/walkingR1.png");
+					frame = 2;
+					break;
+					case 2:
+					texture = PIXI.Texture.fromImage("assets/walkingR2.png");
+					frame = 3;
+					break;
+					case 3:
+					texture = PIXI.Texture.fromImage("assets/standingR2.png");
+					frame = 1;
+					break;
+
+				}
+				//texture = PIXI.Texture.fromImage("assets/walkingL1.png");
+				sprite.setTexture(texture);
+				//framCounter =0;
+			}*/
+			
 		}
 		
-		moveRight = false;
+		
 
 	}
 	else if(moveUp)
 	{
 		UP();
-		moveUp = false;
+		
 	}
 	else if(moveDown)
 	{
 		DOWN();
-		moveDown = false;
+		
 	}
-
 
 	sprite.position.x = PLAYER.x;
 	sprite.position.y = PLAYER.y;
@@ -241,17 +157,125 @@ var frame = 0;
 	NPC2.x -= 0.4;
 	NPC3.position.x = NPC2.x;
 	NPC3.position.y = NPC2.y;
-	// setTimeout(function(){requestAnimFrame( animate );},75);
-	requestAnimFrame(animate);
+
+	framCounter++;
+
+	
+
+    this.renderer.render(this.world.stage);
+    window.requestAnimFrame($.proxy(this.update, this));
+};
+
+// Represents the view of the game world currently rendered to the screen.
+app.Camera = function (world, x, y, width, height) {
+    this.world = world;
+    this.view = new PIXI.Rectangle(0, 0, width, height);
+    this.boundary = new PIXI.Rectangle(width / 2, height / 2, this.world.size.width - width, this.world.size.height - height);
+    this.update(x, y);
+};
+
+
+// Center the camera on the x and y coordinates provided, but clamp to the game world.
+app.Camera.prototype.update = function (x, y) {
+    var newCenterX = Math.max(this.boundary.x, Math.min(this.boundary.x + this.boundary.width, x));
+    var newCenterY = Math.max(this.boundary.y, Math.min(this.boundary.y + this.boundary.height, x));
+    this.world.setPosition(this.view.width / 2 - newCenterX, 0);
+};
+
+
+app.World = function (width, height) {
+    //this.size = new PIXI.Rectangle(0, 0, width, height);
+    this.stage = new PIXI.Stage();
+
+    // Create foreground and background containers.
+    this.foreground = new PIXI.DisplayObjectContainer();
+    this.background = new PIXI.DisplayObjectContainer();
+
+    //Initializes all of the objects on the map except for the player and NPCs
+	//Since these are all static elements, they are drawn once.
+	//Once there are maps bigger than one screen the drawing aspect will need to be reworked.
+	var FLOOR = new FLOOROBJ(0,	Y-200, X, 200, false, false,  0x000000);
+	FLOOR.closestFloor = FLOOR;
+	var floorsprite = new PIXI.TilingSprite(PIXI.Texture.fromImage("assets/Floor.png"), FLOOR.width, FLOOR.height);
+	floorsprite.position.x = FLOOR.x;
+	floorsprite.position.y = FLOOR.y;
+	GAMEOBJECTS.push(FLOOR);
+
+	var ladderY = FLOOR.y - 200;
+	var LADDER = new LADDEROBJ(300,ladderY,50,200,  false, false,  0xfff000);
+	var lsprite = new PIXI.TilingSprite(PIXI.Texture.fromImage("assets/Ladder.png"), LADDER.width, LADDER.height);
+	lsprite.position.x = LADDER.x;
+	lsprite.position.y = LADDER.y;
+	GAMEOBJECTS.push(LADDER);
+
+	var FLOOR2 = new FLOOROBJ(0,ladderY, 300, 10,  false, false, 0x000000);
+	FLOOR2.closestFloor = FLOOR2;
+	var floor2sprite = new PIXI.TilingSprite(PIXI.Texture.fromImage("assets/Floor.png"), FLOOR2.width, FLOOR2.height);
+	floor2sprite.position.x = FLOOR2.x;
+	floor2sprite.position.y = FLOOR2.y;
+	GAMEOBJECTS.push(FLOOR2);
+
+	var FLOOR3 = new FLOOROBJ(FLOOR2.width + LADDER.width, ladderY, X-FLOOR2.width, 10,  false, false,  0x000000);
+	FLOOR3.closestFloor = FLOOR3;
+	var floor3sprite = new PIXI.TilingSprite(PIXI.Texture.fromImage("assets/Floor.png"),FLOOR3.width, FLOOR3.height);
+	floor3sprite.position.x = FLOOR3.x;
+	floor3sprite.position.y = FLOOR3.y;
+	GAMEOBJECTS.push(FLOOR3);
+
+	var LADDER2 = new LADDEROBJ(500+ FLOOR2.width + LADDER.width, ladderY - 200, 50, 200,  false, false,  0xfff000);
+	var l2sprite = new PIXI.TilingSprite(PIXI.Texture.fromImage("assets/Ladder.png"), LADDER2.width, LADDER2.height);
+	l2sprite.position.x = LADDER2.x;
+	l2sprite.position.y = LADDER2.y;
+	GAMEOBJECTS.push(LADDER2);
+
+	var FLOOR4 = new FLOOROBJ(0,LADDER2.y, LADDER2.x, 10,  false, false,  0x000000);
+	FLOOR4.closestFloor = FLOOR4;
+	var floor4sprite = new PIXI.TilingSprite(PIXI.Texture.fromImage("assets/Floor.png"), FLOOR4.width, FLOOR4.height);
+	floor4sprite.position.x = FLOOR4.x;
+	floor4sprite.position.y = FLOOR4.y;
+	GAMEOBJECTS.push(FLOOR4);
+
+	var FLOOR5 = new FLOOROBJ(LADDER2.x + LADDER2.width, LADDER2.y, X-FLOOR4.width, 10,  false, false,  0x000000);
+	FLOOR5.closestFloor = FLOOR5;
+	var floor5sprite = new PIXI.TilingSprite(PIXI.Texture.fromImage("assets/Floor.png"), FLOOR5.width, FLOOR5.height);
+	floor5sprite.position.x = FLOOR5.x;
+	floor5sprite.position.y = FLOOR5.y;
+	GAMEOBJECTS.push(FLOOR5);
+
+	
+
+	LADDER.lowerFloor = FLOOR;
+	LADDER.upperFloor = FLOOR2;
+	LADDER2.lowerFloor = FLOOR3;
+	LADDER2.upperFloor = FLOOR4;
+
+	this.foreground.addChild(floorsprite);
+	this.foreground.addChild(floor2sprite);
+	this.foreground.addChild(floor3sprite);
+	this.foreground.addChild(floor4sprite);
+	this.foreground.addChild(floor5sprite);
+	this.foreground.addChild(lsprite);
+	this.foreground.addChild(l2sprite);
 
 
 
-	    // render the stage   
-	    renderer.render(backGround);
 
-	}
+	var backgroundSprite = new PIXI.TilingSprite(new PIXI.Texture.fromImage('assets/background.png'), X, Y);
+	this.background.addChild(backgroundSprite);
 
+	 // Add the containers to the stage.
+    this.stage.addChild(this.background);
+    this.stage.addChild(this.foreground);
+};
 
+// Move the world. This is called by the camera to keep the screen tracking the whale.
+// The background moves more slowly than the foreground to make it appear far away.
+app.World.prototype.setPosition = function (x, y) {
+    this.foreground.position.x = x;
+    this.foreground.position.y = y;
+    this.background.position.x = x / 50;
+    this.background.position.y = y / 50;
+};
 
 
 	var RIGHT = function(){
@@ -263,13 +287,13 @@ var frame = 0;
 		}
 		else
 		{
-			if(PLAYER.x + 5 <= X-20)
+			if(PLAYER.x + 2.5 <= X-20)
 			{
-				PLAYER.x += 5;
+				PLAYER.x += 2.5;
 
 			}
 		}
-	
+
 	}
 
 
@@ -282,9 +306,9 @@ var frame = 0;
 		}
 		else
 		{
-			if(PLAYER.x -5 >=0)
+			if(PLAYER.x -2.5 >=0)
 			{	
-				PLAYER.x -= 5;
+				PLAYER.x -= 2.5;
 
 			}
 		}
@@ -325,6 +349,7 @@ var frame = 0;
 
 
 		var DOWN = function(){
+			console.log("Down was called!");
 		//loops through the GAMEOBJECTS array and checks to see if it is type ladder, if it is it performs the check to see if you are close enough
 		for(var i =0; i<GAMEOBJECTS.length; i++)
 		{
@@ -363,3 +388,8 @@ var frame = 0;
 				}
 			}
 		}
+
+
+		$(function () {
+			new app.Game();
+		});
