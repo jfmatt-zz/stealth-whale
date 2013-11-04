@@ -140,15 +140,6 @@ var background = new PIXI.DisplayObjectContainer();
 	 // Add the containers to the stage.
 	 stage.addChild(this.background);
 	 stage.addChild(this.foreground);
-
-	//loop that draws the objects on the screen, since these objects don't move, it is currently only run once
-	/*for(var i = 0; i < GAMEOBJECTS.length; i++)
-	{
-		var draw = new PIXI.Graphics();
-		foreground.addChild(draw);
-		draw.beginFill(GAMEOBJECTS[i].color);
-		draw.drawRect(GAMEOBJECTS[i].x,GAMEOBJECTS[i].y, GAMEOBJECTS[i].width, GAMEOBJECTS[i].height);
-	}*/
 	
 }
 init();
@@ -160,51 +151,35 @@ init();
 	PLAYER.y = pFloor;
 	PLAYER.closestFloor = GAMEOBJECTS[0];
 
-	PLAYER.left =0;
-	PLAYER.right =4;
-	PLAYER.up =0;
-	PLAYER.down =0;
-
 
 	var NPC1 = new ENEMYOBJ(30, GAMEOBJECTS[5].y-20, 10,50, true, false, 0x000fff);
 	GAMEOBJECTS.push(NPC1);
 	NPCOBJECTS.push(NPC1);
 
-	NPC1.left =0;
-	NPC1.right =4;
-	NPC1.up =0;
-	NPC1.down =0;
+	
 
 	var NPC2 = new ENEMYOBJ(1200, GAMEOBJECTS[3].y-20, 10,50, true, false, 0x000fff);
 	GAMEOBJECTS.push(NPC2);
 	NPCOBJECTS.push(NPC2);
-	NPC2.left =0;
-	NPC2.right =4;
-	NPC2.up =0;
-	NPC2.down =0;
+	
 
-  	// create a texture from an image path
-  	//var texture = PIXI.Texture.fromImage("assets/standingL.png");
-	// create a new Sprite using the texture
+  	// create a new Sprite using the texture
 	var sprite = new PIXI.Sprite(PIXI.Texture.fromImage("assets/standingL.png"));   
+
+	sprite.anchor.x = 0.5;
+	sprite.anchor.y = 0.65;
 
 	var NPC = new PIXI.Sprite(PIXI.Texture.fromImage("assets/standingL.png"));
 
-	var NPC3 = new PIXI.Sprite(PIXI.Texture.fromImage("assets/standingL.png"));
-
 	NPC.anchor.x = 0.5;
 	NPC.anchor.y = 0.65;
+
+	var NPC3 = new PIXI.Sprite(PIXI.Texture.fromImage("assets/standingL.png"));
 
 	NPC3.anchor.x = 0.5;
 	NPC3.anchor.y = 0.65;
 
 
-	
-	
-	
-	sprite.anchor.x = 0.5;
-	sprite.anchor.y = 0.65;
-	
 	foreground.addChild(NPC3);
 	foreground.addChild(NPC);
 	foreground.addChild(sprite);
@@ -354,7 +329,6 @@ init();
 
 
 		var DOWN = function(){
-			console.log("Down was called!");
 		//loops through the GAMEOBJECTS array and checks to see if it is type ladder, if it is it performs the check to see if you are close enough
 		for(var i =0; i<GAMEOBJECTS.length; i++)
 		{

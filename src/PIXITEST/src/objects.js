@@ -16,6 +16,12 @@
 		this.isSolid = solid;
 		this.isHideable = isHideable;
 		this.color = color;
+
+
+		this.right =0;
+		this.left =4;
+		this.up =0;
+		this.down =0;
 		//this.closestFloor = closestFloor;
 
 		
