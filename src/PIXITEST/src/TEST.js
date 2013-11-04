@@ -164,17 +164,17 @@ init();
 	
 
   	// create a new Sprite using the texture
-	var sprite = new PIXI.Sprite(PIXI.Texture.fromImage("assets/standingL.png"));   
+	var sprite = new PIXI.Sprite(PIXI.Texture.fromImage("assets/StandingL_transparent.png"));   
 
 	sprite.anchor.x = 0.5;
 	sprite.anchor.y = 0.65;
 
-	var NPC = new PIXI.Sprite(PIXI.Texture.fromImage("assets/standingL.png"));
+	var NPC = new PIXI.Sprite(PIXI.Texture.fromImage("assets/StandingL_transparent.png"));
 
 	NPC.anchor.x = 0.5;
 	NPC.anchor.y = 0.65;
 
-	var NPC3 = new PIXI.Sprite(PIXI.Texture.fromImage("assets/standingL.png"));
+	var NPC3 = new PIXI.Sprite(PIXI.Texture.fromImage("assets/StandingL_transparent.png"));
 
 	NPC3.anchor.x = 0.5;
 	NPC3.anchor.y = 0.65;
