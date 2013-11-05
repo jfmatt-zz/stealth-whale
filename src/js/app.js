@@ -20,9 +20,13 @@ define(
 			this.clock = new Clock(config.fps)
 			this._ticks = 0
 			
-			this.vision = new Vision()
-			this.vision.x = 50
-			this.vision.y = 100
+			this.vision = new Vision(
+				{x: 100, y: 100},
+				{x: 0, y: 0},
+				100,
+				Math.PI / 2,
+				30
+			)
 			this.vision
 				.calc(this.stage)
 				.render()
