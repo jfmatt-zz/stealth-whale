@@ -6,24 +6,24 @@ var app = {};
 
 var GAMEOBJECTS = [];
 var NPCOBJECTS = [];
-
+// var renderer;
 app.world = function()
 {
 	this.stage = new PIXI.Stage();
 	this.foreground = new PIXI.DisplayObjectContainer();
 	this.background = new PIXI.DisplayObjectContainer();
-
+	console.log("Made the stage!");
 
 	// create a renderer instance
-	this.renderer = PIXI.autoDetectRenderer(X-5, Y-5);
+	this.renderer = new PIXI.CanvasRenderer(X-5, Y-5);
 	
 	// add the renderer view element to the DOM
 	document.body.appendChild(this.renderer.view);
 
 	this.game();
 
-
-	requestAnimFrame(this.update);
+	
+	requestAnimFrame(this.update.bind(this));
 }
 
 
@@ -99,18 +99,18 @@ app.world.prototype.game = function()
 	LADDER2.upperFloor = FLOOR4;
 
 
-	for(var i =0; i <GAMEOBJECTS.length; i++)
+	/*for(var i =0; i <GAMEOBJECTS.length; i++)
 	{
 		this.foreground.addChild(GAMEOBJECTS[i].sprite);
-	}
+	}*/
 
-	/*foreground.addChild(floorsprite);
-	foreground.addChild(floor2sprite);
-	foreground.addChild(floor3sprite);
-	foreground.addChild(floor4sprite);
-	foreground.addChild(floor5sprite);
-	foreground.addChild(lsprite);
-	foreground.addChild(l2sprite);*/
+	this.foreground.addChild(floorsprite);
+	this.foreground.addChild(floor2sprite);
+	this.foreground.addChild(floor3sprite);
+	this.foreground.addChild(floor4sprite);
+	this.foreground.addChild(floor5sprite);
+	this.foreground.addChild(lsprite);
+	this.foreground.addChild(l2sprite);
 
 
 
