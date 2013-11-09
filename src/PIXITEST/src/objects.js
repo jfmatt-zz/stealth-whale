@@ -42,7 +42,7 @@ PLAYEROBJ.prototype = new GAMEOBJ();
 
 PLAYEROBJ.prototype.collide = function (GAMEOBJECTS) {
 
-	for(var i = 0; i < GAMEOBJECTS.length; i++)
+	for(var i = 0; i < GAMEOBJECTS.length-1; i++)
 	{
 
 		if(this.x >= GAMEOBJECTS[i].x && this.x <= GAMEOBJECTS[i].x+GAMEOBJECTS[i].width && GAMEOBJECTS[i].isSolid == true && this.y >= GAMEOBJECTS[i].y && this.y <= GAMEOBJECTS[i].y + GAMEOBJECTS[i].width)
@@ -52,13 +52,15 @@ PLAYEROBJ.prototype.collide = function (GAMEOBJECTS) {
 
 		}
 	}
+	//return false;
 
 };
 
 PLAYEROBJ.prototype.update = function(KEYS)
 {
 		// Check for horizontal movement.
-		if (this.keys['d'] && !this.onLadder) {
+		if (KEYS['d'] && !this.onLadder) {
+			console.log(this.collide(GAMEOBJECTS));
 			if(this.collide(GAMEOBJECTS) === true)
 			{
 				console.log("Game Over!");
@@ -68,10 +70,12 @@ PLAYEROBJ.prototype.update = function(KEYS)
 				if(this.x + 2.5 <= X-20)
 				{
 					this.x += 2.5;
+					this.frameSwitcher(0);
+					this.frameCount++;
 
 				}	
 			}
-		} else if (this.keys['a'] && !this.onLadder) {
+		} else if (KEYS['a'] && !this.onLadder) {
 			if(this.collide(GAMEOBJECTS) === true)
 			{
 				console.log("Game Over!");
@@ -81,20 +85,22 @@ PLAYEROBJ.prototype.update = function(KEYS)
 				if(this.x -2.5 >=0)
 				{	
 					this.x -= 2.5;
+					this.frameSwitcher(1);
+					this.frameCount++;
 
 				}	
 			}
 		}
 		
    		 // Check for vertical movement.
-   		 if (this.keys['s']) {
-    		for(var i =0; i<GAMEOBJECTS.length; i++)
+   		 if (KEYS['s']) {
+    		for(var i =0; i<GAMEOBJECTS.length-1; i++)
 			{
 				if(GAMEOBJECTS[i].collide(this) === true)
 				{
 				
 
-					if(this.y + 5 <= this.closestFloor.y-20)
+					if(this.y + 5 <= this.closestFloor.y-52)
 					{
 							//sets that you are on the ladder to true, so that you cant walk off the side of the ladder
 							//then adjusts the thiss y coordinate 
@@ -113,12 +119,12 @@ PLAYEROBJ.prototype.update = function(KEYS)
 
 					}
 				}
-    	} else if (this.keys['w']) {
-    		for(var i = 0; i < GAMEOBJECTS.length; i++)
+    	} else if (KEYS['w']) {
+    		for(var i = 0; i < GAMEOBJECTS.length-1; i++)
 			{
-				if(GAMEOBJECTS[i].collide(this) && GAMEOBJECTS[i].allowVertical)
+				if(GAMEOBJECTS[i].collide(this))
 				{
-					if(this.y >= GAMEOBJECTS[i].y-15 && GAMEOBJECTS[i].y - 5 >= 0)
+					if(this.y >= GAMEOBJECTS[i].y-52 && GAMEOBJECTS[i].y - 5 >= 0)
 					{
 							//sets that you are on the ladder to true, so that you cant walk off the side of the ladder
 							//then adjusts the thiss y coordinate 
@@ -146,7 +152,7 @@ PLAYEROBJ.prototype.update = function(KEYS)
     	this.sprite.position.x = this.x;
     	this.sprite.position.y = this.y;
 
-    	this.frameSwitcher();
+    	
     	
 }
 

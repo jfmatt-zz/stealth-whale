@@ -30,12 +30,12 @@
 		this.frameCount = 0;
 	};
 
-
+	var textures = ["assets/standingR.png","assets/walkingR1.png","assets/walkingR2.png","assets/standingR2.png", "assets/standingL.png", "assets/walkingL1.png", "assets/walkingL2.png", "assets/standingL2.png"];
 	GAMEOBJ.prototype.frameSwitcher = function(direction)
 	{
 		if(direction == 0)
 			{
-				if(frameCount% 3 == 0)
+				if(this.frameCount == 3)
 				{
 					
 
@@ -45,13 +45,14 @@
 					{
 						this.right =0;
 					}
+					this.frameCount = 0;
 
 				}
 			}
 
 			if(direction ==1)
 			{
-				if(frameCount%3 == 0)
+				if(this.frameCount == 3)
 				{
 					
 
@@ -62,6 +63,7 @@
 					{
 						this.left = 4;
 					}
+					this.frameCount = 0;
 
 				}
 			}
