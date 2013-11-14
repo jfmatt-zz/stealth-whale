@@ -38,10 +38,7 @@ app.world.prototype.game = function()
 	//Initializes all of the objects on the map except for the player and NPCs
 	//Since these are all static elements, they are drawn once.
 	//Once there are maps bigger than one screen the drawing aspect will need to be reworked.
-	// var floorsprite = new PIXI.TilingSprite(PIXI.Texture.fromImage("assets/Floor.png"), X,200);
-
-
-	//As long as player is the last object in the GAMEOBJECTS array everything should work fine. DO NOT ADD ANYTHING TO THE ARRAY AFTER THE PLAYER.
+	//THE PLAYER IS ALWAYS THE FIRST ITEM IN THE GAMEOBJECTS ARRAY, DO NOT ADD THINGS BEFORE IT
 	var PLAYER = new PLAYEROBJ(200,Y-220, 52,52,true,false, 0x000000, new PIXI.Sprite(PIXI.Texture.fromImage("assets/standingL.png")));
   	PLAYER.sprite.position.x = PLAYER.x;
   	PLAYER.sprite.position.y = PLAYER.y;
@@ -70,7 +67,7 @@ app.world.prototype.game = function()
 	GAMEOBJECTS.push(FLOOR3);
 
 	
-	var LADDER = new LADDEROBJ(300,Y-FLOOR.height - ladderHeight,50,ladderHeight,  false, false,  0xfff000,  new PIXI.TilingSprite(PIXI.Texture.fromImage("assets/Ladder.png"), 50, ladderHeight));
+	var LADDER = new LADDEROBJ(300,FLOOR2.y,50,ladderHeight,  false, false,  0xfff000,  new PIXI.TilingSprite(PIXI.Texture.fromImage("assets/Ladder.png"), 50, ladderHeight));
 	GAMEOBJECTS.push(LADDER);
 
 	var LADDER2 = new LADDEROBJ(600, Y - 400 -FLOOR.height, 50, ladderHeight,  false, false,  0xfff000,new PIXI.TilingSprite(PIXI.Texture.fromImage("assets/Ladder.png"), 50, ladderHeight));

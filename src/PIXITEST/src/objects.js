@@ -94,7 +94,7 @@ PLAYEROBJ.prototype.update = function(KEYS)
 					floorI = i;
 				}
 			}
-				if(!cantMove && onFloor && this.sprite.position.y + this.sprite.height < collideObj[floorI].sprite.position.y)
+				if(!cantMove && onFloor)
 				{
 					this.sprite.position.x += 2.5;
 					this.frameSwitcher(0);
@@ -119,8 +119,13 @@ PLAYEROBJ.prototype.update = function(KEYS)
 				{
 					cantMove = true;
 				}
+				if(collideObj[i] instanceof FLOOROBJ)
+				{
+					onFloor = true;
+					
+				}
 			}
-				if(!cantMove)
+				if(!cantMove && onFloor)
 				{
 					this.sprite.position.x -= 2.5;
 					this.frameSwitcher(1);
@@ -141,34 +146,33 @@ PLAYEROBJ.prototype.update = function(KEYS)
 					cantMove = true;
 
 				}
-				if(collideObj[i].isSolid)
+				else if(collideObj[i].isSolid)
 				{
 					cantMove = true;
 				}
-				if(collideObj[i] instanceof LADDEROBJ)
+				else if(collideObj[i] instanceof LADDEROBJ)
 				{
 					ladderI = i;
+					this.closestFloor = collideObj[i].lowerFloor;
 				}
+
 			}
 				if(!cantMove && ladderI != -1)
 				{
 						
-					if(this.sprite.position.y + 5 <= collideObj[ladderI].lowerFloor.sprite.position.y -52)
-					{
+					//if(this.sprite.position.y + 5 <= collideObj[ladderI].lowerFloor.sprite.position.y -52)
+					//{
 							//sets that you are on the ladder to true, so that you cant walk off the side of the ladder
 							//then adjusts the thiss y coordinate 
 							this.sprite.position.y += 5;
-
-
-						
-					}
+					//}
 					
 
-					}
+				}
 				
     	} else if (KEYS['w']) {
     		collideObj = this.collide(GAMEOBJECTS,0 ,-5);
-    		console.log(collideObj);
+    		console.log(this.sprite.position.y + " " + this.sprite.height + " " + FLOOR.y +);
 			for(var i =0; i < collideObj.length; i++)
 			{
 				if(collideObj[i] instanceof ENEMYOBJ)
@@ -178,19 +182,21 @@ PLAYEROBJ.prototype.update = function(KEYS)
 					cantMove = true;
 
 				}
-				if(collideObj[i].isSolid)
+				else if(collideObj[i].isSolid)
 				{
 					cantMove = true;
 				}
-				if(collideObj[i] instanceof LADDEROBJ)
+				else if(collideObj[i] instanceof LADDEROBJ)
 				{
 					ladderI = i;
+					this.closestFloor = collideObj[i].upperFloor;
 				}
+
 			}
 				//console.log(cantMove + " " + ladderI);
 				if(!cantMove && ladderI != -1)
 				{
-					console.log(this.closestFloor);
+					
 					if(this.sprite.position.y - 5 >= collideObj[ladderI].upperFloor.sprite.position.y-52)
 					{
 							//sets that you are on the ladder to true, so that you cant walk off the side of the ladder
@@ -199,14 +205,7 @@ PLAYEROBJ.prototype.update = function(KEYS)
 							this.sprite.position.y -= 5;
 						
 					}
-					else
-						{
-							//this is when you are unable to move any higher, aka you have reached the top of the ladder
-							//this links the this to the closest floor so the this is "stuck" to it
-							//also sets onLadder to false so you can move left and right again
-							this.closestFloor = collideObj[ladderI].upperFloor;
-							this.onLadder = false;
-						}
+					
 
 					}
     	}	
