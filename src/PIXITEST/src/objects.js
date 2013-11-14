@@ -10,7 +10,7 @@
 	
 	LADDEROBJ.prototype.collide = function(PLAYER){
 
-		if(PLAYER.x >= this.x && PLAYER.x <= this.x+this.width)
+		if(PLAYER.sprite.position.x >= this.sprite.position.x && PLAYER.sprite.position.x <= this.sprite.position.x+this.sprite.width)
 		{
 			return true;
 		};
@@ -40,18 +40,25 @@ var PLAYEROBJ = function(){
 
 PLAYEROBJ.prototype = new GAMEOBJ();
 
-PLAYEROBJ.prototype.collide = function (GAMEOBJECTS) {
+PLAYEROBJ.prototype.collide = function (GAMEOBJECTS, dx, dy) {
 
-	for(var i = 0; i < GAMEOBJECTS.length-1; i++)
+var collided = [];
+	for(var i = 1; i < GAMEOBJECTS.length; i++)
 	{
-
-		if(this.x >= GAMEOBJECTS[i].x && this.x <= GAMEOBJECTS[i].x+GAMEOBJECTS[i].width && GAMEOBJECTS[i].isSolid == true && this.y >= GAMEOBJECTS[i].y && this.y <= GAMEOBJECTS[i].y + GAMEOBJECTS[i].width)
+		
+		if(this.sprite.position.x + this.sprite.width + dx >= GAMEOBJECTS[i].sprite.position.x 
+			&& GAMEOBJECTS[i].sprite.position.x+GAMEOBJECTS[i].sprite.width >= this.sprite.position.x + dx
+			&& this.sprite.position.y + this.sprite.height + dy >= GAMEOBJECTS[i].sprite.position.y 
+			&& GAMEOBJECTS[i].sprite.position.y + GAMEOBJECTS[i].sprite.height >= this.sprite.position.y + dy)
+			
 		{
-
-			return true;
+			
+			collided.push(GAMEOBJECTS[i]);
+			
 
 		}
 	}
+	return collided;
 	//return false;
 
 };
@@ -59,53 +66,137 @@ PLAYEROBJ.prototype.collide = function (GAMEOBJECTS) {
 PLAYEROBJ.prototype.update = function(KEYS)
 {
 		// Check for horizontal movement.
-		if (KEYS['d'] && !this.onLadder) {
-			console.log(this.collide(GAMEOBJECTS));
-			if(this.collide(GAMEOBJECTS) === true)
+		var collideObj = [];
+		var gameOver = false;
+		var cantMove = false;
+		var onFloor = false;
+		var floorI = -1;
+		var ladderI = -1;
+		if (KEYS['d']) {
+			//console.log(this.collide(GAMEOBJECTS));
+			collideObj = this.collide(GAMEOBJECTS, 2.5,0);
+			for(var i =0; i < collideObj.length; i++)
 			{
-				console.log("Game Over!");
-			}
-			else
-			{
-				if(this.x + 2.5 <= X-20)
+				if(collideObj[i] instanceof ENEMYOBJ)
 				{
-					this.x += 2.5;
+					console.log("GAME OVER");
+					gameOver = true;
+					cantMove = true;
+
+				}
+				if(collideObj[i].isSolid)
+				{
+					cantMove = true;
+				}
+				if(collideObj[i] instanceof FLOOROBJ)
+				{
+					onFloor = true;
+					floorI = i;
+				}
+			}
+				if(!cantMove && onFloor && this.sprite.position.y + this.sprite.height < collideObj[floorI].sprite.position.y)
+				{
+					this.sprite.position.x += 2.5;
 					this.frameSwitcher(0);
 					this.frameCount++;
+				}
+					
 
-				}	
-			}
-		} else if (KEYS['a'] && !this.onLadder) {
-			if(this.collide(GAMEOBJECTS) === true)
+					
+			
+		} else if (KEYS['a']) {
+			collideObj = this.collide(GAMEOBJECTS, -2.5,0);
+			for(var i =0; i < collideObj.length; i++)
 			{
-				console.log("Game Over!");
+				if(collideObj[i] instanceof ENEMYOBJ)
+				{
+					console.log("GAME OVER");
+					gameOver = true;
+					cantMove = true;
+
+				}
+				if(collideObj[i].isSolid)
+				{
+					cantMove = true;
+				}
 			}
-			else
-			{
-				if(this.x -2.5 >=0)
-				{	
-					this.x -= 2.5;
+				if(!cantMove)
+				{
+					this.sprite.position.x -= 2.5;
 					this.frameSwitcher(1);
 					this.frameCount++;
-
-				}	
-			}
+				}
 		}
 		
    		 // Check for vertical movement.
    		 if (KEYS['s']) {
-    		for(var i =0; i<GAMEOBJECTS.length-1; i++)
+   		 	collideObj = this.collide(GAMEOBJECTS,0 ,5);
+   		 	console.log(collideObj);
+			for(var i =0; i < collideObj.length; i++)
 			{
-				if(GAMEOBJECTS[i].collide(this) === true)
+				if(collideObj[i] instanceof ENEMYOBJ)
 				{
-				
+					console.log("GAME OVER");
+					gameOver = true;
+					cantMove = true;
 
-					if(this.y + 5 <= this.closestFloor.y-52)
+				}
+				if(collideObj[i].isSolid)
+				{
+					cantMove = true;
+				}
+				if(collideObj[i] instanceof LADDEROBJ)
+				{
+					ladderI = i;
+				}
+			}
+				if(!cantMove && ladderI != -1)
+				{
+						
+					if(this.sprite.position.y + 5 <= collideObj[ladderI].lowerFloor.sprite.position.y -52)
+					{
+							//sets that you are on the ladder to true, so that you cant walk off the side of the ladder
+							//then adjusts the thiss y coordinate 
+							this.sprite.position.y += 5;
+
+
+						
+					}
+					
+
+					}
+				
+    	} else if (KEYS['w']) {
+    		collideObj = this.collide(GAMEOBJECTS,0 ,-5);
+    		console.log(collideObj);
+			for(var i =0; i < collideObj.length; i++)
+			{
+				if(collideObj[i] instanceof ENEMYOBJ)
+				{
+					console.log("GAME OVER");
+					gameOver = true;
+					cantMove = true;
+
+				}
+				if(collideObj[i].isSolid)
+				{
+					cantMove = true;
+				}
+				if(collideObj[i] instanceof LADDEROBJ)
+				{
+					ladderI = i;
+				}
+			}
+				//console.log(cantMove + " " + ladderI);
+				if(!cantMove && ladderI != -1)
+				{
+					console.log(this.closestFloor);
+					if(this.sprite.position.y - 5 >= collideObj[ladderI].upperFloor.sprite.position.y-52)
 					{
 							//sets that you are on the ladder to true, so that you cant walk off the side of the ladder
 							//then adjusts the thiss y coordinate 
 							this.onLadder = true;
-							this.y += 5;
+							this.sprite.position.y -= 5;
 						
 					}
 					else
@@ -113,47 +204,25 @@ PLAYEROBJ.prototype.update = function(KEYS)
 							//this is when you are unable to move any higher, aka you have reached the top of the ladder
 							//this links the this to the closest floor so the this is "stuck" to it
 							//also sets onLadder to false so you can move left and right again
-							this.closestFloor = GAMEOBJECTS[i].lowerFloor;
+							this.closestFloor = collideObj[ladderI].upperFloor;
 							this.onLadder = false;
 						}
 
 					}
-				}
-    	} else if (KEYS['w']) {
-    		for(var i = 0; i < GAMEOBJECTS.length-1; i++)
-			{
-				if(GAMEOBJECTS[i].collide(this))
-				{
-					if(this.y >= GAMEOBJECTS[i].y-52 && GAMEOBJECTS[i].y - 5 >= 0)
-					{
-							//sets that you are on the ladder to true, so that you cant walk off the side of the ladder
-							//then adjusts the thiss y coordinate 
-							this.onLadder = true;
-							this.y -= 5;
-						
-							break;
-						}	
-						else
-						{
-							//this is when you are unable to move any higher, aka you have reached the top of the ladder
-							//this links the this to the closest floor so the this is "stuck" to it
-							//also sets onLadder to false so you can move left and right again
-							this.closestFloor = GAMEOBJECTS[i].upperFloor;
-							this.onLadder = false;
-						}	
-					}
-				
-
-			}
-			
     	}	
-
-
-    	this.sprite.position.x = this.x;
-    	this.sprite.position.y = this.y;
-
-    	
-    	
+    	/*else if(KEYS['space'])
+    	{
+    		var hideObj;
+    		if(hideObj = this.collide(GAMEOBJECTS,0,0))
+    		{
+    			if(hideObj.isHideable)
+    			{
+    				this.sprite.visible = false;
+    			}
+    		}
+    	}*/
+  	
+  	
 }
 
 var ENEMYOBJ = function()
@@ -165,7 +234,7 @@ ENEMYOBJ.prototype = new GAMEOBJ();
 
 ENEMYOBJ.prototype.collide = function(PLAYER)
 {
-	if(PLAYER.x >= this.x && PLAYER.x <= this.x+this.width && PLAYER.y >= this.y && PLAYER.y <= this.y+this.height)
+	if(PLAYER.sprite.position.x >= this.sprite.position.x && PLAYER.sprite.position.x <= this.sprite.position.x+this.sprite.width && PLAYER.sprite.position.y >= this.sprite.position.y && PLAYER.sprite.position.y <= this.sprite.position.y+this.sprite.height)
 	{
 		return true;
 	};
@@ -174,4 +243,16 @@ ENEMYOBJ.prototype.collide = function(PLAYER)
 ENEMYOBJ.prototype.update = function(direction)
 {
 	this.frameSwitcher(direction);
+}
+
+var WALLOBJ = function()
+{
+	GAMEOBJ.apply(this,arguments);
+};
+
+WALLOBJ.prototype = new GAMEOBJ();
+
+WALLOBJ.prototype.collide = function(PLAYER)
+{
+	return false;
 }
