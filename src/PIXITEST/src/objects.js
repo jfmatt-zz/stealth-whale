@@ -49,7 +49,7 @@ var collided = [];
 		
 		if(this.sprite.position.x + this.sprite.width + dx >= GAMEOBJECTS[i].sprite.position.x 
 			&& GAMEOBJECTS[i].sprite.position.x+GAMEOBJECTS[i].sprite.width >= this.sprite.position.x + dx
-			&& this.sprite.position.y + this.sprite.height + dy >= GAMEOBJECTS[i].sprite.position.y 
+			&& this.sprite.position.y + this.sprite.height + dy >= GAMEOBJECTS[i].sprite.position.y
 			&& GAMEOBJECTS[i].sprite.position.y + GAMEOBJECTS[i].sprite.height >= this.sprite.position.y + dy)
 			
 		{
@@ -97,9 +97,13 @@ PLAYEROBJ.prototype.update = function(KEYS)
 			}
 				if(!cantMove && onFloor)
 				{
-					this.sprite.position.x += 2.5;
-					// this.frameSwitcher(0);
-					this.frameCount++;
+					if(this.sprite.position.y + this.sprite.height <= collideObj[floorI].sprite.position.y+5)
+					{
+						this.sprite.position.x += 2.5;
+						this.frameSwitcher(0);
+						this.frameCount++;
+					}
+					
 				}
 					
 
@@ -122,15 +126,21 @@ PLAYEROBJ.prototype.update = function(KEYS)
 				}
 				if(collideObj[i] instanceof FLOOROBJ)
 				{
+					floorI = i;
 					onFloor = true;
 					
 				}
 			}
 				if(!cantMove && onFloor)
 				{
-					this.sprite.position.x -= 2.5;
-					// this.frameSwitcher(1);
-					this.frameCount++;
+					if(this.sprite.position.y + this.sprite.height <= collideObj[floorI].sprite.position.y+5)
+					{
+						this.sprite.position.x -= 2.5;
+						this.frameSwitcher(1);
+						this.frameCount++;
+					}
+					
+					
 				}
 		}
 		
@@ -160,12 +170,16 @@ PLAYEROBJ.prototype.update = function(KEYS)
 			}
 				if(!cantMove && ladderI != -1)
 				{
-						
+						if(this.sprite.position.y + this.sprite.height + 5 <= collideObj[ladderI].lowerFloor.sprite.position.y+5)
+						{
+							this.sprite.position.y += 5;
+							
+						}
 					//if(this.sprite.position.y + 5 <= collideObj[ladderI].lowerFloor.sprite.position.y -52)
 					//{
 							//sets that you are on the ladder to true, so that you cant walk off the side of the ladder
 							//then adjusts the thiss y coordinate 
-							this.sprite.position.y += 5;
+							
 					//}
 					
 
@@ -197,7 +211,7 @@ PLAYEROBJ.prototype.update = function(KEYS)
 				if(!cantMove && ladderI != -1)
 				{
 					
-					if(this.sprite.position.y - 5 >= collideObj[ladderI].upperFloor.sprite.position.y-52)
+					if(this.sprite.position.y + this.sprite.height- 5 >= collideObj[ladderI].sprite.position.y)
 					{
 							//sets that you are on the ladder to true, so that you cant walk off the side of the ladder
 							//then adjusts the thiss y coordinate 

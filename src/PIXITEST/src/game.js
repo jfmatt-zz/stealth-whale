@@ -39,7 +39,7 @@ app.world.prototype.game = function()
 	//Since these are all static elements, they are drawn once.
 	//Once there are maps bigger than one screen the drawing aspect will need to be reworked.
 	//THE PLAYER IS ALWAYS THE FIRST ITEM IN THE GAMEOBJECTS ARRAY, DO NOT ADD THINGS BEFORE IT
-	var PLAYER = new PLAYEROBJ(200,Y-77, 62,70,true,false, 0x000000, new PIXI.Sprite(PIXI.Texture.fromImage("assets/Whale_L_stand.png")));
+	var PLAYER = new PLAYEROBJ(200,Y-214, 184,140,true,false, 0x000000, new PIXI.Sprite(PIXI.Texture.fromImage("assets/Whale_L_stand.png")));
 	PLAYER.sprite.width = PLAYER.width;
 	PLAYER.sprite.height = PLAYER.height;
   	PLAYER.sprite.position.x = PLAYER.x;

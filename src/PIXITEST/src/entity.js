@@ -22,15 +22,18 @@
 		this.color = color;
 
 
-		this.right =0;
-		this.left =4;
+		this.right =8;
+		this.left =0;
 		this.up =0;
 		this.down =0;
 
 		this.frameCount = 0;
 	};
 
-	var textures = ["assets/standingR.png","assets/walkingR1.png","assets/walkingR2.png","assets/standingR2.png", "assets/standingL.png", "assets/walkingL1.png", "assets/walkingL2.png", "assets/standingL2.png"];
+	var assets = ['assets/Whale_L_stand.png', 'assets/Whale_L_walk_1.png','assets/Whale_L_walk_2.png','assets/Whale_L_walk_3.png',
+	'assets/Whale_L_walk_4.png','assets/Whale_L_walk_5.png','assets/Whale_L_walk_6.png','assets/Whale_L_walk_7.png','assets/Whale_L_walk_8.png',
+	'assets/Whale_R_stand.png', 'assets/Whale_R_walk_1.png', 'assets/Whale_R_walk_2.png', 'assets/Whale_R_walk_3.png', 'assets/Whale_R_walk_4.png',
+	'assets/Whale_R_walk_5.png', 'assets/Whale_R_walk_6.png','assets/Whale_R_walk_7.png','assets/Whale_R_walk_8.png']
 	GAMEOBJ.prototype.frameSwitcher = function(direction)
 	{
 		if(direction == 0)
@@ -39,11 +42,11 @@
 				{
 					
 
-					this.sprite.setTexture(PIXI.Texture.fromImage(textures[this.right]));
+					this.sprite.setTexture(PIXI.Texture.fromImage(assets[this.right]));
 					this.right++;
-					if(this.right > 3)
+					if(this.right > 12)
 					{
-						this.right =0;
+						this.right =8;
 					}
 					this.frameCount = 0;
 
@@ -56,12 +59,12 @@
 				{
 					
 
-					this.sprite.setTexture(PIXI.Texture.fromImage(textures[this.left]));
+					this.sprite.setTexture(PIXI.Texture.fromImage(assets[this.left]));
 					this.left++;
 
-					if(this.left > 7)
+					if(this.left > 8)
 					{
-						this.left = 4;
+						this.left = 0;
 					}
 					this.frameCount = 0;
 
