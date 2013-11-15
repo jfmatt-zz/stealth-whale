@@ -39,7 +39,7 @@ app.world.prototype.game = function()
 	//Since these are all static elements, they are drawn once.
 	//Once there are maps bigger than one screen the drawing aspect will need to be reworked.
 	//THE PLAYER IS ALWAYS THE FIRST ITEM IN THE GAMEOBJECTS ARRAY, DO NOT ADD THINGS BEFORE IT
-	var PLAYER = new PLAYEROBJ(200,Y-220, 52,52,true,false, 0x000000, new PIXI.Sprite(PIXI.Texture.fromImage("assets/standingL.png")));
+	var PLAYER = new PLAYEROBJ(200,0, 52,52,true,false, 0x000000, new PIXI.Sprite(PIXI.Texture.fromImage("assets/Whale_L_stand.png")));
   	PLAYER.sprite.position.x = PLAYER.x;
   	PLAYER.sprite.position.y = PLAYER.y;
 	
@@ -54,7 +54,7 @@ app.world.prototype.game = function()
 	var WALL2 = new WALLOBJ(X-10, 0, 10, Y, true, false, 0x000000,new PIXI.TilingSprite(PIXI.Texture.fromImage("assets/Floor.png"), 10,Y));
 	GAMEOBJECTS.push(WALL2);
 
-	var FLOOR = new FLOOROBJ(WALL.x + WALL.width,	Y-200, WALL2.x, 200, false, false,  0x000000,new PIXI.TilingSprite(PIXI.Texture.fromImage("assets/Floor.png"), WALL2.x,200));
+	var FLOOR = new FLOOROBJ(WALL.x + WALL.width,	Y-25, WALL2.x, 25, false, false,  0x000000,new PIXI.TilingSprite(PIXI.Texture.fromImage("assets/Floor.png"), WALL2.x,25));
 	FLOOR.closestFloor = FLOOR;
 	GAMEOBJECTS.push(FLOOR);
 
@@ -67,10 +67,10 @@ app.world.prototype.game = function()
 	GAMEOBJECTS.push(FLOOR3);
 
 	
-	var LADDER = new LADDEROBJ(300,FLOOR2.y,50,ladderHeight,  false, false,  0xfff000,  new PIXI.TilingSprite(PIXI.Texture.fromImage("assets/Ladder.png"), 50, ladderHeight));
+	var LADDER = new LADDEROBJ(300,FLOOR2.y,80,ladderHeight,  false, false,  0xfff000,  new PIXI.TilingSprite(PIXI.Texture.fromImage("assets/Ladder.png"), 80, ladderHeight));
 	GAMEOBJECTS.push(LADDER);
 
-	var LADDER2 = new LADDEROBJ(600, Y - 400 -FLOOR.height, 50, ladderHeight,  false, false,  0xfff000,new PIXI.TilingSprite(PIXI.Texture.fromImage("assets/Ladder.png"), 50, ladderHeight));
+	var LADDER2 = new LADDEROBJ(600, Y - 400 -FLOOR.height, 80, ladderHeight,  false, false,  0xfff000,new PIXI.TilingSprite(PIXI.Texture.fromImage("assets/Ladder.png"), 80, ladderHeight));
 	GAMEOBJECTS.push(LADDER2);
 
 	LADDER.lowerFloor = FLOOR;
@@ -93,11 +93,11 @@ app.world.prototype.game = function()
 	PLAYER.closestFloor = GAMEOBJECTS[2];
 
 		for(var i =1; i <GAMEOBJECTS.length; i++)
-	{
-		GAMEOBJECTS[i].sprite.position.x = GAMEOBJECTS[i].x;
-		GAMEOBJECTS[i].sprite.position.y = GAMEOBJECTS[i].y;
-		this.foreground.addChild(GAMEOBJECTS[i].sprite);
-	}
+		{
+			GAMEOBJECTS[i].sprite.position.x = GAMEOBJECTS[i].x;
+			GAMEOBJECTS[i].sprite.position.y = GAMEOBJECTS[i].y;
+			this.foreground.addChild(GAMEOBJECTS[i].sprite);
+		}
 
 
 	GAMEOBJECTS[0].sprite.position.x = GAMEOBJECTS[0].x;

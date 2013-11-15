@@ -172,8 +172,7 @@ PLAYEROBJ.prototype.update = function(KEYS)
 				
     	} else if (KEYS['w']) {
     		collideObj = this.collide(GAMEOBJECTS,0 ,-5);
-    		console.log(this.sprite.position.y + " " + this.sprite.height + " " + FLOOR.y +);
-			for(var i =0; i < collideObj.length; i++)
+    		for(var i =0; i < collideObj.length; i++)
 			{
 				if(collideObj[i] instanceof ENEMYOBJ)
 				{
