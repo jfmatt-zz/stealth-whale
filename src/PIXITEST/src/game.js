@@ -39,7 +39,9 @@ app.world.prototype.game = function()
 	//Since these are all static elements, they are drawn once.
 	//Once there are maps bigger than one screen the drawing aspect will need to be reworked.
 	//THE PLAYER IS ALWAYS THE FIRST ITEM IN THE GAMEOBJECTS ARRAY, DO NOT ADD THINGS BEFORE IT
-	var PLAYER = new PLAYEROBJ(200,0, 52,52,true,false, 0x000000, new PIXI.Sprite(PIXI.Texture.fromImage("assets/Whale_L_stand.png")));
+	var PLAYER = new PLAYEROBJ(200,Y-77, 62,70,true,false, 0x000000, new PIXI.Sprite(PIXI.Texture.fromImage("assets/Whale_L_stand.png")));
+	PLAYER.sprite.width = PLAYER.width;
+	PLAYER.sprite.height = PLAYER.height;
   	PLAYER.sprite.position.x = PLAYER.x;
   	PLAYER.sprite.position.y = PLAYER.y;
 	
@@ -67,7 +69,7 @@ app.world.prototype.game = function()
 	GAMEOBJECTS.push(FLOOR3);
 
 	
-	var LADDER = new LADDEROBJ(300,FLOOR2.y,80,ladderHeight,  false, false,  0xfff000,  new PIXI.TilingSprite(PIXI.Texture.fromImage("assets/Ladder.png"), 80, ladderHeight));
+	var LADDER = new LADDEROBJ(300,FLOOR2.y,80,ladderHeight,  false, true,  0xfff000,  new PIXI.TilingSprite(PIXI.Texture.fromImage("assets/Ladder.png"), 80, ladderHeight));
 	GAMEOBJECTS.push(LADDER);
 
 	var LADDER2 = new LADDEROBJ(600, Y - 400 -FLOOR.height, 80, ladderHeight,  false, false,  0xfff000,new PIXI.TilingSprite(PIXI.Texture.fromImage("assets/Ladder.png"), 80, ladderHeight));
@@ -78,13 +80,17 @@ app.world.prototype.game = function()
 	LADDER2.lowerFloor = FLOOR2;
 	LADDER2.upperFloor = FLOOR3;
 
-	var NPC1 = new ENEMYOBJ(800, FLOOR2.y-52, 52,52, true, false, 0x000fff, new PIXI.Sprite(PIXI.Texture.fromImage("assets/standingL.png")));
+	var NPC1 = new ENEMYOBJ(800, FLOOR2.y-52, 52,60, true, false, 0x000fff, new PIXI.Sprite(PIXI.Texture.fromImage("assets/soldierNOGUN_L_stand.png")));
+	NPC1.sprite.width = NPC1.width;
+	NPC1.sprite.height = NPC1.height;
 	GAMEOBJECTS.push(NPC1);
 	NPCOBJECTS.push(NPC1);
 
 	
 
-	var NPC2 = new ENEMYOBJ(1200, FLOOR3.y-52, 52,52, true, false, 0x000fff,new PIXI.Sprite(PIXI.Texture.fromImage("assets/standingL.png")));
+	var NPC2 = new ENEMYOBJ(1200, FLOOR3.y-52, 52,60, true, false, 0x000fff,new PIXI.Sprite(PIXI.Texture.fromImage("assets/soldierNOGUN_L_stand.png")));
+	NPC2.sprite.width = NPC2.width;
+	NPC2.sprite.height = NPC2.height;
 	GAMEOBJECTS.push(NPC2);
 	NPCOBJECTS.push(NPC2);
 

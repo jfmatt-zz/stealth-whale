@@ -36,6 +36,7 @@ var PLAYEROBJ = function(){
 	GAMEOBJ.apply(this, arguments);
 
 	this.onLadder = false;
+	this.clicked = false;
 };
 
 PLAYEROBJ.prototype = new GAMEOBJ();
@@ -97,7 +98,7 @@ PLAYEROBJ.prototype.update = function(KEYS)
 				if(!cantMove && onFloor)
 				{
 					this.sprite.position.x += 2.5;
-					this.frameSwitcher(0);
+					// this.frameSwitcher(0);
 					this.frameCount++;
 				}
 					
@@ -128,7 +129,7 @@ PLAYEROBJ.prototype.update = function(KEYS)
 				if(!cantMove && onFloor)
 				{
 					this.sprite.position.x -= 2.5;
-					this.frameSwitcher(1);
+					// this.frameSwitcher(1);
 					this.frameCount++;
 				}
 		}
@@ -208,17 +209,28 @@ PLAYEROBJ.prototype.update = function(KEYS)
 
 					}
     	}	
-    	/*else if(KEYS['space'])
+    	else if(KEYS['space'])
     	{
-    		var hideObj;
-    		if(hideObj = this.collide(GAMEOBJECTS,0,0))
+    		
+    		var hideObj = hideObj = this.collide(GAMEOBJECTS,0,0);
+    		for(var i =0; i <hideObj.length; i++)
     		{
-    			if(hideObj.isHideable)
+    			if(hideObj[i].isHideable && !this.clicked)
     			{
     				this.sprite.visible = false;
+    				this.clicked = true;
+    				console.log("HIDING");
+    				
+    				
+    			}
+    			else if(hideObj[i].isHideable && this.clicked)
+    			{
+    				this.sprite.visible = true;
+    				this.clicked = false;
+
     			}
     		}
-    	}*/
+    	}
   	
   	
 }
