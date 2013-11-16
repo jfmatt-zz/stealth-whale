@@ -25,8 +25,8 @@ var PLAYEROBJ = function(){
 	this.lAssets = ['assets/Whale_L_stand.png', 'assets/Whale_L_walk_1.png','assets/Whale_L_walk_2.png','assets/Whale_L_walk_3.png',
 	'assets/Whale_L_walk_4.png','assets/Whale_L_walk_5.png','assets/Whale_L_walk_6.png','assets/Whale_L_walk_7.png','assets/Whale_L_walk_8.png'];
 
-	this.rAssets = ['assets/Whale_R_stand.png', 'assets/Whale_R_walk_1.png', 'assets/Whale_R_walk_2.png', 'assets/Whale_R_walk_3.png', 'assets/Whale_R_walk_4.png',
-	'assets/Whale_R_walk_5.png', 'assets/Whale_R_walk_6.png','assets/Whale_R_walk_7.png','assets/Whale_R_walk_8.png'];
+	this.rAssets = ['assets/Whale_R_stand.PNG', 'assets/Whale_R_walk_1.PNG', 'assets/Whale_R_walk_2.PNG', 'assets/Whale_R_walk_3.PNG', 'assets/Whale_R_walk_4.PNG',
+	'assets/Whale_R_walk_5.PNG', 'assets/Whale_R_walk_6.PNG','assets/Whale_R_walk_7.PNG','assets/Whale_R_walk_8.PNG'];
 
 };
 
@@ -94,6 +94,7 @@ PLAYEROBJ.prototype.update = function(KEYS, foreground)
 						this.sprite.position.x += 2.5;
 						this.frameSwitcher(0, this.rAssets,3);
 						this.frameCount++;
+  						
 					}
 					
 				}
@@ -165,14 +166,7 @@ PLAYEROBJ.prototype.update = function(KEYS, foreground)
 							this.sprite.position.y += 5;
 							
 						}
-					//if(this.sprite.position.y + 5 <= collideObj[ladderI].lowerFloor.sprite.position.y -52)
-					//{
-							//sets that you are on the ladder to true, so that you cant walk off the side of the ladder
-							//then adjusts the thiss y coordinate 
 							
-					//}
-					
-
 				}
 				
     	} else if (KEYS['w']) {
@@ -261,13 +255,20 @@ var ENEMYOBJ = function()
 
 	this.soldierLAssets = ['assets/soldierNOGUN_L_stand.png', 'assets/soldierNOGUN_L_walk_1.png', 'assets/soldierNOGUN_L_walk_2.png', 
 	'assets/soldierNOGUN_L_walk_3.png' , 'assets/soldierNOGUN_L_walk_4.png'];
+
 	this.soldierRAssets = ['assets/soldierNOGUN_R_stand.png', 'assets/soldierNOGUN_R_walk_1.png', 'assets/soldierNOGUN_R_walk_2.png', 
 	'assets/soldierNOGUN_R_walk_3.png','assets/soldierNOGUN_R_walk_4.png'];
 
 	this.counter = 0;
 
-	this.script = [2.5,2.5,2.5,2.5];
+	
 };
+
+ENEMYOBJ.prototype.lAssets = ['assets/soldierNOGUN_L_stand.png', 'assets/soldierNOGUN_L_walk_1.png', 'assets/soldierNOGUN_L_walk_2.png', 
+	'assets/soldierNOGUN_L_walk_3.png' , 'assets/soldierNOGUN_L_walk_4.png'];
+
+ENEMYOBJ.prototype.rAssets = ['assets/soldierNOGUN_R_stand.png', 'assets/soldierNOGUN_R_walk_1.png', 'assets/soldierNOGUN_R_walk_2.png', 
+	'assets/soldierNOGUN_R_walk_3.png','assets/soldierNOGUN_R_walk_4.png'];
 
 ENEMYOBJ.prototype = new GAMEOBJ();
 
@@ -292,31 +293,37 @@ ENEMYOBJ.prototype.collide = function(GAMEOBJECTS, dx, dy)
 
 ENEMYOBJ.prototype.update = function()
 {
+	console.log(this.script[this.counter]);
 	this.sprite.position.x += this.script[this.counter];
 
-
-	if(this.collide(GAMEOBJECTS, this.script[this.counter], 0))
+	if(this.frameCount == 6)
 	{
+		if(this.collide(GAMEOBJECTS, this.script[this.counter], 0))
+		{
 		console.log("GAME OVER!");
-	}
+		}
 
 		if(this.script[this.counter] === -2.5)
 		{
-			this.frameSwitcher(1, this.soldierLAssets, 6);
-			this.frameCount++;
+			this.frameSwitcher(1, this.lAssets, 6);
+			
 		}
 		else if(this.script[this.counter] === 2.5)
 		{
-			this.frameSwitcher(0, this.soldierRAssets, 6);
-			this.frameCount++;
+			this.frameSwitcher(0, this.rAssets, 6);
+			
 		}
 
 		this.counter++;
-		if(this.counter > this.script.length)
+		if(this.counter > this.script.length-1)
 		{
 			this.counter =0;
 		}
+		this.frameCount = 0;
 		
+	}
+	this.frameCount++;
+	
 	
 }
 

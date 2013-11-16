@@ -70,7 +70,7 @@ app.world.prototype.game = function()
 	GAMEOBJECTS.push(FLOOR3);
 
 	
-	var LADDER = new LADDEROBJ(300,FLOOR2.y,80,ladderHeight,  false, true,   new PIXI.TilingSprite(PIXI.Texture.fromImage("assets/Ladder.png"), 80, ladderHeight));
+	var LADDER = new LADDEROBJ(300,FLOOR2.y,80,ladderHeight,  false, false,   new PIXI.TilingSprite(PIXI.Texture.fromImage("assets/Ladder.png"), 80, ladderHeight));
 	GAMEOBJECTS.push(LADDER);
 
 	var LADDER2 = new LADDEROBJ(600, Y - 400 -FLOOR.height, 80, ladderHeight,  false, false, new PIXI.TilingSprite(PIXI.Texture.fromImage("assets/Ladder.png"), 80, ladderHeight));
@@ -87,11 +87,18 @@ app.world.prototype.game = function()
 	FLAG.sprite.height = FLAG.height;
 	GAMEOBJECTS.push(FLAG);
 
+	var FLAG2 = new GAMEOBJ(LADDER2.x - 30, LADDER2.y - 142, 100, 112, false, true, new PIXI.Sprite(PIXI.Texture.fromImage("assets/flag_1.png")));
+	FLAG2.sprite.width = FLAG2.width;
+	FLAG2.sprite.height = FLAG2.height;
+	GAMEOBJECTS.push(FLAG2);
+
+
 	var NPC1 = new ENEMYOBJ(800, FLOOR2.y-60, 52,60, true, false, new PIXI.Sprite(PIXI.Texture.fromImage("assets/soldierNOGUN_L_stand.png")));
 	NPC1.sprite.width = NPC1.width;
 	NPC1.sprite.height = NPC1.height;
 	GAMEOBJECTS.push(NPC1);
 	NPCOBJECTS.push(NPC1);
+	NPC1.script = [0,-2.5,-2.5,-2.5, -2.5, -2.5,-2.5,-2.5,-2.5, -2.5, -2.5,-2.5,-2.5,-2.5, -2.5, -2.5,  0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 2.5, 2.5, 2.5,2.5, 2.5,2.5, 2.5, 2.5,2.5, 2.5,2.5, 2.5, 2.5,2.5, 2.5, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
 
 	
 
@@ -100,6 +107,7 @@ app.world.prototype.game = function()
 	NPC2.sprite.height = NPC2.height;
 	GAMEOBJECTS.push(NPC2);
 	NPCOBJECTS.push(NPC2);
+	NPC2.script = [0,-2.5,-2.5,-2.5, -2.5, -2.5, -2.5, -2.5, -2.5, -2.5, -2.5, -2.5,-2.5,-2.5, -2.5, -2.5, -2.5, -2.5, -2.5, -2.5, -2.5, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 2.5, 2.5, 2.5,2.5, 2.5, 2.5,2.5,2.5,2.5,2.5,2.5, 2.5, 2.5,2.5, 2.5, 2.5,2.5,2.5,2.5,2.5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
 
 
 
