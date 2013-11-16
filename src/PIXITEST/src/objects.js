@@ -253,11 +253,8 @@ var ENEMYOBJ = function()
 	GAMEOBJ.apply(this, arguments);
 
 
-	this.soldierLAssets = ['assets/soldierNOGUN_L_stand.png', 'assets/soldierNOGUN_L_walk_1.png', 'assets/soldierNOGUN_L_walk_2.png', 
-	'assets/soldierNOGUN_L_walk_3.png' , 'assets/soldierNOGUN_L_walk_4.png'];
-
-	this.soldierRAssets = ['assets/soldierNOGUN_R_stand.png', 'assets/soldierNOGUN_R_walk_1.png', 'assets/soldierNOGUN_R_walk_2.png', 
-	'assets/soldierNOGUN_R_walk_3.png','assets/soldierNOGUN_R_walk_4.png'];
+	this.lAssets = ['assets/soldierNOGUN_L_stand.png', 'assets/soldierNOGUN_L_walk_1.png', 'assets/soldierNOGUN_L_walk_2.png', 'assets/soldierNOGUN_L_walk_3.png' , 'assets/soldierNOGUN_L_walk_4.png'];
+	this.rAssets = ['assets/soldierNOGUN_R_stand.png', 'assets/soldierNOGUN_R_walk_1.png', 'assets/soldierNOGUN_R_walk_2.png', 'assets/soldierNOGUN_R_walk_3.png','assets/soldierNOGUN_R_walk_4.png'];
 
 	this.counter = 0;
 
