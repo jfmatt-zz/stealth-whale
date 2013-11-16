@@ -10,7 +10,7 @@ module.exports = function(grunt) {
 		},
 
 		jshint: {
-			files: ['Gruntfile.js', 'src/**/*.js', '!src/js/vendor/**', 'test/**/*.js'],
+			all: ['Gruntfile.js', 'src/**/*.js', '!src/js/vendor/**', 'test/**/*.js'],
 			options: {
 				smarttabs: true,
 				asi: true
@@ -18,7 +18,7 @@ module.exports = function(grunt) {
 		},
 
 		mocha: {
-			files: ['test/**/*.html']
+			all: ['test/**/*.html']
 		},
 
 		'gh-pages': {

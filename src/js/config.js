@@ -3,7 +3,7 @@ define(
 	function () {
 		return {
 
-			fps: 4,
+			fps: 20,
 			
 			colors: {
 				SKY: 0xFFFFFF
