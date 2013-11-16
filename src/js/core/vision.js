@@ -38,7 +38,7 @@ define(
 			})
 			return arr
 		};
-		
+
 		_.extend(Vision.prototype, {
 			getPoly: function () {
 				if (this.dirty) {
@@ -60,7 +60,6 @@ define(
 				    args = _.isArray(stages) ? stages : arguments,
 
 				    segments = [],
-				    criticals = [],
 
 				    piOver2 = Math.PI / 2,
 				    threePiOver2 = piOver2 * 3,
@@ -70,13 +69,27 @@ define(
 
 				    Pt
 
-				this.pts = []
+				if (this._res != this.resolution) {
+					this.pts = []
+					this._res = this.resolution
+					for (ii = 0; ii < this.resolution; ii++) {
+						Pt = new Point(this.radius)
+						Pt.th = th
+						th += dTh
+						this.pts.push(Pt)
+					}
+				}
+				th = 0
 				this.position.x = this.center.x - this.radius
 				this.position.y = this.center.y - this.radius
 				
 				//Add things we're colliding with
 				for (ii = 0; ii < args.length; ii++)
 					objs = objs.concat(flattenStage(args[ii]))
+
+				_.filter(objs, function (o) {
+					return !o.blocksVision
+				})
 				
 				//get segments
 				_.each(objs, function (o) {
@@ -130,7 +143,7 @@ define(
 				
 				//yay ugly
 				for (ii = 0; ii < this.resolution; ii++) {
-					Pt = new Point(this.radius, 0)
+					Pt = this.pts[ii]
 					Pt.th = th
 //					console.log("th=" + th + " (interval " + ii + ")")
 //					console.log("x=" + Pt.x + ", y=" + Pt.y + ", th=" + Pt.th + ", r=" + Pt.r)
@@ -201,7 +214,6 @@ define(
 
 					}
 
-					this.pts.push(Pt)
 					th += dTh
 				}
 

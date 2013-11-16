@@ -35,8 +35,8 @@ define(
 			this.stage.addChild(this.vision)
 
 			var wall = new Sprite(P.Texture.fromImage("http://eagle1.american.edu/~jd4317a/GWoM/assets/Floor.png"))
-			wall.position.x = 120
-			wall.position.y = 20
+			wall.position.x = 150
+			wall.position.y = 50
 //			wall.visible = false
 			this.stage.addChild(wall)
 			
