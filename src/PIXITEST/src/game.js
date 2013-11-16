@@ -39,7 +39,7 @@ app.world.prototype.game = function()
 	//Since these are all static elements, they are drawn once.
 	//Once there are maps bigger than one screen the drawing aspect will need to be reworked.
 	//THE PLAYER IS ALWAYS THE FIRST ITEM IN THE GAMEOBJECTS ARRAY, DO NOT ADD THINGS BEFORE IT
-	var PLAYER = new PLAYEROBJ(200,Y-214, 184,140,true,false, 0x000000, new PIXI.Sprite(PIXI.Texture.fromImage("assets/Whale_L_stand.png")));
+	var PLAYER = new PLAYEROBJ(200,Y-165, 123,140,true,false,  new PIXI.Sprite(PIXI.Texture.fromImage("assets/Whale_L_stand.png")));
 	PLAYER.sprite.width = PLAYER.width;
 	PLAYER.sprite.height = PLAYER.height;
   	PLAYER.sprite.position.x = PLAYER.x;
@@ -50,29 +50,30 @@ app.world.prototype.game = function()
 
 	var ladderHeight = 200;
 
-	var WALL = new WALLOBJ(0,0,10,Y, true, false, 0x000000,new PIXI.TilingSprite(PIXI.Texture.fromImage("assets/Floor.png"), 10,Y))
+	var WALL = new GAMEOBJ(0,0,10,Y, true, false, new PIXI.TilingSprite(PIXI.Texture.fromImage("assets/Floor.png"), 10,Y))
 	GAMEOBJECTS.push(WALL);
 
-	var WALL2 = new WALLOBJ(X-10, 0, 10, Y, true, false, 0x000000,new PIXI.TilingSprite(PIXI.Texture.fromImage("assets/Floor.png"), 10,Y));
+	var WALL2 = new GAMEOBJ(X-10, 0, 10, Y, true, false, new PIXI.TilingSprite(PIXI.Texture.fromImage("assets/Floor.png"), 10,Y));
 	GAMEOBJECTS.push(WALL2);
 
-	var FLOOR = new FLOOROBJ(WALL.x + WALL.width,	Y-25, WALL2.x, 25, false, false,  0x000000,new PIXI.TilingSprite(PIXI.Texture.fromImage("assets/Floor.png"), WALL2.x,25));
+	var FLOOR = new FLOOROBJ(WALL.x + WALL.width,	Y-25, WALL2.x, 25, false, false,  new PIXI.TilingSprite(PIXI.Texture.fromImage("assets/Floor.png"), WALL2.x,25));
 	FLOOR.closestFloor = FLOOR;
 	GAMEOBJECTS.push(FLOOR);
 
-	var FLOOR2 = new FLOOROBJ(WALL.x + WALL.width,Y-ladderHeight-FLOOR.height, WALL2.x, 25,  false, false, 0x000000,new PIXI.TilingSprite(PIXI.Texture.fromImage("assets/Floor.png"), WALL2.x, 25));
+	var FLOOR2 = new FLOOROBJ(WALL.x + WALL.width,Y-ladderHeight-FLOOR.height, WALL2.x, 25,  false, false, new PIXI.TilingSprite(PIXI.Texture.fromImage("assets/Floor.png"), WALL2.x, 25));
 	FLOOR2.closestFloor = FLOOR2;
 	GAMEOBJECTS.push(FLOOR2);
 
-	var FLOOR3 = new FLOOROBJ(WALL.x + WALL.width, Y-400 - FLOOR.height, WALL2.x, 25,  false, false,  0x000000,new PIXI.TilingSprite(PIXI.Texture.fromImage("assets/Floor.png"), WALL2.x, 25))
+	var FLOOR3 = new FLOOROBJ(WALL.x + WALL.width, Y-400 - FLOOR.height, WALL2.x, 25,  false, false,  new PIXI.TilingSprite(PIXI.Texture.fromImage("assets/Floor.png"), WALL2.x, 25))
+
 	FLOOR3.closestFloor = FLOOR3;
 	GAMEOBJECTS.push(FLOOR3);
 
 	
-	var LADDER = new LADDEROBJ(300,FLOOR2.y,80,ladderHeight,  false, true,  0xfff000,  new PIXI.TilingSprite(PIXI.Texture.fromImage("assets/Ladder.png"), 80, ladderHeight));
+	var LADDER = new LADDEROBJ(300,FLOOR2.y,80,ladderHeight,  false, true,   new PIXI.TilingSprite(PIXI.Texture.fromImage("assets/Ladder.png"), 80, ladderHeight));
 	GAMEOBJECTS.push(LADDER);
 
-	var LADDER2 = new LADDEROBJ(600, Y - 400 -FLOOR.height, 80, ladderHeight,  false, false,  0xfff000,new PIXI.TilingSprite(PIXI.Texture.fromImage("assets/Ladder.png"), 80, ladderHeight));
+	var LADDER2 = new LADDEROBJ(600, Y - 400 -FLOOR.height, 80, ladderHeight,  false, false, new PIXI.TilingSprite(PIXI.Texture.fromImage("assets/Ladder.png"), 80, ladderHeight));
 	GAMEOBJECTS.push(LADDER2);
 
 	LADDER.lowerFloor = FLOOR;
@@ -80,7 +81,12 @@ app.world.prototype.game = function()
 	LADDER2.lowerFloor = FLOOR2;
 	LADDER2.upperFloor = FLOOR3;
 
-	var NPC1 = new ENEMYOBJ(800, FLOOR2.y-52, 52,60, true, false, 0x000fff, new PIXI.Sprite(PIXI.Texture.fromImage("assets/soldierNOGUN_L_stand.png")));
+	var FLAG = new GAMEOBJ(20+LADDER.x + LADDER.width, LADDER.y -142, 100, 112, false, true, new PIXI.Sprite(PIXI.Texture.fromImage("assets/flag_1.png")));
+	FLAG.sprite.width = FLAG.width;
+	FLAG.sprite.height = FLAG.height;
+	GAMEOBJECTS.push(FLAG);
+
+	var NPC1 = new ENEMYOBJ(800, FLOOR2.y-60, 52,60, true, false, new PIXI.Sprite(PIXI.Texture.fromImage("assets/soldierNOGUN_L_stand.png")));
 	NPC1.sprite.width = NPC1.width;
 	NPC1.sprite.height = NPC1.height;
 	GAMEOBJECTS.push(NPC1);
@@ -88,11 +94,13 @@ app.world.prototype.game = function()
 
 	
 
-	var NPC2 = new ENEMYOBJ(1200, FLOOR3.y-52, 52,60, true, false, 0x000fff,new PIXI.Sprite(PIXI.Texture.fromImage("assets/soldierNOGUN_L_stand.png")));
+	var NPC2 = new ENEMYOBJ(1200, FLOOR3.y-60, 52,60, true, false,new PIXI.Sprite(PIXI.Texture.fromImage("assets/soldierNOGUN_L_stand.png")));
 	NPC2.sprite.width = NPC2.width;
 	NPC2.sprite.height = NPC2.height;
 	GAMEOBJECTS.push(NPC2);
 	NPCOBJECTS.push(NPC2);
+
+	
 
 
 
@@ -130,7 +138,7 @@ app.world.prototype.update = function()
 
 	for(var i = 0; i <GAMEOBJECTS.length; i++)
 	{
-		GAMEOBJECTS[i].update(this.keys);
+		GAMEOBJECTS[i].update(this.keys, this.foreground, this);
 	}
 
 	requestAnimFrame(this.update.bind(this));

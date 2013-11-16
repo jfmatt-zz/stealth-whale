@@ -1,5 +1,5 @@
 	//Game object for non player/NPC objects. Basically the background, ladders, etc. Also any objects that can be hidden behind. 
-	var GAMEOBJ = function(x,y,width, height,solid, isHideable, color, sprite)
+	var GAMEOBJ = function(x,y,width, height,solid, isHideable, sprite)
 	{
 		
 		this.x = x;
@@ -19,10 +19,10 @@
 
 		this.isSolid = solid;
 		this.isHideable = isHideable;
-		this.color = color;
+		
 
 
-		this.right =8;
+		this.right =0;
 		this.left =0;
 		this.up =0;
 		this.down =0;
@@ -30,23 +30,23 @@
 		this.frameCount = 0;
 	};
 
-	var assets = ['assets/Whale_L_stand.png', 'assets/Whale_L_walk_1.png','assets/Whale_L_walk_2.png','assets/Whale_L_walk_3.png',
-	'assets/Whale_L_walk_4.png','assets/Whale_L_walk_5.png','assets/Whale_L_walk_6.png','assets/Whale_L_walk_7.png','assets/Whale_L_walk_8.png',
-	'assets/Whale_R_stand.png', 'assets/Whale_R_walk_1.png', 'assets/Whale_R_walk_2.png', 'assets/Whale_R_walk_3.png', 'assets/Whale_R_walk_4.png',
-	'assets/Whale_R_walk_5.png', 'assets/Whale_R_walk_6.png','assets/Whale_R_walk_7.png','assets/Whale_R_walk_8.png']
-	GAMEOBJ.prototype.frameSwitcher = function(direction)
+	
+	
+	GAMEOBJ.prototype.frameSwitcher = function(direction, assets, frameDelay)
 	{
+
+		//0 is right, 1 is left, 2 is up, 3 is down.
 		if(direction == 0)
 			{
-				if(this.frameCount == 3)
+				if(this.frameCount == frameDelay)
 				{
 					
 
 					this.sprite.setTexture(PIXI.Texture.fromImage(assets[this.right]));
 					this.right++;
-					if(this.right > 12)
+					if(this.right > assets.length-1)
 					{
-						this.right =8;
+						this.right =0;
 					}
 					this.frameCount = 0;
 
@@ -55,14 +55,14 @@
 
 			if(direction ==1)
 			{
-				if(this.frameCount == 3)
+				if(this.frameCount == frameDelay)
 				{
 					
 
 					this.sprite.setTexture(PIXI.Texture.fromImage(assets[this.left]));
 					this.left++;
 
-					if(this.left > 8)
+					if(this.left > assets.length-1)
 					{
 						this.left = 0;
 					}

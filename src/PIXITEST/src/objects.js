@@ -8,16 +8,6 @@
 
 	LADDEROBJ.prototype.allowsVertical = true;
 	
-	LADDEROBJ.prototype.collide = function(PLAYER){
-
-		if(PLAYER.sprite.position.x >= this.sprite.position.x && PLAYER.sprite.position.x <= this.sprite.position.x+this.sprite.width)
-		{
-			return true;
-		};
-
-	};
-
-
 	var FLOOROBJ = function()
 	{
 		GAMEOBJ.apply(this, arguments);
@@ -25,18 +15,18 @@
 
 	FLOOROBJ.prototype = new GAMEOBJ();
 
-	FLOOROBJ.prototype.collide = function(PLAYER)
-	{
-		return false;
-	}
-
-
 //generic player object
 var PLAYEROBJ = function(){
 	GAMEOBJ.apply(this, arguments);
 
 	this.onLadder = false;
-	this.clicked = false;
+	this.locked = false;
+
+	this.lAssets = ['assets/Whale_L_stand.png', 'assets/Whale_L_walk_1.png','assets/Whale_L_walk_2.png','assets/Whale_L_walk_3.png',
+	'assets/Whale_L_walk_4.png','assets/Whale_L_walk_5.png','assets/Whale_L_walk_6.png','assets/Whale_L_walk_7.png','assets/Whale_L_walk_8.png']
+	this.rAssets =['assets/Whale_R_stand.png', 'assets/Whale_R_walk_1.png', 'assets/Whale_R_walk_2.png', 'assets/Whale_R_walk_3.png', 'assets/Whale_R_walk_4.png',
+	'assets/Whale_R_walk_5.png', 'assets/Whale_R_walk_6.png','assets/Whale_R_walk_7.png','assets/Whale_R_walk_8.png'];
+
 };
 
 PLAYEROBJ.prototype = new GAMEOBJ();
@@ -64,7 +54,7 @@ var collided = [];
 
 };
 
-PLAYEROBJ.prototype.update = function(KEYS)
+PLAYEROBJ.prototype.update = function(KEYS, foreground)
 {
 		// Check for horizontal movement.
 		var collideObj = [];
@@ -95,12 +85,12 @@ PLAYEROBJ.prototype.update = function(KEYS)
 					floorI = i;
 				}
 			}
-				if(!cantMove && onFloor)
+				if(!cantMove && onFloor && !this.locked)
 				{
 					if(this.sprite.position.y + this.sprite.height <= collideObj[floorI].sprite.position.y+5)
 					{
 						this.sprite.position.x += 2.5;
-						this.frameSwitcher(0);
+						this.frameSwitcher(0, this.rAssets,3);
 						this.frameCount++;
 					}
 					
@@ -131,12 +121,12 @@ PLAYEROBJ.prototype.update = function(KEYS)
 					
 				}
 			}
-				if(!cantMove && onFloor)
+				if(!cantMove && onFloor && !this.locked)
 				{
 					if(this.sprite.position.y + this.sprite.height <= collideObj[floorI].sprite.position.y+5)
 					{
 						this.sprite.position.x -= 2.5;
-						this.frameSwitcher(1);
+						this.frameSwitcher(1, this.lAssets, 3);
 						this.frameCount++;
 					}
 					
@@ -168,9 +158,9 @@ PLAYEROBJ.prototype.update = function(KEYS)
 				}
 
 			}
-				if(!cantMove && ladderI != -1)
+				if(!cantMove && ladderI != -1 && !this.locked)
 				{
-						if(this.sprite.position.y + this.sprite.height + 5 <= collideObj[ladderI].lowerFloor.sprite.position.y+5)
+						if(this.sprite.position.y + this.sprite.height + 5 <= collideObj[ladderI].lowerFloor.sprite.position.y)
 						{
 							this.sprite.position.y += 5;
 							
@@ -208,7 +198,7 @@ PLAYEROBJ.prototype.update = function(KEYS)
 
 			}
 				//console.log(cantMove + " " + ladderI);
-				if(!cantMove && ladderI != -1)
+				if(!cantMove && ladderI != -1 && !this.locked)
 				{
 					
 					if(this.sprite.position.y + this.sprite.height- 5 >= collideObj[ladderI].sprite.position.y)
@@ -223,27 +213,27 @@ PLAYEROBJ.prototype.update = function(KEYS)
 
 					}
     	}	
-    	else if(KEYS['space'])
+    	else if(KEYS['q'])
     	{
     		
     		var hideObj = hideObj = this.collide(GAMEOBJECTS,0,0);
     		for(var i =0; i <hideObj.length; i++)
     		{
-    			if(hideObj[i].isHideable && !this.clicked)
+    			if(hideObj[i].isHideable)
     			{
-    				this.sprite.visible = false;
-    				this.clicked = true;
+    				
+    				foreground.addChildAt(this.sprite, 0);
     				console.log("HIDING");
+    				this.locked = true;
     				
     				
-    			}
-    			else if(hideObj[i].isHideable && this.clicked)
-    			{
-    				this.sprite.visible = true;
-    				this.clicked = false;
-
     			}
     		}
+    	}
+    	else if(KEYS['e'])
+    	{
+    		foreground.addChildAt(this.sprite, foreground.children.length-1);
+    		this.locked = false;
     	}
   	
   	
@@ -252,31 +242,49 @@ PLAYEROBJ.prototype.update = function(KEYS)
 var ENEMYOBJ = function()
 {
 	GAMEOBJ.apply(this, arguments);
+
+
+	this.soldierLAssets = ['assets/soldierNOGUN_L_stand.png', 'assets/soldierNOGUN_L_walk_1.png', 'assets/soldierNOGUN_L_walk_2.png', 
+	'assets/soldierNOGUN_L_walk_3.png' , 'assets/soldierNOGUN_L_walk_4.png'];
+	this.soldierRAssets = ['assets/soldierNOGUN_R_stand.png', 'assets/soldierNOGUN_R_walk_1.png', 'assets/soldierNOGUN_R_walk_2.png', 
+	'assets/soldierNOGUN_R_walk_3.png','assets/soldierNOGUN_R_walk_4.png'];
+
+	this.delay = 0;
 };
 
 ENEMYOBJ.prototype = new GAMEOBJ();
 
-ENEMYOBJ.prototype.collide = function(PLAYER)
+ENEMYOBJ.prototype.collide = function(GAMEOBJECTS, dx, dy)
 {
-	if(PLAYER.sprite.position.x >= this.sprite.position.x && PLAYER.sprite.position.x <= this.sprite.position.x+this.sprite.width && PLAYER.sprite.position.y >= this.sprite.position.y && PLAYER.sprite.position.y <= this.sprite.position.y+this.sprite.height)
+	
+		if(this.sprite.position.x + this.sprite.width + dx >= GAMEOBJECTS[0].sprite.position.x 
+			&& GAMEOBJECTS[0].sprite.position.x+GAMEOBJECTS[0].sprite.width >= this.sprite.position.x + dx
+			&& this.sprite.position.y + this.sprite.height + dy >= GAMEOBJECTS[0].sprite.position.y
+			&& GAMEOBJECTS[0].sprite.position.y + GAMEOBJECTS[0].sprite.height >= this.sprite.position.y + dy
+			&& !GAMEOBJECTS[0].locked)
+			
+		{
+			
+			return true;
+			
+
+		}
+	
+	
+}
+
+ENEMYOBJ.prototype.update = function()
+{
+	this.sprite.position.x -= 0.5;
+	if(this.collide(GAMEOBJECTS, -1, 0))
 	{
-		return true;
-	};
+		console.log("GAME OVER!");
+	}
+
+	
+		this.frameSwitcher(1, this.soldierLAssets, 6);
+		this.frameCount++;
+	
 }
 
-ENEMYOBJ.prototype.update = function(direction)
-{
-	this.frameSwitcher(direction);
-}
 
-var WALLOBJ = function()
-{
-	GAMEOBJ.apply(this,arguments);
-};
-
-WALLOBJ.prototype = new GAMEOBJ();
-
-WALLOBJ.prototype.collide = function(PLAYER)
-{
-	return false;
-}
