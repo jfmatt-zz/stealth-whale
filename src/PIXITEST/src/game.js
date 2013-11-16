@@ -108,7 +108,7 @@ app.world.prototype.game = function()
 	NPC1.sprite.height = NPC1.height;
 	GAMEOBJECTS.push(NPC1);
 	NPCOBJECTS.push(NPC1);
-	NPC1.script = [new SCRIPTOBJ(0, 200), new SCRIPTOBJ(1, 200), new SCRIPTOBJ(0, 400)];
+	NPC1.script = [new SCRIPTOBJ(0, 200), new SCRIPTOBJ(1, 200), new SCRIPTOBJ(0, 600)];
 
 	
 
@@ -117,7 +117,7 @@ app.world.prototype.game = function()
 	NPC2.sprite.height = NPC2.height;
 	GAMEOBJECTS.push(NPC2);
 	NPCOBJECTS.push(NPC2);
-	NPC2.script = [new SCRIPTOBJ(0, 200), new SCRIPTOBJ(1, 200), new SCRIPTOBJ(0, 400)];
+	NPC2.script = [new SCRIPTOBJ(0, 200), new SCRIPTOBJ(1, 200), new SCRIPTOBJ(0, 600)];
 	
 
 

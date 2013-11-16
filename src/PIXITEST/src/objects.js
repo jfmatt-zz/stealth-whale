@@ -164,7 +164,7 @@ PLAYEROBJ.prototype.update = function(KEYS, foreground)
 			}
 				if(!cantMove && ladderI != -1 && !this.locked)
 				{
-						if(this.sprite.position.y + this.sprite.height  <= collideObj[ladderI].sprite.position.y + collideObj[ladderI].sprite.height)
+						if(this.sprite.position.y + this.sprite.height + 5   <= collideObj[ladderI].sprite.position.y + collideObj[ladderI].sprite.height)
 						{
 							this.sprite.position.y += 5;
 							
@@ -201,7 +201,7 @@ PLAYEROBJ.prototype.update = function(KEYS, foreground)
 			if(!cantMove && ladderI != -1 && !this.locked)
 			{
 				
-				if(this.sprite.position.y + this.sprite.height >= collideObj[ladderI].sprite.position.y)
+				if(this.sprite.position.y + this.sprite.height -5 >= collideObj[ladderI].sprite.position.y)
 				{
 						//sets that you are on the ladder to true, so that you cant walk off the side of the ladder
 						//then adjusts the thiss y coordinate 
@@ -257,6 +257,8 @@ PLAYEROBJ.prototype.update = function(KEYS, foreground)
     		}
 
     	}
+  	
+  	
 }
 
 var ENEMYOBJ = function()
