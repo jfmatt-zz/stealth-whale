@@ -8,6 +8,7 @@
 		this.height = height;
 
 		this.sprite = sprite;
+		// this.position = this.sprite.position;
 		this.isSolid = solid;
 		this.isHideable = isHideable;
 		this.right =0;

@@ -1,6 +1,7 @@
 //Tried to make it so that the canvas will fill the browser window, it kind of works.
 var X = 2000;
 var Y = 2000;
+
 console.log(X + "," + Y);
 var app = {};
 
@@ -12,6 +13,8 @@ app.world = function()
 	this.stage = new PIXI.Stage();
 	this.foreground = new PIXI.DisplayObjectContainer();
 	this.background = new PIXI.DisplayObjectContainer();
+
+	console.log("initialized stage");
 	
 	this.keys =  {};
     var keyName = function (event) {
@@ -26,7 +29,7 @@ app.world = function()
 	app.camera = new app.Camera(this, 980, 720);
 	app.camera.update();
 	
-	// create a renderer instance
+
 	// this.renderer = new PIXI.CanvasRenderer(X, Y, $('#game')[0]);
 	this.renderer = new PIXI.CanvasRenderer(app.camera.view.width, app.camera.view.height);
 	
@@ -105,7 +108,7 @@ app.world.prototype.game = function()
 	NPC1.sprite.height = NPC1.height;
 	GAMEOBJECTS.push(NPC1);
 	NPCOBJECTS.push(NPC1);
-	NPC1.script = [0,-2.5,-2.5,-2.5, -2.5, -2.5,-2.5,-2.5,-2.5, -2.5, -2.5,-2.5,-2.5,-2.5, -2.5, -2.5,  0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 2.5, 2.5, 2.5,2.5, 2.5,2.5, 2.5, 2.5,2.5, 2.5,2.5, 2.5, 2.5,2.5, 2.5, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+	NPC1.script = [new SCRIPTOBJ(0, 200), new SCRIPTOBJ(1, 200), new SCRIPTOBJ(0, 400)];
 
 	
 
@@ -114,7 +117,8 @@ app.world.prototype.game = function()
 	NPC2.sprite.height = NPC2.height;
 	GAMEOBJECTS.push(NPC2);
 	NPCOBJECTS.push(NPC2);
-	NPC2.script = [0,-2.5,-2.5,-2.5, -2.5, -2.5, -2.5, -2.5, -2.5, -2.5, -2.5, -2.5,-2.5,-2.5, -2.5, -2.5, -2.5, -2.5, -2.5, -2.5, -2.5, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 2.5, 2.5, 2.5,2.5, 2.5, 2.5,2.5,2.5,2.5,2.5,2.5, 2.5, 2.5,2.5, 2.5, 2.5,2.5,2.5,2.5,2.5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+	NPC2.script = [new SCRIPTOBJ(0, 200), new SCRIPTOBJ(1, 200), new SCRIPTOBJ(0, 400)];
+	
 
 
 
@@ -156,8 +160,9 @@ app.world.prototype.update = function()
 		GAMEOBJECTS[i].update(this.keys, this.foreground);
 	}
 
-	// Update the player's vision.
-	GAMEOBJECTS[0].vision.calc(this.stage);
+
+	// GAMEOBJECTS[0].vision.calc(this.stage);
+
 
   	// Whenever the player moves, center the camera on the player.
 	app.camera.update(GAMEOBJECTS[0].sprite.position.x, GAMEOBJECTS[0].sprite.position.y);
