@@ -19,7 +19,7 @@ Vision.prototype = new PIXI.Graphics()
 var flattenStage = function (stage) {
     var arr = []
     _.each(stage.children, function (x) {
-        if (x.constructor == P.Stage)
+        if (x.constructor == PIXI.Stage)
             arr = arr.concat(flattenStage(x))
         else
             arr.push(x)
