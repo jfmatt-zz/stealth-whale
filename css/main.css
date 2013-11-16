@@ -1,8 +1,7 @@
 body {
     margin: 0;
 }
-/* Outer div for vertical centering, see 
-http://stackoverflow.com/questions/396145/whats-the-best-way-of-centering-a-div-vertically-with-css */
+/* Outer div for vertical centering, see http://stackoverflow.com/questions/396145/whats-the-best-way-of-centering-a-div-vertically-with-css */
 .center-outer {
     display: table;
     position: absolute;

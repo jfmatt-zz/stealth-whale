@@ -1,6 +1,7 @@
 //Tried to make it so that the canvas will fill the browser window, it kind of works.
-var Y = 600;
-var X = 800;
+var X = 2000;
+var Y = 2000;
+
 console.log(X + "," + Y);
 var app = {};
 
@@ -12,6 +13,8 @@ app.world = function()
 	this.stage = new PIXI.Stage();
 	this.foreground = new PIXI.DisplayObjectContainer();
 	this.background = new PIXI.DisplayObjectContainer();
+
+	console.log("initialized stage");
 	
 	this.keys =  {};
     var keyName = function (event) {
@@ -20,21 +23,28 @@ app.world = function()
     $(document).bind('keydown', $.proxy(function (event) { this.keys[keyName(event)] = true; }, this));
     $(document).bind('keyup', $.proxy(function (event) { this.keys[keyName(event)] = false; }, this));
 
-	// create a renderer instance
-	this.renderer = new PIXI.CanvasRenderer(X, Y, $('#game')[0]);
-	
-	// add the renderer view element to the DOM
-	// document.body.appendChild(this.renderer.view);
-
 	this.game();
 
+	// Create a camera and center it on the player's location.
+	app.camera = new app.Camera(this, 980, 720);
+	app.camera.update();
 	
+
+	// this.renderer = new PIXI.CanvasRenderer(X, Y, $('#game')[0]);
+	this.renderer = new PIXI.CanvasRenderer(app.camera.view.width, app.camera.view.height);
+	
+	// add the renderer view element to the DOM
+	document.body.appendChild(this.renderer.view);
+
 	requestAnimFrame(this.update.bind(this));
 }
 
 
 app.world.prototype.game = function()
 {
+	// The total size of the world. Only a portion of the world is displayed at a time based on the location of the camera.
+	this.size = new PIXI.Rectangle(0, 0, X, Y);
+
 	//Initializes all of the objects on the map except for the player and NPCs
 	//Since these are all static elements, they are drawn once.
 	//Once there are maps bigger than one screen the drawing aspect will need to be reworked.
@@ -98,7 +108,7 @@ app.world.prototype.game = function()
 	NPC1.sprite.height = NPC1.height;
 	GAMEOBJECTS.push(NPC1);
 	NPCOBJECTS.push(NPC1);
-	NPC1.script = [0,-2.5,-2.5,-2.5, -2.5, -2.5,-2.5,-2.5,-2.5, -2.5, -2.5,-2.5,-2.5,-2.5, -2.5, -2.5,  0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 2.5, 2.5, 2.5,2.5, 2.5,2.5, 2.5, 2.5,2.5, 2.5,2.5, 2.5, 2.5,2.5, 2.5, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+	NPC1.script = [new SCRIPTOBJ(0, 200), new SCRIPTOBJ(1, 200), new SCRIPTOBJ(0, 600)];
 
 	
 
@@ -107,7 +117,8 @@ app.world.prototype.game = function()
 	NPC2.sprite.height = NPC2.height;
 	GAMEOBJECTS.push(NPC2);
 	NPCOBJECTS.push(NPC2);
-	NPC2.script = [0,-2.5,-2.5,-2.5, -2.5, -2.5, -2.5, -2.5, -2.5, -2.5, -2.5, -2.5,-2.5,-2.5, -2.5, -2.5, -2.5, -2.5, -2.5, -2.5, -2.5, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 2.5, 2.5, 2.5,2.5, 2.5, 2.5,2.5,2.5,2.5,2.5,2.5, 2.5, 2.5,2.5, 2.5, 2.5,2.5,2.5,2.5,2.5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+	NPC2.script = [new SCRIPTOBJ(0, 200), new SCRIPTOBJ(1, 200), new SCRIPTOBJ(0, 600)];
+	
 
 
 
@@ -149,15 +160,43 @@ app.world.prototype.update = function()
 		GAMEOBJECTS[i].update(this.keys, this.foreground);
 	}
 
-	GAMEOBJECTS[0].vision.calc(this.stage);
+
+	// GAMEOBJECTS[0].vision.calc(this.stage);
+
+
+  	// Whenever the player moves, center the camera on the player.
+	app.camera.update(GAMEOBJECTS[0].sprite.position.x, GAMEOBJECTS[0].sprite.position.y);
 
 	requestAnimFrame(this.update.bind(this));
 
 	this.renderer.render(this.stage);
 }
 
+// Represents the view of the game world currently rendered to the screen.
+app.Camera = function (world, width, height) {
+    this.world = world;
+    this.view = new PIXI.Rectangle(0, 0, width, height);
+    this.boundary = new PIXI.Rectangle(width / 2, height / 2, this.world.size.width - width, this.world.size.height - height);
+    // console.log('view w: ' + X + ' view h: ' + Y);
+    // console.log('world w: ' + world.size.width + ' world h: ' + world.size.height);
+    // console.log(this.boundary);
+};
 
+// Center the camera on the x and y coordinates provided, but clamp to the game world.
+app.Camera.prototype.update = function (x, y) {
+	var x = GAMEOBJECTS[0].sprite.position.x;
+	var y = GAMEOBJECTS[0].sprite.position.y;
+    var cameraX = this.view.width / 2 - Math.max(this.boundary.x, Math.min(this.boundary.x + this.boundary.width, x));
+    var cameraY = this.view.height / 2 - Math.max(this.boundary.y, Math.min(this.boundary.y + this.boundary.height, y));
 
+    // Update the foreground.
+    this.world.foreground.position.x = cameraX;
+    this.world.foreground.position.y = cameraY;
+
+    // Update the background.
+    this.world.background.position.x = cameraX;
+    this.world.background.position.y = cameraY;
+};
 
 $(function () {
     new app.world();

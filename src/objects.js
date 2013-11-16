@@ -57,6 +57,7 @@ var collided = [];
 
 };
 
+
 PLAYEROBJ.prototype.update = function(KEYS, foreground)
 {
 		// Check for horizontal movement.
@@ -163,10 +164,14 @@ PLAYEROBJ.prototype.update = function(KEYS, foreground)
 			}
 				if(!cantMove && ladderI != -1 && !this.locked)
 				{
-						if(this.sprite.position.y + this.sprite.height + 5 <= collideObj[ladderI].lowerFloor.sprite.position.y)
+						if(this.sprite.position.y + this.sprite.height + 5   <= collideObj[ladderI].sprite.position.y + collideObj[ladderI].sprite.height)
 						{
 							this.sprite.position.y += 5;
 							
+						}
+						else if(this.sprite.position.y + this.sprite.height + 5 > collideObj[ladderI].lowerFloor.sprite.position.y)
+						{
+							this.sprite.position.y = collideObj[ladderI].lowerFloor.sprite.position.y-this.sprite.height;
 						}
 							
 				}
@@ -192,21 +197,26 @@ PLAYEROBJ.prototype.update = function(KEYS, foreground)
 				}
 
 			}
-				//console.log(cantMove + " " + ladderI);
-				if(!cantMove && ladderI != -1 && !this.locked)
+			//console.log(cantMove + " " + ladderI);
+			if(!cantMove && ladderI != -1 && !this.locked)
+			{
+				
+				if(this.sprite.position.y + this.sprite.height -5 >= collideObj[ladderI].sprite.position.y)
 				{
+						//sets that you are on the ladder to true, so that you cant walk off the side of the ladder
+						//then adjusts the thiss y coordinate 
+						this.onLadder = true;
+						this.sprite.position.y -= 5;
 					
-					if(this.sprite.position.y + this.sprite.height- 5 >= collideObj[ladderI].sprite.position.y)
-					{
-							//sets that you are on the ladder to true, so that you cant walk off the side of the ladder
-							//then adjusts the thiss y coordinate 
-							this.onLadder = true;
-							this.sprite.position.y -= 5;
-						
-					}
-					
+				}
+				else if(this.sprite.position.y + this.sprite.height -5 >= collideObj[ladderI].sprite.position.y)
+				{
+					this.sprite.position.u = collideObj[ladderI].sprite.position.y + this.sprite.height;
+				}
+				
+				
 
-					}
+			}
     	}	
     	else if(KEYS['q'])
     	{
@@ -256,6 +266,9 @@ var ENEMYOBJ = function()
 	GAMEOBJ.apply(this, arguments);
 
 	this.counter = 0;
+	this.inAction = false;
+	this.waitDelay =0;
+	this.time =0;
 
 	
 };
@@ -271,7 +284,9 @@ ENEMYOBJ.prototype.rAssets = ['assets/soldierNOGUN_R_stand.png', 'assets/soldier
 
 ENEMYOBJ.prototype.collide = function(GAMEOBJECTS, dx, dy)
 {
-	
+	var collided = [];
+	for(var i = 0; i < GAMEOBJECTS.length; i++)
+	{
 		if(this.sprite.position.x + this.sprite.width + dx >= GAMEOBJECTS[0].sprite.position.x 
 			&& GAMEOBJECTS[0].sprite.position.x+GAMEOBJECTS[0].sprite.width >= this.sprite.position.x + dx
 			&& this.sprite.position.y + this.sprite.height + dy >= GAMEOBJECTS[0].sprite.position.y
@@ -280,46 +295,70 @@ ENEMYOBJ.prototype.collide = function(GAMEOBJECTS, dx, dy)
 			
 		{
 			
-			return true;
+			collided.push(GAMEOBJECTS[i]);
 			
 
 		}
+	}
+	return collided;
+		
 	
 	
 }
 
 ENEMYOBJ.prototype.update = function()
 {
-	
-	this.sprite.position.x += this.script[this.counter];
-
-	if(this.frameCount == 6)
+	var t = Date.now();
+	// console.log(t);
+	// console.log("COUNTER: " + this.counter);
+	// console.log("ACTION: " + this.script[this.counter].type);
+	//if 0 then its a move command
+	if(this.script[this.counter].type == 0 && this.sprite.position.x != this.script[this.counter].target)
 	{
-		if(this.collide(GAMEOBJECTS, this.script[this.counter], 0))
-		{
-		console.log("GAME OVER!");
-		}
 
-		if(this.script[this.counter] === -2.5)
+		var xTARGET = this.script[this.counter].target;
+
+
+		// Check if you are moving left 
+		if(this.sprite.position.x - xTARGET > 0)
 		{
+			this.sprite.position.x -= 2.5;
 			this.frameSwitcher(1, this.lAssets, 6);
-			
+			this.frameCount++;
 		}
-		else if(this.script[this.counter] === 2.5)
+		else if(this.sprite.position.x - xTARGET < 0)
 		{
+			this.sprite.position.x += 2.5;
 			this.frameSwitcher(0, this.rAssets, 6);
-			
+			this.frameCount++;
 		}
 
+	}
+	else if(this.script[this.counter].type == 0 && this.sprite.position.x == this.script[this.counter].target)
+	{
 		this.counter++;
+	
+		if(this.counter > this.script.length-1)
+		{
+			this.counter =0;
+			
+		}
+	}
+	else if(this.script[this.counter].type == 1 && this.time ==0)
+	{
+		this.time = t;
+		
+	}
+	else if(this.script[this.counter].type == 1 && t- this.time >= this.script[this.counter].target)
+	{
+		this.counter++;
+		this.time =0;
 		if(this.counter > this.script.length-1)
 		{
 			this.counter =0;
 		}
-		this.frameCount = 0;
-		
 	}
-	this.frameCount++;
+	
 	
 	
 }
@@ -335,6 +374,17 @@ var ITEMOBJ = function()
 ITEMOBJ.prototype = new GAMEOBJ();
 
 ITEMOBJ.prototype.blocksVision = false;
+
+
+var SCRIPTOBJ = function(type, target)
+{
+
+	//0 is move, 1 is wait
+	this.type = type;
+
+	// target is either the x coordinate to move to, or the number of seconds to wait
+	this.target = target;
+}
 
 
 
