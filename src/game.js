@@ -28,14 +28,9 @@ app.world = function()
 	// Create a camera and center it on the player's location.
 	app.camera = new app.Camera(this, 980, 720);
 	app.camera.update();
-	
 
-	// this.renderer = new PIXI.CanvasRenderer(X, Y, $('#game')[0]);
-	this.renderer = new PIXI.CanvasRenderer(app.camera.view.width, app.camera.view.height);
+	this.renderer = new PIXI.CanvasRenderer(app.camera.view.width, app.camera.view.height, $('#game')[0]);
 	
-	// add the renderer view element to the DOM
-	document.body.appendChild(this.renderer.view);
-
 	requestAnimFrame(this.update.bind(this));
 }
 
