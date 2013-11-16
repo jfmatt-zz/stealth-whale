@@ -247,8 +247,6 @@ PLAYEROBJ.prototype.update = function(KEYS, foreground)
     		}
 
     	}
-  	
-  	
 }
 
 var ENEMYOBJ = function()
