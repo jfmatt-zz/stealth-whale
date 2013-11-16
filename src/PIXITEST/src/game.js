@@ -1,6 +1,6 @@
 //Tried to make it so that the canvas will fill the browser window, it kind of works.
-var Y = window.innerHeight;
-var X = window.innerWidth;
+var Y = 600;
+var X = 800;
 console.log(X + "," + Y);
 var app = {};
 
@@ -21,10 +21,10 @@ app.world = function()
     $(document).bind('keyup', $.proxy(function (event) { this.keys[keyName(event)] = false; }, this));
 
 	// create a renderer instance
-	this.renderer = new PIXI.CanvasRenderer(X-5, Y-5);
+	this.renderer = new PIXI.CanvasRenderer(X, Y, $('#game')[0]);
 	
 	// add the renderer view element to the DOM
-	document.body.appendChild(this.renderer.view);
+	// document.body.appendChild(this.renderer.view);
 
 	this.game();
 
