@@ -72,7 +72,7 @@ PLAYEROBJ.prototype.floorCheck = function(collideObj)
 	var floorCheck = [false, false, -1];
 	for(var i =0; i < collideObj.length; i++)
 		{
-			if(collideObj[i] instanceof ENEMYOBJ)
+			if(collideObj[i] instanceof ENEMYOBJ && !this.locked)
 			{
 				console.log("GAME OVER");
 				gameOver = true;
@@ -99,7 +99,7 @@ PLAYEROBJ.prototype.ladderCheck = function(collideObj)
 	var ladderCheck =[false, -1];
 	for(var i =0; i < collideObj.length; i++)
 	{
-		if(collideObj[i] instanceof ENEMYOBJ)
+		if(collideObj[i] instanceof ENEMYOBJ && !this.locked)
 		{
 			console.log("GAME OVER");
 			gameOver = true;
