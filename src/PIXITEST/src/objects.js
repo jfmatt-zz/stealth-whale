@@ -23,8 +23,9 @@ var PLAYEROBJ = function(){
 	this.locked = false;
 
 	this.lAssets = ['assets/Whale_L_stand.png', 'assets/Whale_L_walk_1.png','assets/Whale_L_walk_2.png','assets/Whale_L_walk_3.png',
-	'assets/Whale_L_walk_4.png','assets/Whale_L_walk_5.png','assets/Whale_L_walk_6.png','assets/Whale_L_walk_7.png','assets/Whale_L_walk_8.png']
-	this.rAssets =['assets/Whale_R_stand.png', 'assets/Whale_R_walk_1.png', 'assets/Whale_R_walk_2.png', 'assets/Whale_R_walk_3.png', 'assets/Whale_R_walk_4.png',
+	'assets/Whale_L_walk_4.png','assets/Whale_L_walk_5.png','assets/Whale_L_walk_6.png','assets/Whale_L_walk_7.png','assets/Whale_L_walk_8.png'];
+
+	this.rAssets = ['assets/Whale_R_stand.png', 'assets/Whale_R_walk_1.png', 'assets/Whale_R_walk_2.png', 'assets/Whale_R_walk_3.png', 'assets/Whale_R_walk_4.png',
 	'assets/Whale_R_walk_5.png', 'assets/Whale_R_walk_6.png','assets/Whale_R_walk_7.png','assets/Whale_R_walk_8.png'];
 
 };
@@ -63,6 +64,7 @@ PLAYEROBJ.prototype.update = function(KEYS, foreground)
 		var onFloor = false;
 		var floorI = -1;
 		var ladderI = -1;
+
 		if (KEYS['d']) {
 			//console.log(this.collide(GAMEOBJECTS));
 			collideObj = this.collide(GAMEOBJECTS, 2.5,0);
@@ -137,7 +139,6 @@ PLAYEROBJ.prototype.update = function(KEYS, foreground)
    		 // Check for vertical movement.
    		 if (KEYS['s']) {
    		 	collideObj = this.collide(GAMEOBJECTS,0 ,5);
-   		 	console.log(collideObj);
 			for(var i =0; i < collideObj.length; i++)
 			{
 				if(collideObj[i] instanceof ENEMYOBJ)
@@ -154,7 +155,6 @@ PLAYEROBJ.prototype.update = function(KEYS, foreground)
 				else if(collideObj[i] instanceof LADDEROBJ)
 				{
 					ladderI = i;
-					this.closestFloor = collideObj[i].lowerFloor;
 				}
 
 			}
@@ -193,7 +193,6 @@ PLAYEROBJ.prototype.update = function(KEYS, foreground)
 				else if(collideObj[i] instanceof LADDEROBJ)
 				{
 					ladderI = i;
-					this.closestFloor = collideObj[i].upperFloor;
 				}
 
 			}
@@ -216,7 +215,7 @@ PLAYEROBJ.prototype.update = function(KEYS, foreground)
     	else if(KEYS['q'])
     	{
     		
-    		var hideObj = hideObj = this.collide(GAMEOBJECTS,0,0);
+    		var hideObj = this.collide(GAMEOBJECTS,0,0);
     		for(var i =0; i <hideObj.length; i++)
     		{
     			if(hideObj[i].isHideable)
@@ -235,6 +234,22 @@ PLAYEROBJ.prototype.update = function(KEYS, foreground)
     		foreground.addChildAt(this.sprite, foreground.children.length-1);
     		this.locked = false;
     	}
+    	else if(KEYS['space'])
+    	{
+    		collideObj = this.collide(GAMEOBJECTS,0 ,-5);
+    		for(var i =0; i < collideObj.length; i++)
+    		{
+    			if(collideObj[i] instanceof ITEMOBJ && !collideObj[i].pickedUp)
+    			{
+    				console.log("PICKED UP ITEM");
+    				collideObj[i].sprite.visible = false;
+    				collideObj[i].pickedUp = true;
+
+
+    			}
+    		}
+
+    	}
   	
   	
 }
@@ -249,7 +264,9 @@ var ENEMYOBJ = function()
 	this.soldierRAssets = ['assets/soldierNOGUN_R_stand.png', 'assets/soldierNOGUN_R_walk_1.png', 'assets/soldierNOGUN_R_walk_2.png', 
 	'assets/soldierNOGUN_R_walk_3.png','assets/soldierNOGUN_R_walk_4.png'];
 
-	this.delay = 0;
+	this.counter = 0;
+
+	this.script = [2.5,2.5,2.5,2.5];
 };
 
 ENEMYOBJ.prototype = new GAMEOBJ();
@@ -275,16 +292,44 @@ ENEMYOBJ.prototype.collide = function(GAMEOBJECTS, dx, dy)
 
 ENEMYOBJ.prototype.update = function()
 {
-	this.sprite.position.x -= 0.5;
-	if(this.collide(GAMEOBJECTS, -1, 0))
+	this.sprite.position.x += this.script[this.counter];
+
+
+	if(this.collide(GAMEOBJECTS, this.script[this.counter], 0))
 	{
 		console.log("GAME OVER!");
 	}
 
-	
-		this.frameSwitcher(1, this.soldierLAssets, 6);
-		this.frameCount++;
+		if(this.script[this.counter] === -2.5)
+		{
+			this.frameSwitcher(1, this.soldierLAssets, 6);
+			this.frameCount++;
+		}
+		else if(this.script[this.counter] === 2.5)
+		{
+			this.frameSwitcher(0, this.soldierRAssets, 6);
+			this.frameCount++;
+		}
+
+		this.counter++;
+		if(this.counter > this.script.length)
+		{
+			this.counter =0;
+		}
+		
 	
 }
+
+
+var ITEMOBJ = function()
+{
+	GAMEOBJ.apply(this, arguments);
+
+	this.pickedUp = false;
+}
+
+ITEMOBJ.prototype = new GAMEOBJ();
+
+
 
 

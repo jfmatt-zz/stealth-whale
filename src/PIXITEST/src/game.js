@@ -81,6 +81,7 @@ app.world.prototype.game = function()
 	LADDER2.lowerFloor = FLOOR2;
 	LADDER2.upperFloor = FLOOR3;
 
+
 	var FLAG = new GAMEOBJ(20+LADDER.x + LADDER.width, LADDER.y -142, 100, 112, false, true, new PIXI.Sprite(PIXI.Texture.fromImage("assets/flag_1.png")));
 	FLAG.sprite.width = FLAG.width;
 	FLAG.sprite.height = FLAG.height;
@@ -100,7 +101,6 @@ app.world.prototype.game = function()
 	GAMEOBJECTS.push(NPC2);
 	NPCOBJECTS.push(NPC2);
 
-	
 
 
 
@@ -138,7 +138,7 @@ app.world.prototype.update = function()
 
 	for(var i = 0; i <GAMEOBJECTS.length; i++)
 	{
-		GAMEOBJECTS[i].update(this.keys, this.foreground, this);
+		GAMEOBJECTS[i].update(this.keys, this.foreground);
 	}
 
 	requestAnimFrame(this.update.bind(this));
