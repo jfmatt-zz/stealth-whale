@@ -1,4 +1,3 @@
-//Tried to make it so that the canvas will fill the browser window, it kind of works.
 var X = 2000;
 var Y = 2000;
 
@@ -115,20 +114,15 @@ app.world.prototype.game = function()
 	GAMEOBJECTS.push(NPC2);
 	NPCOBJECTS.push(NPC2);
 	NPC2.script = [new SCRIPTOBJ(0, 200), new SCRIPTOBJ(1, 200), new SCRIPTOBJ(0, 600)];
-	
-
-
-
 
 	PLAYER.closestFloor = GAMEOBJECTS[2];
 
-		for(var i =1; i <GAMEOBJECTS.length; i++)
-		{
-			GAMEOBJECTS[i].sprite.position.x = GAMEOBJECTS[i].x;
-			GAMEOBJECTS[i].sprite.position.y = GAMEOBJECTS[i].y;
-			this.foreground.addChild(GAMEOBJECTS[i].sprite);
-		}
-
+	for(var i =1; i <GAMEOBJECTS.length; i++)
+	{
+		GAMEOBJECTS[i].sprite.position.x = GAMEOBJECTS[i].x;
+		GAMEOBJECTS[i].sprite.position.y = GAMEOBJECTS[i].y;
+		this.foreground.addChild(GAMEOBJECTS[i].sprite);
+	}
 
 	GAMEOBJECTS[0].sprite.position.x = GAMEOBJECTS[0].x;
 	GAMEOBJECTS[0].sprite.position.y = GAMEOBJECTS[0].y;
@@ -137,36 +131,26 @@ app.world.prototype.game = function()
 	var backgroundSprite = new PIXI.TilingSprite(new PIXI.Texture.fromImage('assets/background.png'), X, Y);
 	this.background.addChild(backgroundSprite);
 
-  	
-	 // Add the containers to the stage.
-	 this.stage.addChild(this.background);
-	 this.stage.addChild(this.foreground);
-
+	// Add the containers to the stage.
+	this.stage.addChild(this.background);
+	this.stage.addChild(this.foreground);
 }
-
-
-
 
 app.world.prototype.update = function()
 {
-
-
-
 	for(var i = 0; i <GAMEOBJECTS.length; i++)
 	{
 		GAMEOBJECTS[i].update(this.keys, this.foreground);
 	}
 
-
 	// GAMEOBJECTS[0].vision.calc(this.stage);
-
 
   	// Whenever the player moves, center the camera on the player.
 	app.camera.update(GAMEOBJECTS[0].sprite.position.x, GAMEOBJECTS[0].sprite.position.y);
 
-	requestAnimFrame(this.update.bind(this));
-
+	// Render the frame and request the next frame.
 	this.renderer.render(this.stage);
+	requestAnimFrame(this.update.bind(this));
 }
 
 // Represents the view of the game world currently rendered to the screen.
@@ -174,9 +158,6 @@ app.Camera = function (world, width, height) {
     this.world = world;
     this.view = new PIXI.Rectangle(0, 0, width, height);
     this.boundary = new PIXI.Rectangle(width / 2, height / 2, this.world.size.width - width, this.world.size.height - height);
-    // console.log('view w: ' + X + ' view h: ' + Y);
-    // console.log('world w: ' + world.size.width + ' world h: ' + world.size.height);
-    // console.log(this.boundary);
 };
 
 // Center the camera on the x and y coordinates provided, but clamp to the game world.
