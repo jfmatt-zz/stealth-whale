@@ -22,11 +22,21 @@ var PLAYEROBJ = function(){
 	this.onLadder = false;
 	this.locked = false;
 
-	this.lAssets = ['assets/Whale_L_stand.png', 'assets/Whale_L_walk_1.png','assets/Whale_L_walk_2.png','assets/Whale_L_walk_3.png',
+	this.lAssetsNORMAL = ['assets/Whale_L_stand.png', 'assets/Whale_L_walk_1.png','assets/Whale_L_walk_2.png','assets/Whale_L_walk_3.png',
 	'assets/Whale_L_walk_4.png','assets/Whale_L_walk_5.png','assets/Whale_L_walk_6.png','assets/Whale_L_walk_7.png','assets/Whale_L_walk_8.png'];
 
-	this.rAssets = ['assets/Whale_R_stand.PNG', 'assets/Whale_R_walk_1.PNG', 'assets/Whale_R_walk_2.PNG', 'assets/Whale_R_walk_3.PNG', 'assets/Whale_R_walk_4.PNG',
+	this.rAssetsNORMAL = ['assets/Whale_R_stand.PNG', 'assets/Whale_R_walk_1.PNG', 'assets/Whale_R_walk_2.PNG', 'assets/Whale_R_walk_3.PNG', 'assets/Whale_R_walk_4.PNG',
 	'assets/Whale_R_walk_5.PNG', 'assets/Whale_R_walk_6.PNG','assets/Whale_R_walk_7.PNG','assets/Whale_R_walk_8.PNG'];
+
+	this.lAssetsLEDERHOSEN = ['assets/hitler_R_alert.png'];
+
+	this.rAssetsLEDERHOSEN = ['assets/hitler_R_alert.png'];
+
+	this.lAssets = [this.lAssetsNORMAL, this.lAssetsLEDERHOSEN];
+
+	this.rAssets = [this.rAssetsNORMAL, this.lAssetsLEDERHOSEN];
+
+	this.currentRank = 0;
 
 	this.vision = new Vision(this.sprite.position);
 
@@ -57,208 +67,183 @@ var collided = [];
 
 };
 
+PLAYEROBJ.prototype.floorCheck = function(collideObj)
+{
+	var floorCheck = [false, false, -1];
+	for(var i =0; i < collideObj.length; i++)
+		{
+			if(collideObj[i] instanceof ENEMYOBJ)
+			{
+				console.log("GAME OVER");
+				gameOver = true;
+				
+
+			}
+			if(collideObj[i].isSolid)
+			{
+				floorCheck[0] = true;
+			}
+			if(collideObj[i] instanceof FLOOROBJ)
+			{
+				floorCheck[1] = true;
+				floorCheck[2] = i;
+			}
+		}
+
+		return floorCheck;
+
+};
+
+PLAYEROBJ.prototype.ladderCheck = function(collideObj)
+{
+	var ladderCheck =[false, -1];
+	for(var i =0; i < collideObj.length; i++)
+	{
+		if(collideObj[i] instanceof ENEMYOBJ)
+		{
+			console.log("GAME OVER");
+			gameOver = true;
+		}
+		else if(collideObj[i].isSolid)
+		{
+			ladderCheck[0] = true;
+		}
+		else if(collideObj[i] instanceof LADDEROBJ)
+		{
+			ladderCheck[1] = i;
+		}
+	}
+	return ladderCheck;
+}
 
 PLAYEROBJ.prototype.update = function(KEYS, foreground)
 {
 		// Check for horizontal movement.
 		var collideObj = [];
-		var gameOver = false;
-		var cantMove = false;
-		var onFloor = false;
-		var floorI = -1;
-		var ladderI = -1;
+		var floorVal = [];
+		var ladderVal = [];
+		
 
-		if (KEYS['d']) {
-			//console.log(this.collide(GAMEOBJECTS));
-			collideObj = this.collide(GAMEOBJECTS, 2.5,0);
-			for(var i =0; i < collideObj.length; i++)
+	if (KEYS['d']) 
+	{
+		//console.log(this.collide(GAMEOBJECTS));
+		collideObj = this.collide(GAMEOBJECTS, 2.5,0);
+		floorVal = this.floorCheck(collideObj);
+		if(!floorVal[0] && floorVal[1] && !this.locked)
+		{
+			if(this.sprite.position.y + this.sprite.height <= collideObj[floorVal[2]].sprite.position.y+5)
 			{
-				if(collideObj[i] instanceof ENEMYOBJ)
-				{
-					console.log("GAME OVER");
-					gameOver = true;
-					cantMove = true;
-
-				}
-				if(collideObj[i].isSolid)
-				{
-					cantMove = true;
-				}
-				if(collideObj[i] instanceof FLOOROBJ)
-				{
-					onFloor = true;
-					floorI = i;
-				}
-			}
-				if(!cantMove && onFloor && !this.locked)
-				{
-					if(this.sprite.position.y + this.sprite.height <= collideObj[floorI].sprite.position.y+5)
-					{
-						this.sprite.position.x += 2.5;
-						this.frameSwitcher(0, this.rAssets,3);
-						this.frameCount++;
-  						
-					}
+				this.sprite.position.x += 2.5;
+				this.frameSwitcher(0, this.rAssets[this.currentRank],3);
+				this.frameCount++;
 					
-				}
+			}
+				
+		}
 					
 
 					
 			
-		} else if (KEYS['a']) {
-			collideObj = this.collide(GAMEOBJECTS, -2.5,0);
-			for(var i =0; i < collideObj.length; i++)
+	} 
+	else if (KEYS['a']) 
+	{
+		collideObj = this.collide(GAMEOBJECTS, -2.5,0);
+		floorVal = this.floorCheck(collideObj);
+		if(!floorVal[0] && floorVal[1] && !this.locked)
+		{
+			if(this.sprite.position.y + this.sprite.height <= collideObj[floorVal[2]].sprite.position.y+5)
 			{
-				if(collideObj[i] instanceof ENEMYOBJ)
-				{
-					console.log("GAME OVER");
-					gameOver = true;
-					cantMove = true;
-
-				}
-				if(collideObj[i].isSolid)
-				{
-					cantMove = true;
-				}
-				if(collideObj[i] instanceof FLOOROBJ)
-				{
-					floorI = i;
-					onFloor = true;
-					
-				}
+				this.sprite.position.x -= 2.5;
+				this.frameSwitcher(1, this.lAssets[this.currentRank], 3);
+				this.frameCount++;
 			}
-				if(!cantMove && onFloor && !this.locked)
-				{
-					if(this.sprite.position.y + this.sprite.height <= collideObj[floorI].sprite.position.y+5)
-					{
-						this.sprite.position.x -= 2.5;
-						this.frameSwitcher(1, this.lAssets, 3);
-						this.frameCount++;
-					}
-					
-					
-				}
+			
+			
 		}
+	}
 		
    		 // Check for vertical movement.
-   		 if (KEYS['s']) {
-   		 	collideObj = this.collide(GAMEOBJECTS,0 ,5);
-			for(var i =0; i < collideObj.length; i++)
+	 if (KEYS['s']) 
+	 {
+	 	collideObj = this.collide(GAMEOBJECTS,0 ,5);
+		ladderVal = this.ladderCheck(collideObj);
+		if(!ladderVal[0] && ladderVal[1] != -1 && !this.locked)
+		{
+			if(this.sprite.position.y + this.sprite.height + 5   <= collideObj[ladderVal[1]].sprite.position.y + collideObj[ladderVal[1]].sprite.height)
 			{
-				if(collideObj[i] instanceof ENEMYOBJ)
-				{
-					console.log("GAME OVER");
-					gameOver = true;
-					cantMove = true;
-
-				}
-				else if(collideObj[i].isSolid)
-				{
-					cantMove = true;
-				}
-				else if(collideObj[i] instanceof LADDEROBJ)
-				{
-					ladderI = i;
-				}
-
-			}
-				if(!cantMove && ladderI != -1 && !this.locked)
-				{
-						if(this.sprite.position.y + this.sprite.height + 5   <= collideObj[ladderI].sprite.position.y + collideObj[ladderI].sprite.height)
-						{
-							this.sprite.position.y += 5;
-							
-						}
-						else if(this.sprite.position.y + this.sprite.height + 5 > collideObj[ladderI].lowerFloor.sprite.position.y)
-						{
-							this.sprite.position.y = collideObj[ladderI].lowerFloor.sprite.position.y-this.sprite.height;
-						}
-							
-				}
+				this.sprite.position.y += 5;
 				
-    	} else if (KEYS['w']) {
-    		collideObj = this.collide(GAMEOBJECTS,0 ,-5);
-    		for(var i =0; i < collideObj.length; i++)
-			{
-				if(collideObj[i] instanceof ENEMYOBJ)
-				{
-					console.log("GAME OVER");
-					gameOver = true;
-					cantMove = true;
-
-				}
-				else if(collideObj[i].isSolid)
-				{
-					cantMove = true;
-				}
-				else if(collideObj[i] instanceof LADDEROBJ)
-				{
-					ladderI = i;
-				}
-
 			}
-			//console.log(cantMove + " " + ladderI);
-			if(!cantMove && ladderI != -1 && !this.locked)
+			else if(this.sprite.position.y + this.sprite.height + 5 > collideObj[ladderVal[1]].lowerFloor.sprite.position.y)
+			{
+				this.sprite.position.y = collideObj[ladderVal[1]].lowerFloor.sprite.position.y-this.sprite.height;
+			}
+				
+		}
+		
+	}	 
+	else if (KEYS['w']) 
+	{
+		collideObj = this.collide(GAMEOBJECTS,0 ,-5);
+		ladderVal = this.ladderCheck(collideObj);
+		if(!ladderVal[0] && ladderVal[1] != -1 && !this.locked)
+		{
+			
+			if(this.sprite.position.y + this.sprite.height -5 >= collideObj[ladderVal[1]].sprite.position.y)
+			{
+					//sets that you are on the ladder to true, so that you cant walk off the side of the ladder
+					//then adjusts the thiss y coordinate 
+					this.onLadder = true;
+					this.sprite.position.y -= 5;
+				
+			}
+			else if(this.sprite.position.y + this.sprite.height -5 >= collideObj[ladderVal[1]].sprite.position.y)
+			{
+				this.sprite.position.u = collideObj[ladderVal[1]].sprite.position.y + this.sprite.height;
+			}
+		}
+	}	
+	else if(KEYS['q'])
+	{
+		
+		var hideObj = this.collide(GAMEOBJECTS,0,0);
+		for(var i =0; i <hideObj.length; i++)
+		{
+			if(hideObj[i].isHideable)
 			{
 				
-				if(this.sprite.position.y + this.sprite.height -5 >= collideObj[ladderI].sprite.position.y)
-				{
-						//sets that you are on the ladder to true, so that you cant walk off the side of the ladder
-						//then adjusts the thiss y coordinate 
-						this.onLadder = true;
-						this.sprite.position.y -= 5;
-					
-				}
-				else if(this.sprite.position.y + this.sprite.height -5 >= collideObj[ladderI].sprite.position.y)
-				{
-					this.sprite.position.u = collideObj[ladderI].sprite.position.y + this.sprite.height;
-				}
+				foreground.addChildAt(this.sprite, 0);
+				console.log("HIDING");
+				this.locked = true;
 				
 				
+			}
+		}
+	}
+	else if(KEYS['e'])
+	{
+		foreground.addChildAt(this.sprite, foreground.children.length-1);
+		this.locked = false;
+	}
+	else if(KEYS['space'])
+	{
+		collideObj = this.collide(GAMEOBJECTS,0 ,-5);
+		for(var i =0; i < collideObj.length; i++)
+		{
+			if(collideObj[i] instanceof ITEMOBJ && !collideObj[i].pickedUp)
+			{
+				console.log("PICKED UP ITEM");
+
+				collideObj[i].sprite.visible = false;
+				collideObj[i].pickedUp = true;
+
+				this.currentRank++;
+
 
 			}
-    	}	
-    	else if(KEYS['q'])
-    	{
-    		
-    		var hideObj = this.collide(GAMEOBJECTS,0,0);
-    		for(var i =0; i <hideObj.length; i++)
-    		{
-    			if(hideObj[i].isHideable)
-    			{
-    				
-    				foreground.addChildAt(this.sprite, 0);
-    				console.log("HIDING");
-    				this.locked = true;
-    				
-    				
-    			}
-    		}
-    	}
-    	else if(KEYS['e'])
-    	{
-    		foreground.addChildAt(this.sprite, foreground.children.length-1);
-    		this.locked = false;
-    	}
-    	else if(KEYS['space'])
-    	{
-    		collideObj = this.collide(GAMEOBJECTS,0 ,-5);
-    		for(var i =0; i < collideObj.length; i++)
-    		{
-    			if(collideObj[i] instanceof ITEMOBJ && !collideObj[i].pickedUp)
-    			{
-    				console.log("PICKED UP ITEM");
+		}
 
-    				collideObj[i].sprite.visible = false;
-    				collideObj[i].pickedUp = true;
-
-
-    			}
-    		}
-
-    	}
-  	
-  	
+	}
 }
 
 var ENEMYOBJ = function()
