@@ -149,6 +149,8 @@ app.world.prototype.update = function()
 		GAMEOBJECTS[i].update(this.keys, this.foreground);
 	}
 
+	GAMEOBJECTS[0].vision.calc(this.stage);
+
 	requestAnimFrame(this.update.bind(this));
 
 	this.renderer.render(this.stage);

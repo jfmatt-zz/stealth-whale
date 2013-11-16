@@ -6,7 +6,7 @@
 
 	LADDEROBJ.prototype = new GAMEOBJ();
 
-	LADDEROBJ.prototype.allowsVertical = true;
+	LADDEROBJ.prototype.blocksVision = false;
 	
 	var FLOOROBJ = function()
 	{
@@ -27,6 +27,8 @@ var PLAYEROBJ = function(){
 
 	this.rAssets = ['assets/Whale_R_stand.PNG', 'assets/Whale_R_walk_1.PNG', 'assets/Whale_R_walk_2.PNG', 'assets/Whale_R_walk_3.PNG', 'assets/Whale_R_walk_4.PNG',
 	'assets/Whale_R_walk_5.PNG', 'assets/Whale_R_walk_6.PNG','assets/Whale_R_walk_7.PNG','assets/Whale_R_walk_8.PNG'];
+
+	this.vision = new Vision(this.sprite.position);
 
 };
 
@@ -236,6 +238,7 @@ PLAYEROBJ.prototype.update = function(KEYS, foreground)
     			if(collideObj[i] instanceof ITEMOBJ && !collideObj[i].pickedUp)
     			{
     				console.log("PICKED UP ITEM");
+
     				collideObj[i].sprite.visible = false;
     				collideObj[i].pickedUp = true;
 
@@ -252,14 +255,11 @@ var ENEMYOBJ = function()
 {
 	GAMEOBJ.apply(this, arguments);
 
-
-	this.lAssets = ['assets/soldierNOGUN_L_stand.png', 'assets/soldierNOGUN_L_walk_1.png', 'assets/soldierNOGUN_L_walk_2.png', 'assets/soldierNOGUN_L_walk_3.png' , 'assets/soldierNOGUN_L_walk_4.png'];
-	this.rAssets = ['assets/soldierNOGUN_R_stand.png', 'assets/soldierNOGUN_R_walk_1.png', 'assets/soldierNOGUN_R_walk_2.png', 'assets/soldierNOGUN_R_walk_3.png','assets/soldierNOGUN_R_walk_4.png'];
-
 	this.counter = 0;
 
 	
 };
+ENEMYOBJ.prototype = new GAMEOBJ();
 
 ENEMYOBJ.prototype.lAssets = ['assets/soldierNOGUN_L_stand.png', 'assets/soldierNOGUN_L_walk_1.png', 'assets/soldierNOGUN_L_walk_2.png', 
 	'assets/soldierNOGUN_L_walk_3.png' , 'assets/soldierNOGUN_L_walk_4.png'];
@@ -267,7 +267,7 @@ ENEMYOBJ.prototype.lAssets = ['assets/soldierNOGUN_L_stand.png', 'assets/soldier
 ENEMYOBJ.prototype.rAssets = ['assets/soldierNOGUN_R_stand.png', 'assets/soldierNOGUN_R_walk_1.png', 'assets/soldierNOGUN_R_walk_2.png', 
 	'assets/soldierNOGUN_R_walk_3.png','assets/soldierNOGUN_R_walk_4.png'];
 
-ENEMYOBJ.prototype = new GAMEOBJ();
+
 
 ENEMYOBJ.prototype.collide = function(GAMEOBJECTS, dx, dy)
 {
@@ -290,7 +290,7 @@ ENEMYOBJ.prototype.collide = function(GAMEOBJECTS, dx, dy)
 
 ENEMYOBJ.prototype.update = function()
 {
-	console.log(this.script[this.counter]);
+	
 	this.sprite.position.x += this.script[this.counter];
 
 	if(this.frameCount == 6)
@@ -333,6 +333,8 @@ var ITEMOBJ = function()
 }
 
 ITEMOBJ.prototype = new GAMEOBJ();
+
+ITEMOBJ.prototype.blocksVision = false;
 
 
 

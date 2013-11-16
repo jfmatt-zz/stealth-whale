@@ -8,26 +8,16 @@
 		this.height = height;
 
 		this.sprite = sprite;
-		// this.sprite.position.x = this.x;
-		// this.sprite.position.y = this.y;
-		// this.sprite.anchor.x = 0.5;
-		// this.sprite.anchor.y = 0.65;
-		// this.sprite.width = this.width;
-		// this.sprite.height = this.height;
-		
-
-
 		this.isSolid = solid;
 		this.isHideable = isHideable;
-		
-
-
 		this.right =0;
 		this.left =0;
 		this.up =0;
 		this.down =0;
 
 		this.frameCount = 0;
+
+		this.blocksVision = true;
 	};
 
 	
