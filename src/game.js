@@ -33,8 +33,9 @@ app.World.prototype.showTitleScreen = function () {
     this.renderer.render(titleStage);
 
     // Play the title music.
-    var music = new buzz.sound('sound/title.mp3');
-    music.fadeIn().play();
+    var music = new buzz.sound('sound/TheDukeofWhales.mp3');
+    	
+    music.play();
 
     // When all assets are loaded, let player press space to start the game.
     doneLoading = $.proxy(function () {
@@ -132,8 +133,6 @@ app.World.prototype.game = function()
 	GAMEOBJECTS.push(FLAG);
 
 	var FLAG2 = new GAMEOBJ(LADDER2.x - 30, LADDER2.y - 142, 100, 112, false, true, new PIXI.Sprite(PIXI.Texture.fromImage("assets/flag_1.png")));
-	FLAG2.sprite.width = FLAG2.width;
-	FLAG2.sprite.height = FLAG2.height;
 	GAMEOBJECTS.push(FLAG2);
 
 	var LEDER = new ITEMOBJ(500, FLOOR.y - 40, 40,40, false, false, new PIXI.Sprite(PIXI.Texture.fromImage("assets/item_fedora_1.png")));

@@ -63,6 +63,13 @@ var PLAYEROBJ = function(){
 PLAYEROBJ.prototype = new GAMEOBJ();
 
 PLAYEROBJ.prototype.blocksVision = false;
+
+PLAYEROBJ.prototype.sounds = ['sound/WhaleWalk-01.wav'];
+
+PLAYEROBJ.prototype.s = new buzz.sound('sound/WhaleWalk-01.wav');
+
+
+
 PLAYEROBJ.prototype.collide = function (GAMEOBJECTS, dx, dy) {
 
 var collided = [];
@@ -175,6 +182,12 @@ PLAYEROBJ.prototype.update = function(KEYS, foreground)
 			}
 			this.direction = 1;	
 
+			if(this.frameCount == 3)
+			{
+					
+    				this.s.play();
+			}
+			
 		}
 					
 
@@ -201,6 +214,11 @@ PLAYEROBJ.prototype.update = function(KEYS, foreground)
 				this.frameCount++;
 			}
 			this.direction = 0;
+			if(this.frameCount == 3)
+			{
+				this.s.play();
+			}
+
 			
 		}
 	}
@@ -332,9 +350,6 @@ ENEMYOBJ.prototype.update = function()
 
 
 	var t = Date.now();
-	// console.log(t);
-	// console.log("COUNTER: " + this.counter);
-	// console.log("ACTION: " + this.script[this.counter].type);
 	//if 0 then its a move command
 	if(this.script[this.counter].type == 0 && this.sprite.position.x != this.script[this.counter].target)
 	{

@@ -26,6 +26,8 @@
 	};
 
 	GAMEOBJ.prototype.blocksVision = true
+
+	GAMEOBJ.prototype.sound = [];
 	
 	GAMEOBJ.prototype.frameSwitcher = function(direction, assets, frameDelay)
 	{
@@ -44,7 +46,8 @@
 						this.right =0;
 					}
 					this.frameCount = 0;
-
+					
+   					
 				}
 			}
 
@@ -62,6 +65,7 @@
 						this.left = 0;
 					}
 					this.frameCount = 0;
+
 
 				}
 			}
