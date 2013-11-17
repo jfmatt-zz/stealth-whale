@@ -1,20 +1,68 @@
+var app = app || {};
+
 var X = 2000;
 var Y = 2000;
-
-console.log(X + "," + Y);
-var app = {};
 
 var GAMEOBJECTS = [];
 var NPCOBJECTS = [];
 
-app.world = function()
-{
+app.World = function() {
+	this.size = new PIXI.Rectangle(0, 0, X, Y);
+    this.camera = new app.Camera(this, 980, 720);
+    this.renderer = new PIXI.CanvasRenderer(this.camera.view.width, this.camera.view.height, $('#game')[0]);
+    this.showTitleScreen();
+}
+
+app.World.prototype.showTitleScreen = function () {
+    var doneLoading, hideTitleScreen;
+    var titleStage = new PIXI.Stage();
+
+    // Add title text.
+    var title = new PIXI.Text('German Whale of Mystery', {font: 'bold 40px Avro', fill: 'white', align: 'center'});
+    title.position = new PIXI.Point(this.renderer.width / 2, (this.renderer.height / 2) - 50);
+    title.anchor = new PIXI.Point(0.5, 0.5);
+    titleStage.addChild(title);
+
+    // Add subtitle text.
+    var subtitle = new PIXI.Text('', {font: 'bold italic 40px Avro', fill: 'white', align: 'center'});
+    subtitle.position = new PIXI.Point(this.renderer.width / 2, (this.renderer.height / 2) + 50);
+    subtitle.anchor = new PIXI.Point(0.5, 0.5);
+    titleStage.addChild(subtitle);
+
+    // Render the stage.
+    this.renderer.render(titleStage);
+
+    // Play the title music.
+    var music = new buzz.sound('sound/title.mp3');
+    music.fadeIn().play();
+
+    // When all assets are loaded, let player press space to start the game.
+    doneLoading = $.proxy(function () {
+        subtitle.setText('Press space to play.');
+        this.renderer.render(titleStage);
+        $(document).bind('keypress', 'space', hideTitleScreen);
+    }, this);
+
+    // When space is pressed, fade the title screen out and start the game.
+    hideTitleScreen = $.proxy(function () {
+        $(document).unbind('keypress');
+        music.fadeOut(2.0, function () { music.stop(); });
+        this.startGame();
+    }, this);
+
+    // Start the asset loader.
+    var assets = ['assets/Floor.png', 'assets/Ladder.png', 'assets/Whale_L_stand.png', 'assets/Whale_L_walk_1.png', 'assets/Whale_L_walk_2.png', 'assets/Whale_L_walk_3.png', 'assets/Whale_L_walk_4.png', 'assets/Whale_L_walk_5.png', 'assets/Whale_L_walk_6.png', 'assets/Whale_L_walk_7.png', 'assets/Whale_L_walk_8.png', 'assets/Whale_R_stand.PNG', 'assets/Whale_R_walk_1.PNG', 'assets/Whale_R_walk_2.PNG', 'assets/Whale_R_walk_3.PNG', 'assets/Whale_R_walk_4.PNG', 'assets/Whale_R_walk_5.PNG', 'assets/Whale_R_walk_6.PNG', 'assets/Whale_R_walk_7.PNG', 'assets/Whale_R_walk_8.PNG', 'assets/background.png', 'assets/flag_1.png', 'assets/hitler_R_alert.png', 'assets/soldierNOGUN_L_blink.png', 'assets/soldierNOGUN_L_stand.png', 'assets/soldierNOGUN_L_walk_1.png', 'assets/soldierNOGUN_L_walk_2.png', 'assets/soldierNOGUN_L_walk_3.png', 'assets/soldierNOGUN_L_walk_4.png', 'assets/soldierNOGUN_R_blink.png', 'assets/soldierNOGUN_R_stand.png', 'assets/soldierNOGUN_R_walk_1.png', 'assets/soldierNOGUN_R_walk_2.png', 'assets/soldierNOGUN_R_walk_3.png', 'assets/soldierNOGUN_R_walk_4.png', 'assets/sprites.json', 'assets/sprites.png'];
+    var assetLoader = new PIXI.AssetLoader(assets);
+    assetLoader.onComplete = doneLoading;
+    assetLoader.load();
+};
+
+app.World.prototype.startGame = function () {
 	this.stage = new PIXI.Stage();
 	this.foreground = new PIXI.DisplayObjectContainer();
 	this.background = new PIXI.DisplayObjectContainer();
 
-	console.log("initialized stage");
-	
+	// Track which keys are pressed.
 	this.keys =  {};
     var keyName = function (event) {
         return jQuery.hotkeys.specialKeys[event.which] || String.fromCharCode(event.which).toLowerCase();
@@ -23,22 +71,13 @@ app.world = function()
     $(document).bind('keyup', $.proxy(function (event) { this.keys[keyName(event)] = false; }, this));
 
 	this.game();
+	this.camera.update();
 
-	// Create a camera and center it on the player's location.
-	app.camera = new app.Camera(this, 980, 720);
-	app.camera.update();
-
-	this.renderer = new PIXI.CanvasRenderer(app.camera.view.width, app.camera.view.height, $('#game')[0]);
-	
 	requestAnimFrame(this.update.bind(this));
 }
 
-
-app.world.prototype.game = function()
+app.World.prototype.game = function()
 {
-	// The total size of the world. Only a portion of the world is displayed at a time based on the location of the camera.
-	this.size = new PIXI.Rectangle(0, 0, X, Y);
-
 	//Initializes all of the objects on the map except for the player and NPCs
 	//Since these are all static elements, they are drawn once.
 	//Once there are maps bigger than one screen the drawing aspect will need to be reworked.
@@ -136,7 +175,7 @@ app.world.prototype.game = function()
 	this.stage.addChild(this.foreground);
 }
 
-app.world.prototype.update = function()
+app.World.prototype.update = function()
 {
 	for(var i = 0; i <GAMEOBJECTS.length; i++)
 	{
@@ -146,7 +185,7 @@ app.world.prototype.update = function()
 	// GAMEOBJECTS[0].vision.calc(this.stage);
 
   	// Whenever the player moves, center the camera on the player.
-	app.camera.update(GAMEOBJECTS[0].sprite.position.x, GAMEOBJECTS[0].sprite.position.y);
+	this.camera.update(GAMEOBJECTS[0].sprite.position.x, GAMEOBJECTS[0].sprite.position.y);
 
 	// Render the frame and request the next frame.
 	this.renderer.render(this.stage);
@@ -155,7 +194,7 @@ app.world.prototype.update = function()
 
 // Represents the view of the game world currently rendered to the screen.
 app.Camera = function (world, width, height) {
-    this.world = world;
+	this.world = world;
     this.view = new PIXI.Rectangle(0, 0, width, height);
     this.boundary = new PIXI.Rectangle(width / 2, height / 2, this.world.size.width - width, this.world.size.height - height);
 };
@@ -177,5 +216,5 @@ app.Camera.prototype.update = function (x, y) {
 };
 
 $(function () {
-    new app.world();
+    new app.World();
 });
