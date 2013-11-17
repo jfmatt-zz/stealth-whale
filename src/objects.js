@@ -21,36 +21,6 @@ var PLAYEROBJ = function(){
 	this.onLadder = false;
 	this.locked = false;
 
-	this.lAssetsNAKED = ['assets/Whale_L_naked_stand.png', 'assets/Whale_L_naked_walk_1.png','assets/Whale_L_naked_walk_2.png','assets/Whale_L_naked_walk_3.png',
-	'assets/Whale_L_naked_walk_4.png','assets/Whale_L_naked_walk_5.png','assets/Whale_L_naked_walk_6.png','assets/Whale_L_naked_walk_7.png','assets/Whale_L_naked_walk_8.png'];
-
-	this.rAssetsNAKED = ['assets/Whale_R_naked_stand.PNG', 'assets/Whale_R_naked_walk_1.PNG', 'assets/Whale_R_naked_walk_2.PNG', 'assets/Whale_R_naked_walk_3.PNG', 'assets/Whale_R_naked_walk_4.PNG',
-	'assets/Whale_R_naked_walk_5.PNG', 'assets/Whale_R_naked_walk_6.PNG','assets/Whale_R_naked_walk_7.PNG','assets/Whale_R_naked_walk_8.PNG'];
-
-	this.lAssetsLEDERHOSEN = ['assets/whale_L_lederhosen_stand.png' ,'assets/whale_L_lederhosen_walk_1.png' ,'assets/whale_L_lederhosen_walk_2.png',
-	'assets/whale_L_lederhosen_walk_3.png','assets/whale_L_lederhosen_walk_4.png','assets/whale_L_lederhosen_walk_5.png','assets/whale_L_lederhosen_walk_6.png', 'assets/whale_L_lederhosen_walk_7.png','assets/whale_L_lederhosen_walk_8.png'];
-
-	this.rAssetsLEDERHOSEN = ['assets/whale_R_lederhosen_stand.png','assets/whale_R_lederhosen_walk_1.png', 'assets/whale_R_lederhosen_walk_2.png','assets/whale_R_lederhosen_walk_3.png','assets/whale_R_lederhosen_walk_4.png','assets/whale_R_lederhosen_walk_5.png',
-	'assets/whale_R_lederhosen_walk_6.png', 'assets/whale_R_lederhosen_walk_7.png', 'assets/whale_R_lederhosen_walk_8.png'];
-
-	this.lAssetsFANCY = ['assets/whale_L_fancy_stand.png', 'assets/whale_L_fancy_walk_1.png', 'assets/whale_L_fancy_walk_2.png', 'assets/whale_L_fancy_walk_3.png', 'assets/whale_L_fancy_walk_4.png', 'assets/whale_L_fancy_walk_5.png',
-	'assets/whale_L_fancy_walk_6.png', 'assets/whale_L_fancy_walk_7.png', 'assets/whale_L_fancy_walk_8.png'];
-
-	this.rAssetsFANCY = ['assets/whale_R_fancy_stand.png', 'assets/whale_R_fancy_walk_1.png', 'assets/whale_R_fancy_walk_2.png', 'assets/whale_R_fancy_walk_3.png', 'assets/whale_R_fancy_walk_4.png', 'assets/whale_R_fancy_walk_5.png',
-	'assets/whale_R_fancy_walk_6.png', 'assets/whale_R_fancy_walk_7.png', 'assets/whale_R_fancy_walk_8.png'];
-
-
-	this.rHide = ['assets/whale_R_naked_hide.png', 'assets/whale_R_lederhosen_hide.png', 'assets/whale_R_fancy_hide.png'];
-	this.lHide = ['assets/whale_L_naked_hide.png', 'assets/whale_L_lederhosen_hide.png', 'assets/whale_L_fancy_hide.png'];
-
-	this.hide = [this.lHide, this.rHide];
-
-	this.lAssets = [this.lAssetsNAKED, this.lAssetsLEDERHOSEN, this.lAssetsFANCY];
-
-	this.rAssets = [this.rAssetsNAKED, this.rAssetsLEDERHOSEN, this.rAssetsFANCY];
-
-	this.nonHide = [this.lAssets, this.rAssets];
-
 	this.currentRank = 0;
 	this.direction = 0;
 
@@ -61,6 +31,30 @@ var PLAYEROBJ = function(){
 };
 
 PLAYEROBJ.prototype = new GAMEOBJ();
+
+PLAYEROBJ.prototype.assets = {
+	lNAKED: ['assets/whale_L_naked_stand.png', 'assets/whale_L_naked_walk_1.png','assets/whale_L_naked_walk_2.png','assets/whale_L_naked_walk_3.png',
+		'assets/whale_L_naked_walk_4.png','assets/whale_L_naked_walk_5.png','assets/whale_L_naked_walk_6.png','assets/whale_L_naked_walk_7.png','assets/whale_L_naked_walk_8.png'],
+	rNAKED: ['assets/whale_R_naked_stand.png', 'assets/whale_R_naked_walk_1.png', 'assets/whale_R_naked_walk_2.png', 'assets/whale_R_naked_walk_3.png', 'assets/whale_R_naked_walk_4.png',
+		'assets/whale_R_naked_walk_5.png', 'assets/whale_R_naked_walk_6.png','assets/whale_R_naked_walk_7.png','assets/whale_R_naked_walk_8.png'],
+	lLEDERHOSEN: ['assets/whale_L_lederhosen_stand.png' ,'assets/whale_L_lederhosen_walk_1.png' ,'assets/whale_L_lederhosen_walk_2.png',
+		'assets/whale_L_lederhosen_walk_3.png','assets/whale_L_lederhosen_walk_4.png','assets/whale_L_lederhosen_walk_5.png','assets/whale_L_lederhosen_walk_6.png', 'assets/whale_L_lederhosen_walk_7.png','assets/whale_L_lederhosen_walk_8.png'],
+	rLEDERHOSEN: ['assets/whale_R_lederhosen_stand.png','assets/whale_R_lederhosen_walk_1.png', 'assets/whale_R_lederhosen_walk_2.png','assets/whale_R_lederhosen_walk_3.png','assets/whale_R_lederhosen_walk_4.png','assets/whale_R_lederhosen_walk_5.png',
+		'assets/whale_R_lederhosen_walk_6.png', 'assets/whale_R_lederhosen_walk_7.png', 'assets/whale_R_lederhosen_walk_8.png'],
+	lFANCY: ['assets/whale_L_fancy_stand.png', 'assets/whale_L_fancy_walk_1.png', 'assets/whale_L_fancy_walk_2.png', 'assets/whale_L_fancy_walk_3.png', 'assets/whale_L_fancy_walk_4.png', 'assets/whale_L_fancy_walk_5.png',
+		'assets/whale_L_fancy_walk_6.png', 'assets/whale_L_fancy_walk_7.png', 'assets/whale_L_fancy_walk_8.png'],
+	rFANCY: ['assets/whale_R_fancy_stand.png', 'assets/whale_R_fancy_walk_1.png', 'assets/whale_R_fancy_walk_2.png', 'assets/whale_R_fancy_walk_3.png', 'assets/whale_R_fancy_walk_4.png', 'assets/whale_R_fancy_walk_5.png',
+	'assets/whale_R_fancy_walk_6.png', 'assets/whale_R_fancy_walk_7.png', 'assets/whale_R_fancy_walk_8.png'],
+
+	lHide: ['assets/whale_L_naked_hide.png', 'assets/whale_L_lederhosen_hide.png', 'assets/whale_L_fancy_hide.png'],
+	rHide: ['assets/whale_R_naked_hide.png', 'assets/whale_R_lederhosen_hide.png', 'assets/whale_R_fancy_hide.png']
+};
+
+PLAYEROBJ.prototype.lAssets = [PLAYEROBJ.prototype.assets.lNAKED, PLAYEROBJ.prototype.assets.lLEDERHOSEN, PLAYEROBJ.prototype.assets.lFANCY];
+PLAYEROBJ.prototype.rAssets = [PLAYEROBJ.prototype.assets.rNAKED, PLAYEROBJ.prototype.assets.rLEDERHOSEN, PLAYEROBJ.prototype.assets.rFANCY];
+PLAYEROBJ.prototype.hide    = [PLAYEROBJ.prototype.assets.lHide, PLAYEROBJ.prototype.assets.rHide];
+PLAYEROBJ.prototype.nonHide = [PLAYEROBJ.prototype.lAssets, PLAYEROBJ.prototype.rAssets]
+
 
 PLAYEROBJ.prototype.blocksVision = false;
 PLAYEROBJ.prototype.collide = function (GAMEOBJECTS, dx, dy) {
@@ -299,12 +293,11 @@ ENEMYOBJ.prototype = new GAMEOBJ();
 
 ENEMYOBJ.prototype.blocksVision = false;
 
-ENEMYOBJ.prototype.lAssets = ['assets/soldierNOGUN_L_stand.png', 'assets/soldierNOGUN_L_walk_1.png', 'assets/soldierNOGUN_L_walk_2.png', 
+ENEMYOBJ.prototype.assets = {};
+ENEMYOBJ.prototype.lAssets = ENEMYOBJ.prototype.assets.lAssets = ['assets/soldierNOGUN_L_stand.png', 'assets/soldierNOGUN_L_walk_1.png', 'assets/soldierNOGUN_L_walk_2.png', 
 	'assets/soldierNOGUN_L_walk_3.png' , 'assets/soldierNOGUN_L_walk_4.png'];
-
-ENEMYOBJ.prototype.rAssets = ['assets/soldierNOGUN_R_stand.png', 'assets/soldierNOGUN_R_walk_1.png', 'assets/soldierNOGUN_R_walk_2.png', 
+ENEMYOBJ.prototype.rAssets = ENEMYOBJ.prototype.assets.rAssets = ['assets/soldierNOGUN_R_stand.png', 'assets/soldierNOGUN_R_walk_1.png', 'assets/soldierNOGUN_R_walk_2.png', 
 	'assets/soldierNOGUN_R_walk_3.png','assets/soldierNOGUN_R_walk_4.png'];
-
 
 
 ENEMYOBJ.prototype.collide = function(GAMEOBJECTS, dx, dy)

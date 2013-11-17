@@ -2,7 +2,7 @@ function Vision (whalePos, offset, pointer, radius, fov, resolution, color) {
     var ii, Pt
     PIXI.Graphics.call(this)
     this.whalePos = whalePos
-    console.log(whalePos)
+//    console.log(whalePos)
     this.offset = offset
     this.center = new PIXI.Point()
 
@@ -198,8 +198,6 @@ _.extend(Vision.prototype, {
             for (jj = 0; jj < seenSegments.length; jj++) {
 
                 if (seenSegments[jj].tempR <= Pt.r) {
-                    if (seenSegments[jj].sprite.entity instanceof ENEMYOBJ)
-                        console.log(seenSegments[jj].tempR + " ?< " + Pt.r)
                     entity = seenSegments[jj].sprite.entity
                     
                     //first time it's been seen
