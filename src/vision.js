@@ -1,8 +1,8 @@
-function Vision (whale, offset, pointer, radius, fov, resolution, color) {
+function Vision (whalePos, offset, pointer, radius, fov, resolution, color) {
     var ii, Pt
     PIXI.Graphics.call(this)
-    this.whale = whale
-    console.log(whale)
+    this.whalePos = whalePos
+    console.log(whalePos)
     this.offset = offset
     this.center = new PIXI.Point()
 
@@ -12,7 +12,7 @@ function Vision (whale, offset, pointer, radius, fov, resolution, color) {
     this.width = this.height = this.radius * 2
 
     this.fov = fov || (Math.PI / 2)
-    this.resolution = resolution = resolution || 360
+    this.resolution = resolution = resolution || 200
                         
     this.color = color || 0xFF7E00
     this.color = 0xFFFFFF
@@ -38,17 +38,18 @@ _.extend(Vision.prototype, {
     // which should all support getBoundingPoly() and be non-overlapping
     //Supports either multiple args or a single array of stages
     calc: function (stages) {
-        var objs = [],
+        var sprites = [],
             ii, jj,
             args = _.isArray(stages) ? stages : arguments,
 
             segments = [],
+            objectsSeen = [],
 
             piOver2 = Math.PI / 2,
             threePiOver2 = piOver2 * 3,
             dTh = 2 * Math.PI / this.resolution,
             th = 0,
-            thisR, thisX, thisY,
+            thisR, thisX, thisY, seenSegments,
 
             Pt
 
@@ -64,25 +65,16 @@ _.extend(Vision.prototype, {
         }
         th = 0
 
-        this.center.x = this.whale.x + this.offset.x
-        this.center.y = this.whale.y + this.offset.y
-        //this.position.x = this.center.x - this.radius
-        //this.position.y = this.center.y - this.radius
-        //console.log(this.center.x + ", " + this.center.y)
+        this.center.x = this.whalePos.x + this.offset.x
+        this.center.y = this.whalePos.y + this.offset.y
         
         //Add things we're colliding with
         for (ii = 0; ii < args.length; ii++)
-            objs = objs.concat(flattenStage(args[ii]))
+            sprites = sprites.concat(flattenStage(args[ii]))
 
 
-        objs = _.filter(objs, function (o) {
-            return o.blocksVision
-        })
-
-        //console.log(objs);
-        
         //get segments
-        _.each(objs, function (o) {
+        _.each(sprites, function (o) {
             var top, bottom, left, right
             
             if (o === this)
@@ -100,7 +92,9 @@ _.extend(Vision.prototype, {
                     x: left,
                     y1: top,
                     y2: bottom,
-                    vert: true
+                    vert: true,
+                    tempR: 9999,
+                    sprite: o
                 })
             //right
             if (right < this.center.x + this.radius)
@@ -108,7 +102,9 @@ _.extend(Vision.prototype, {
                     x: right,
                     y1: top,
                     y2: bottom,
-                    vert: true
+                    vert: true,
+                    tempR: 9999,
+                    sprite: o
                 })
             //top
             if (top > this.center.y - this.radius)
@@ -116,7 +112,9 @@ _.extend(Vision.prototype, {
                     x1: left,
                     x2: right,
                     y: top,
-                    vert: false
+                    vert: false,
+                    tempR: 9999,
+                    sprite: o
                 })
             //bottom
             if (bottom < this.center.y + this.radius)
@@ -124,7 +122,9 @@ _.extend(Vision.prototype, {
                     x1: left,
                     x2: right,
                     y: bottom,
-                    vert: false
+                    vert: false,
+                    tempR: 9999,
+                    sprite: o
                 })
         }, this)
         //console.log(segments.length + " segments possibly visible")
@@ -134,6 +134,8 @@ _.extend(Vision.prototype, {
             Pt = this.pts[ii]
             Pt.r = this.radius
             Pt.th = th
+            thisThing = null
+            seenSegments = []
 
             for (jj = 0; jj < segments.length; jj++) {
                 //vert
@@ -150,11 +152,13 @@ _.extend(Vision.prototype, {
                             
                     //x = r*cos(th) -> solve for x
                     thisR = segments[jj].x / Math.cos(Pt.th)
-                    if (thisR < Pt.r) {
-                        //get y of intersection
-                        thisY = -1 * thisR * Math.sin(Pt.th)
-                        //check if intersection is in segment
-                        if (segments[jj].y1 < thisY && thisY < segments[jj].y2) {
+                    //get y of intersection
+                    thisY = -1 * thisR * Math.sin(Pt.th)
+                    //check if intersection is in segment
+                    if (segments[jj].y1 < thisY && thisY < segments[jj].y2) {
+                        segments[jj].tempR = thisR
+                        seenSegments.push(segments[jj]);
+                        if (thisR < Pt.r && segments[jj].sprite.entity.blocksVision) {
                             Pt.r = thisR
                         }
                     }
@@ -166,33 +170,53 @@ _.extend(Vision.prototype, {
                     // unit circle identities
                     if (th > Math.PI) {
                         if (segments[jj].y < 0)
-                                continue
+                            continue
                     }
                     else {
                         if (segments[jj].y > 0)
-                                continue
+                            continue
                     }
 
 
                     //y = r*sin(th) -> solve for r
                     //and remember to flip y
                     thisR = -1 * segments[jj].y / Math.sin(Pt.th)
-                    if (thisR < Pt.r) {
-                        //get x of intersection PIXI.Point
-                        thisX = thisR * Math.cos(Pt.th)
-                        //check if intersection is within segment
-                        if (segments[jj].x1 < thisX && thisX < segments[jj].x2) {
+                    //get x of intersection PIXI.Point
+                    thisX = thisR * Math.cos(Pt.th)
+                    //check if intersection is within segment
+                    if (segments[jj].x1 < thisX && thisX < segments[jj].x2) {
+                        segments[jj].tempR = thisR
+                        seenSegments.push(segments[jj]);
+                        if (thisR < Pt.r && segments[jj].sprite.entity.blocksVision) {
                             Pt.r = thisR
                         }
                     }
                 }
 
             }
+            var entity
+            for (jj = 0; jj < seenSegments.length; jj++) {
 
+                if (seenSegments[jj].tempR <= Pt.r) {
+                    if (seenSegments[jj].sprite.entity instanceof ENEMYOBJ)
+                        console.log(seenSegments[jj].tempR + " ?< " + Pt.r)
+                    entity = seenSegments[jj].sprite.entity
+                    
+                    //first time it's been seen
+                    if (entity.seenDistance > this.radius)
+                        objectsSeen.push(entity)
+
+                    //give it the shortest possible distance
+                    if (seenSegments[jj].tempR < entity.seenDistance)
+                        entity.seenDistance = seenSegments[jj].tempR
+
+                }
+
+            }
             th += dTh
         }
-
-        return this
+//        console.log(objectsSeen.length)
+        return objectsSeen
     },
 
     render: function () {
@@ -202,12 +226,12 @@ _.extend(Vision.prototype, {
         
         this.beginFill(this.color)
 
-//        console.log("RENDERING");
+        this.position.x = this.whalePos.x + this.offset.x - this.radius
+        this.position.y = this.whalePos.y + this.offset.y - this.radius
 
-        this.moveTo(this.pts[0].x + this.center.x, this.pts[0].y + this.center.y)
+        this.moveTo(this.pts[0].x + this.radius, this.pts[0].y + this.radius)
         for (ii = 1; ii < this.pts.length; ii++) {
-            this.lineTo(this.pts[ii].x + this.center.x, this.pts[ii].y + this.center.y)
-//            console.log(this.pts[ii].x + ", " + this.pts[ii].y)
+            this.lineTo(this.pts[ii].x + this.radius, this.pts[ii].y + this.radius)
         }
 
         this.endFill()
