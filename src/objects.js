@@ -21,21 +21,40 @@ var PLAYEROBJ = function(){
 	this.onLadder = false;
 	this.locked = false;
 
-	this.lAssetsNORMAL = ['assets/Whale_L_stand.png', 'assets/Whale_L_walk_1.png','assets/Whale_L_walk_2.png','assets/Whale_L_walk_3.png',
-	'assets/Whale_L_walk_4.png','assets/Whale_L_walk_5.png','assets/Whale_L_walk_6.png','assets/Whale_L_walk_7.png','assets/Whale_L_walk_8.png'];
+	this.lAssetsNAKED = ['assets/Whale_L_naked_stand.png', 'assets/Whale_L_naked_walk_1.png','assets/Whale_L_naked_walk_2.png','assets/Whale_L_naked_walk_3.png',
+	'assets/Whale_L_naked_walk_4.png','assets/Whale_L_naked_walk_5.png','assets/Whale_L_naked_walk_6.png','assets/Whale_L_naked_walk_7.png','assets/Whale_L_naked_walk_8.png'];
 
-	this.rAssetsNORMAL = ['assets/Whale_R_stand.PNG', 'assets/Whale_R_walk_1.PNG', 'assets/Whale_R_walk_2.PNG', 'assets/Whale_R_walk_3.PNG', 'assets/Whale_R_walk_4.PNG',
-	'assets/Whale_R_walk_5.PNG', 'assets/Whale_R_walk_6.PNG','assets/Whale_R_walk_7.PNG','assets/Whale_R_walk_8.PNG'];
+	this.rAssetsNAKED = ['assets/Whale_R_naked_stand.PNG', 'assets/Whale_R_naked_walk_1.PNG', 'assets/Whale_R_naked_walk_2.PNG', 'assets/Whale_R_naked_walk_3.PNG', 'assets/Whale_R_naked_walk_4.PNG',
+	'assets/Whale_R_naked_walk_5.PNG', 'assets/Whale_R_naked_walk_6.PNG','assets/Whale_R_naked_walk_7.PNG','assets/Whale_R_naked_walk_8.PNG'];
 
-	this.lAssetsLEDERHOSEN = ['assets/hitler_R_alert.png'];
+	this.lAssetsLEDERHOSEN = ['assets/whale_L_lederhosen_stand.png' ,'assets/whale_L_lederhosen_walk_1.png' ,'assets/whale_L_lederhosen_walk_2.png',
+	'assets/whale_L_lederhosen_walk_3.png','assets/whale_L_lederhosen_walk_4.png','assets/whale_L_lederhosen_walk_5.png','assets/whale_L_lederhosen_walk_6.png', 'assets/whale_L_lederhosen_walk_7.png','assets/whale_L_lederhosen_walk_8.png'];
 
-	this.rAssetsLEDERHOSEN = ['assets/hitler_R_alert.png'];
+	this.rAssetsLEDERHOSEN = ['assets/whale_R_lederhosen_stand.png','assets/whale_R_lederhosen_walk_1.png', 'assets/whale_R_lederhosen_walk_2.png','assets/whale_R_lederhosen_walk_3.png','assets/whale_R_lederhosen_walk_4.png','assets/whale_R_lederhosen_walk_5.png',
+	'assets/whale_R_lederhosen_walk_6.png', 'assets/whale_R_lederhosen_walk_7.png', 'assets/whale_R_lederhosen_walk_8.png'];
 
-	this.lAssets = [this.lAssetsNORMAL, this.lAssetsLEDERHOSEN];
+	this.lAssetsFANCY = ['assets/whale_L_fancy_stand.png', 'assets/whale_L_fancy_walk_1.png', 'assets/whale_L_fancy_walk_2.png', 'assets/whale_L_fancy_walk_3.png', 'assets/whale_L_fancy_walk_4.png', 'assets/whale_L_fancy_walk_5.png',
+	'assets/whale_L_fancy_walk_6.png', 'assets/whale_L_fancy_walk_7.png', 'assets/whale_L_fancy_walk_8.png'];
 
-	this.rAssets = [this.rAssetsNORMAL, this.lAssetsLEDERHOSEN];
+	this.rAssetsFANCY = ['assets/whale_R_fancy_stand.png', 'assets/whale_R_fancy_walk_1.png', 'assets/whale_R_fancy_walk_2.png', 'assets/whale_R_fancy_walk_3.png', 'assets/whale_R_fancy_walk_4.png', 'assets/whale_R_fancy_walk_5.png',
+	'assets/whale_R_fancy_walk_6.png', 'assets/whale_R_fancy_walk_7.png', 'assets/whale_R_fancy_walk_8.png'];
+
+
+	this.rHide = ['assets/whale_R_naked_hide.png', 'assets/whale_R_lederhosen_hide.png', 'assets/whale_R_fancy_hide.png'];
+	this.lHide = ['assets/whale_L_naked_hide.png', 'assets/whale_L_lederhosen_hide.png', 'assets/whale_L_fancy_hide.png'];
+
+	this.hide = [this.lHide, this.rHide];
+
+	this.lAssets = [this.lAssetsNAKED, this.lAssetsLEDERHOSEN, this.lAssetsFANCY];
+
+	this.rAssets = [this.rAssetsNAKED, this.rAssetsLEDERHOSEN, this.rAssetsFANCY];
+
+	this.nonHide = [this.lAssets, this.rAssets];
 
 	this.currentRank = 0;
+	this.direction = 0;
+
+	this.lastTexture;
 
 	this.vision = new Vision(this.sprite.position, {x: 61, y: 25}, {x: 0, y: 0}, 400);
 
@@ -85,6 +104,17 @@ PLAYEROBJ.prototype.floorCheck = function(collideObj)
 			{
 				floorCheck[1] = true;
 				floorCheck[2] = i;
+			}
+			if(collideObj[i] instanceof ITEMOBJ && !collideObj[i].pickedUp)
+			{
+				console.log("PICKED UP ITEM");
+
+				collideObj[i].sprite.visible = false;
+				collideObj[i].pickedUp = true;
+
+				this.currentRank = collideObj[i].currentRank;
+				this.right =0;
+				this.left =0;
 			}
 		}
 
@@ -136,7 +166,15 @@ PLAYEROBJ.prototype.update = function(KEYS, foreground)
 				this.frameCount++;
 					
 			}
-				
+			else if(this.sprite.position.y + this.sprite.height > collideObj[floorVal[2]].sprite.position.y +5)
+			{
+				this.sprite.position.x += 2.5;
+				this.sprite.position.y = collideObj[floorVal[2]].sprite.position.y - this.sprite.height;
+				this.frameSwitcher(0, this.rAssets[this.currentRank],3);
+				this.frameCount++;
+			}
+			this.direction = 1;	
+
 		}
 					
 
@@ -155,7 +193,14 @@ PLAYEROBJ.prototype.update = function(KEYS, foreground)
 				this.frameSwitcher(1, this.lAssets[this.currentRank], 3);
 				this.frameCount++;
 			}
-			
+			else if(this.sprite.position.y +this.sprite.height > collideObj[floorVal[2]].sprite.position.y+5)
+			{
+				this.sprite.position.x -= 2.5;
+				this.sprite.position.y = collideObj[floorVal[2]].sprite.position.y - this.sprite.height;
+				this.frameSwitcher(1, this.lAssets[this.currentRank], 3);
+				this.frameCount++;
+			}
+			this.direction = 0;
 			
 		}
 	}
@@ -210,9 +255,16 @@ PLAYEROBJ.prototype.update = function(KEYS, foreground)
 			if(hideObj[i].isHideable)
 			{
 				
-				foreground.addChildAt(this.sprite, 0);
+				foreground.addChildAt(this.sprite, 2);
 				console.log("HIDING");
 				this.locked = true;
+
+				//this.sprite.setTexture(PIXI.Texture.fromImage(this.hide[this.direction[this.currentRank]]));
+				var tempArray = this.hide[this.direction];
+				this.lastTexture = this.sprite.texture;
+				this.sprite.setTexture(PIXI.Texture.fromImage(tempArray[this.currentRank]));
+
+
 				
 				
 			}
@@ -221,27 +273,10 @@ PLAYEROBJ.prototype.update = function(KEYS, foreground)
 	else if(KEYS['e'])
 	{
 		foreground.addChildAt(this.sprite, foreground.children.length-1);
+		this.sprite.setTexture(this.lastTexture);
 		this.locked = false;
 	}
-	else if(KEYS['space'])
-	{
-		collideObj = this.collide(GAMEOBJECTS,0 ,-5);
-		for(var i =0; i < collideObj.length; i++)
-		{
-			if(collideObj[i] instanceof ITEMOBJ && !collideObj[i].pickedUp)
-			{
-				console.log("PICKED UP ITEM");
-
-				collideObj[i].sprite.visible = false;
-				collideObj[i].pickedUp = true;
-
-				this.currentRank++;
-
-
-			}
-		}
-
-	}
+	
 
 }
 
@@ -270,10 +305,7 @@ ENEMYOBJ.prototype.rAssets = ['assets/soldierNOGUN_R_stand.png', 'assets/soldier
 
 ENEMYOBJ.prototype.collide = function(GAMEOBJECTS, dx, dy)
 {
-	var collided = [];
-	for(var i = 0; i < GAMEOBJECTS.length; i++)
-	{
-		if(this.sprite.position.x + this.sprite.width + dx >= GAMEOBJECTS[0].sprite.position.x 
+	if(this.sprite.position.x + this.sprite.width + dx >= GAMEOBJECTS[0].sprite.position.x 
 			&& GAMEOBJECTS[0].sprite.position.x+GAMEOBJECTS[0].sprite.width >= this.sprite.position.x + dx
 			&& this.sprite.position.y + this.sprite.height + dy >= GAMEOBJECTS[0].sprite.position.y
 			&& GAMEOBJECTS[0].sprite.position.y + GAMEOBJECTS[0].sprite.height >= this.sprite.position.y + dy
@@ -281,12 +313,11 @@ ENEMYOBJ.prototype.collide = function(GAMEOBJECTS, dx, dy)
 			
 		{
 			
-			collided.push(GAMEOBJECTS[i]);
-			
+			return true;
 
 		}
-	}
-	return collided;
+	
+
 		
 	
 	
@@ -294,6 +325,8 @@ ENEMYOBJ.prototype.collide = function(GAMEOBJECTS, dx, dy)
 
 ENEMYOBJ.prototype.update = function()
 {
+
+
 	var t = Date.now();
 	// console.log(t);
 	// console.log("COUNTER: " + this.counter);
@@ -344,6 +377,11 @@ ENEMYOBJ.prototype.update = function()
 			this.counter =0;
 		}
 	}
+
+	if(this.collide(GAMEOBJECTS,0,0))
+	{
+		app.world.gameState = "LOST";
+	}
 	
 	
 	
@@ -360,6 +398,7 @@ var ITEMOBJ = function()
 ITEMOBJ.prototype = new GAMEOBJ();
 
 ITEMOBJ.prototype.blocksVision = false;
+
 
 
 var SCRIPTOBJ = function(type, target)

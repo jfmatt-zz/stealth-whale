@@ -45,13 +45,14 @@ app.World.prototype.showTitleScreen = function () {
 
     // When space is pressed, fade the title screen out and start the game.
     hideTitleScreen = $.proxy(function () {
+    	console.log("hideTitleScreen called");
         $(document).unbind('keypress');
         music.fadeOut(2.0, function () { music.stop(); });
         this.startGame();
     }, this);
 
     // Start the asset loader.
-    var assets = ['assets/Floor.png', 'assets/Ladder.png', 'assets/Whale_L_stand.png', 'assets/Whale_L_walk_1.png', 'assets/Whale_L_walk_2.png', 'assets/Whale_L_walk_3.png', 'assets/Whale_L_walk_4.png', 'assets/Whale_L_walk_5.png', 'assets/Whale_L_walk_6.png', 'assets/Whale_L_walk_7.png', 'assets/Whale_L_walk_8.png', 'assets/Whale_R_stand.PNG', 'assets/Whale_R_walk_1.PNG', 'assets/Whale_R_walk_2.PNG', 'assets/Whale_R_walk_3.PNG', 'assets/Whale_R_walk_4.PNG', 'assets/Whale_R_walk_5.PNG', 'assets/Whale_R_walk_6.PNG', 'assets/Whale_R_walk_7.PNG', 'assets/Whale_R_walk_8.PNG', 'assets/background.png', 'assets/flag_1.png', 'assets/hitler_R_alert.png', 'assets/soldierNOGUN_L_blink.png', 'assets/soldierNOGUN_L_stand.png', 'assets/soldierNOGUN_L_walk_1.png', 'assets/soldierNOGUN_L_walk_2.png', 'assets/soldierNOGUN_L_walk_3.png', 'assets/soldierNOGUN_L_walk_4.png', 'assets/soldierNOGUN_R_blink.png', 'assets/soldierNOGUN_R_stand.png', 'assets/soldierNOGUN_R_walk_1.png', 'assets/soldierNOGUN_R_walk_2.png', 'assets/soldierNOGUN_R_walk_3.png', 'assets/soldierNOGUN_R_walk_4.png', 'assets/sprites.json', 'assets/sprites.png'];
+    var assets = ['assets/Floor.png', 'assets/Ladder.png', 'assets/Whale_L_stand.png', 'assets/Whale_L_walk_1.png', 'assets/Whale_L_walk_2.png', 'assets/Whale_L_walk_3.png', 'assets/Whale_L_walk_4.png', 'assets/Whale_L_walk_5.png', 'assets/Whale_L_walk_6.png', 'assets/Whale_L_walk_7.png', 'assets/Whale_L_walk_8.png', 'assets/Whale_R_stand.PNG', 'assets/Whale_R_walk_1.PNG', 'assets/Whale_R_walk_2.PNG', 'assets/Whale_R_walk_3.PNG', 'assets/Whale_R_walk_4.PNG', 'assets/Whale_R_walk_5.PNG', 'assets/Whale_R_walk_6.PNG', 'assets/Whale_R_walk_7.PNG', 'assets/Whale_R_walk_8.PNG', 'assets/background.png', 'assets/flag_1.png', 'assets/hitler_R_alert.png', 'assets/soldierNOGUN_L_blink.png', 'assets/soldierNOGUN_L_stand.png', 'assets/soldierNOGUN_L_walk_1.png', 'assets/soldierNOGUN_L_walk_2.png', 'assets/soldierNOGUN_L_walk_3.png', 'assets/soldierNOGUN_L_walk_4.png', 'assets/soldierNOGUN_R_blink.png', 'assets/soldierNOGUN_R_stand.png', 'assets/soldierNOGUN_R_walk_1.png', 'assets/soldierNOGUN_R_walk_2.png', 'assets/soldierNOGUN_R_walk_3.png', 'assets/soldierNOGUN_R_walk_4.png', 'assets/sprites.json', 'assets/sprites.png', 'assets/whale_L_lederhosen_walk_1.png', 'assets/whale_R_lederhosen_walk_1.png'];
     var assetLoader = new PIXI.AssetLoader(assets);
     assetLoader.onComplete = doneLoading;
     assetLoader.load();
@@ -127,9 +128,7 @@ app.World.prototype.game = function()
 	LADDER2.upperFloor = FLOOR3;
 
 
-	var FLAG = new ITEMOBJ(20+LADDER.x + LADDER.width, LADDER.y -142, 100, 112, false, true, new PIXI.Sprite(PIXI.Texture.fromImage("assets/flag_1.png")));
-	FLAG.sprite.width = FLAG.width;
-	FLAG.sprite.height = FLAG.height;
+	var FLAG = new GAMEOBJ(20+LADDER.x + LADDER.width, LADDER.y -142, 100, 112, false, true, new PIXI.Sprite(PIXI.Texture.fromImage("assets/item_glow_1.png")));
 	GAMEOBJECTS.push(FLAG);
 
 	var FLAG2 = new GAMEOBJ(LADDER2.x - 30, LADDER2.y - 142, 100, 112, false, true, new PIXI.Sprite(PIXI.Texture.fromImage("assets/flag_1.png")));
@@ -137,10 +136,16 @@ app.World.prototype.game = function()
 	FLAG2.sprite.height = FLAG2.height;
 	GAMEOBJECTS.push(FLAG2);
 
+	var LEDER = new ITEMOBJ(500, FLOOR.y - 40, 40,40, false, false, new PIXI.Sprite(PIXI.Texture.fromImage("assets/item_fedora_1.png")));
+	LEDER.currentRank =1;
+	GAMEOBJECTS.push(LEDER);
+
+	var FANCY = new ITEMOBJ(1000, FLOOR.y - 40, 40,40, false, false, new PIXI.Sprite(PIXI.Texture.fromImage("assets/item_tophat_1.png")));
+	FANCY.currentRank = 2;
+	GAMEOBJECTS.push(FANCY);
+
 
 	var NPC1 = new ENEMYOBJ(800, FLOOR2.y-60, 52,60, false, false, new PIXI.Sprite(PIXI.Texture.fromImage("assets/soldierNOGUN_L_stand.png")));
-	NPC1.sprite.width = NPC1.width;
-	NPC1.sprite.height = NPC1.height;
 	NPC1.closestFloor = FLOOR2;
 	GAMEOBJECTS.push(NPC1);
 	NPCOBJECTS.push(NPC1);
@@ -149,8 +154,6 @@ app.World.prototype.game = function()
 	
 
 	var NPC2 = new ENEMYOBJ(1200, FLOOR3.y-60, 52,60, false, false,new PIXI.Sprite(PIXI.Texture.fromImage("assets/soldierNOGUN_L_stand.png")));
-	NPC2.sprite.width = NPC2.width;
-	NPC2.sprite.height = NPC2.height;
 	NPC2.closestFloor = FLOOR3;
 	GAMEOBJECTS.push(NPC2);
 	NPCOBJECTS.push(NPC2);
@@ -162,6 +165,8 @@ app.World.prototype.game = function()
 	{
 		GAMEOBJECTS[i].sprite.position.x = GAMEOBJECTS[i].x;
 		GAMEOBJECTS[i].sprite.position.y = GAMEOBJECTS[i].y;
+		GAMEOBJECTS[i].sprite.width = GAMEOBJECTS[i].width;
+		GAMEOBJECTS[i].sprite.height = GAMEOBJECTS[i].height;
 		this.foreground.addChild(GAMEOBJECTS[i].sprite);
 	}
 
