@@ -21,6 +21,8 @@
 		this.down =0;
 
 		this.frameCount = 0;
+
+		this.uid = _.uniqueId('go_')
 	};
 
 	GAMEOBJ.prototype.blocksVision = true

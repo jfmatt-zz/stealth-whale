@@ -183,9 +183,24 @@ app.World.prototype.update = function()
 	for(var i = 0; i <GAMEOBJECTS.length; i++)
 	{
 		GAMEOBJECTS[i].update(this.keys, this.foreground);
+		GAMEOBJECTS[i].seenDistance = 99999;
 	}
 
-	GAMEOBJECTS[0].vision.calc(this.foreground);
+	var seen = GAMEOBJECTS[0].vision.calc(this.foreground);
+	//console.log(seen.length)
+	
+	_.each(GAMEOBJECTS, function (o) {
+		if (o instanceof ENEMYOBJ)
+			o.sprite.visible = false
+	})
+
+	_.each(seen, function (x) {
+		if (!(x instanceof ENEMYOBJ))
+			return
+
+		x.sprite.visible = true
+	})
+
 	GAMEOBJECTS[0].vision.render();
 
   	// Whenever the player moves, center the camera on the player.
