@@ -53,7 +53,13 @@ app.World.prototype.showTitleScreen = function () {
     }, this);
 
     // Start the asset loader.
-    var assets = ['assets/Floor.png', 'assets/Ladder.png', 'assets/Whale_L_stand.png', 'assets/Whale_L_walk_1.png', 'assets/Whale_L_walk_2.png', 'assets/Whale_L_walk_3.png', 'assets/Whale_L_walk_4.png', 'assets/Whale_L_walk_5.png', 'assets/Whale_L_walk_6.png', 'assets/Whale_L_walk_7.png', 'assets/Whale_L_walk_8.png', 'assets/Whale_R_stand.PNG', 'assets/Whale_R_walk_1.PNG', 'assets/Whale_R_walk_2.PNG', 'assets/Whale_R_walk_3.PNG', 'assets/Whale_R_walk_4.PNG', 'assets/Whale_R_walk_5.PNG', 'assets/Whale_R_walk_6.PNG', 'assets/Whale_R_walk_7.PNG', 'assets/Whale_R_walk_8.PNG', 'assets/background.png', 'assets/flag_1.png', 'assets/hitler_R_alert.png', 'assets/soldierNOGUN_L_blink.png', 'assets/soldierNOGUN_L_stand.png', 'assets/soldierNOGUN_L_walk_1.png', 'assets/soldierNOGUN_L_walk_2.png', 'assets/soldierNOGUN_L_walk_3.png', 'assets/soldierNOGUN_L_walk_4.png', 'assets/soldierNOGUN_R_blink.png', 'assets/soldierNOGUN_R_stand.png', 'assets/soldierNOGUN_R_walk_1.png', 'assets/soldierNOGUN_R_walk_2.png', 'assets/soldierNOGUN_R_walk_3.png', 'assets/soldierNOGUN_R_walk_4.png', 'assets/sprites.json', 'assets/sprites.png', 'assets/whale_L_lederhosen_walk_1.png', 'assets/whale_R_lederhosen_walk_1.png'];
+    var assets = []
+    _.each([PLAYEROBJ, ENEMYOBJ], function (f) {
+	    for (var k in f.prototype.assets) {
+	    	console.log(k);
+	    	assets = assets.concat(f.prototype.assets[k]);
+			}
+    })
     var assetLoader = new PIXI.AssetLoader(assets);
     assetLoader.onComplete = doneLoading;
     assetLoader.load();
