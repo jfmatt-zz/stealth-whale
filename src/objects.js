@@ -1,18 +1,22 @@
+var app = app || {};
 
-	var LADDEROBJ = function(){
-		GAMEOBJ.apply(this, arguments);
-	}
+// How fast the whale moves.
+var speed = 2.5;
 
-	LADDEROBJ.prototype = new GAMEOBJ();
+var LADDEROBJ = function(){
+	GAMEOBJ.apply(this, arguments);
+}
 
-	LADDEROBJ.prototype.blocksVision = false;
-	
-	var FLOOROBJ = function()
-	{
-		GAMEOBJ.apply(this, arguments);
-	}
+LADDEROBJ.prototype = new GAMEOBJ();
 
-	FLOOROBJ.prototype = new GAMEOBJ();
+LADDEROBJ.prototype.blocksVision = false;
+
+var FLOOROBJ = function()
+{
+	GAMEOBJ.apply(this, arguments);
+}
+
+FLOOROBJ.prototype = new GAMEOBJ();
 
 //generic player object
 var PLAYEROBJ = function(){
@@ -149,22 +153,21 @@ PLAYEROBJ.prototype.ladderCheck = function(collideObj)
 
 PLAYEROBJ.prototype.update = function(KEYS, foreground)
 {
-		// Check for horizontal movement.
-		var collideObj = [];
-		var floorVal = [];
-		var ladderVal = [];
-		
+	// Check for horizontal movement.
+	var collideObj = [];
+	var floorVal = [];
+	var ladderVal = [];
 
 	if (KEYS['d']) 
 	{
 		//console.log(this.collide(GAMEOBJECTS));
-		collideObj = this.collide(GAMEOBJECTS, 2.5,0);
+		collideObj = this.collide(GAMEOBJECTS, speed,0);
 		floorVal = this.floorCheck(collideObj);
 		if(!floorVal[0] && floorVal[1] && !this.locked)
 		{
 			if(this.sprite.position.y + this.sprite.height <= collideObj[floorVal[2]].sprite.position.y+5)
 			{
-				this.sprite.position.x += 2.5;
+				this.sprite.position.x += speed;
 				this.frameSwitcher(0, this.rAssets[this.currentRank],3);
 				this.frameCount++;
 					
@@ -188,13 +191,13 @@ PLAYEROBJ.prototype.update = function(KEYS, foreground)
 	} 
 	else if (KEYS['a']) 
 	{
-		collideObj = this.collide(GAMEOBJECTS, -2.5,0);
+		collideObj = this.collide(GAMEOBJECTS, -speed,0);
 		floorVal = this.floorCheck(collideObj);
 		if(!floorVal[0] && floorVal[1] && !this.locked)
 		{
 			if(this.sprite.position.y + this.sprite.height <= collideObj[floorVal[2]].sprite.position.y+5)
 			{
-				this.sprite.position.x -= 2.5;
+				this.sprite.position.x -= speed;
 				this.frameSwitcher(1, this.lAssets[this.currentRank], 3);
 				this.frameCount++;
 			}
@@ -350,14 +353,14 @@ ENEMYOBJ.prototype.update = function()
 		// Check if you are moving left 
 		if(this.sprite.position.x - xTARGET > 0)
 		{
-			this.sprite.position.x -= 2.5;
+			this.sprite.position.x -= speed;
 			this.frameSwitcher(1, this.lAssets[this.rank], 6);
 			this.direction = 0;
 			this.frameCount++;
 		}
 		else if(this.sprite.position.x - xTARGET < 0)
 		{
-			this.sprite.position.x += 2.5;
+			this.sprite.position.x += speed;
 			this.frameSwitcher(0, this.rAssets[this.rank], 6);
 			this.direction = 1;
 			this.frameCount++;
@@ -399,7 +402,6 @@ ENEMYOBJ.prototype.update = function()
 var ITEMOBJ = function()
 {
 	GAMEOBJ.apply(this, arguments);
-
 	this.pickedUp = false;
 }
 
@@ -444,4 +446,62 @@ var SCRIPTOBJ = function(type, target)
 
 	// target is either the x coordinate to move to, or the number of seconds to wait
 	this.target = target;
+}
+
+// Template for a factory function for each object.
+var makeObject = function (type, options, objectArray) {
+	var texture = PIXI.Texture.fromImage(options.sprite);
+	var sprite = options.tiled ? new PIXI.TilingSprite(texture) : new PIXI.Sprite(texture);
+	sprite.width = options.width;
+	sprite.height = options.height;
+	var object = new type(options.x, options.y, options.width, options.height, options.solid, options.hideable, sprite);
+	object.closestFloor = options.floor;
+	objectArray.push(object);
+	return object;
+};
+
+// Factory functions for each object type.
+GAMEOBJ.make = function (options, objectArray) { return makeObject(GAMEOBJ, options, objectArray); };
+ITEMOBJ.make = function (options, objectArray) {
+	var item = makeObject(ITEMOBJ, options, objectArray);
+	item.currentRank = options.rank;
+	return item;
+}
+LADDEROBJ.make = function(options, objectArray) {
+	options.width = 80;
+	options.sprite = 'assets/Ladder.png';
+	options.tiled = true;
+	options.solid = false;
+	options.hideable = false;
+	var object = makeObject(LADDEROBJ, options, objectArray);
+	object.lowerFloor = options.lower;
+	object.upperFloor = options.upper;
+	return object;
+}
+FLOOROBJ.make = function(options, objectArray) {
+	options.sprite = 'assets/Floor.png';
+	options.tiled = true;
+	options.solid = false;
+	options.hideable = false;
+	var floor = makeObject(FLOOROBJ, options, objectArray);
+	floor.closestFloor = floor;
+	floor.blocksVision = options.transparent ? false : true;
+	return floor;
+}
+ENEMYOBJ.make = function(options, objectArray, npcObjectArray) {
+	var script = _.map(options.script, function (item) {
+		if (_.has(item, 'move')) {
+			return new SCRIPTOBJ(0, item['move']);
+		} else if (_.has(item, 'wait')) {
+			return new SCRIPTOBJ(1, item['wait']);
+		}
+	});
+	options.width = 52;
+	options.height = 60;
+	options.tiled = false;
+	var npc = makeObject(ENEMYOBJ, options, objectArray);
+	npc.script = script;
+	npc.rank = options.rank;
+	npcObjectArray.push(npc);
+	return npc;
 }

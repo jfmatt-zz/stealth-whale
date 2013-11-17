@@ -56,9 +56,8 @@ app.World.prototype.showTitleScreen = function () {
     var assets = []
     _.each([PLAYEROBJ, ENEMYOBJ, ITEMOBJ], function (f) {
 	    for (var k in f.prototype.assets) {
-	    	console.log(k);
 	    	assets = assets.concat(f.prototype.assets[k]);
-			}
+		}
     })
     var assetLoader = new PIXI.AssetLoader(assets);
     assetLoader.onComplete = doneLoading;
@@ -92,82 +91,53 @@ app.World.prototype.game = function()
 	//Since these are all static elements, they are drawn once.
 	//Once there are maps bigger than one screen the drawing aspect will need to be reworked.
 	//THE PLAYER IS ALWAYS THE FIRST ITEM IN THE GAMEOBJECTS ARRAY, DO NOT ADD THINGS BEFORE IT
-	var PLAYER = new PLAYEROBJ(200,Y-165, 123,140,true,false,  new PIXI.Sprite(PIXI.Texture.fromImage("assets/Whale_L_stand.png")));
+	var PLAYER = new PLAYEROBJ(200, Y - 165, 123, 140, true, false, new PIXI.Sprite(PIXI.Texture.fromImage("assets/Whale_L_stand.png")));
 	PLAYER.sprite.width = PLAYER.width;
 	PLAYER.sprite.height = PLAYER.height;
   	PLAYER.sprite.position.x = PLAYER.x;
   	PLAYER.sprite.position.y = PLAYER.y;
 	
 	GAMEOBJECTS.push(PLAYER);
-	console.log("PLAYER IS VISIBLE? " + PLAYER.blocksVision);
 
-	var ladderHeight = 200;
+    var whaleHeight = PLAYER.height;
+	var ladderHeight = 300;
+    var ladderWidth = 80;
+    var wallWidth = 10;
+    var floorHeight = 25;
+    var npcWidth = 52;
+    var npcHeight = 60;
 
-	var WALL = new GAMEOBJ(0,0,10,Y, true, false, new PIXI.TilingSprite(PIXI.Texture.fromImage("assets/Floor.png"), 10,Y))
-	GAMEOBJECTS.push(WALL);
+    // Level bounding walls.
+    var leftWall = GAMEOBJ.make({x: 0, y: 0, width: wallWidth, height: Y, solid: true, hideable: false, sprite: 'assets/Floor.png', tiled: true}, GAMEOBJECTS);
+    var rightWall = GAMEOBJ.make({x: X - wallWidth, y: 0, width: wallWidth, height: Y, solid: true, hideable: false, sprite: 'assets/Floor.png', tiled: true}, GAMEOBJECTS);
 
-	var WALL2 = new GAMEOBJ(X-10, 0, 10, Y, true, false, new PIXI.TilingSprite(PIXI.Texture.fromImage("assets/Floor.png"), 10,Y));
-	GAMEOBJECTS.push(WALL2);
+    // Level 1, Floor 1: a flag to test out hiding and a ladder to the next floor.
+    var floorL1F1 = FLOOROBJ.make({x: leftWall.x + leftWall.width, y: Y - floorHeight, width: X - leftWall.width - rightWall.width, height: floorHeight}, GAMEOBJECTS);
+    var floorL1F2P1 = FLOOROBJ.make({x: leftWall.x + leftWall.width, y: floorL1F1.y - ladderHeight, width: 900, height: floorHeight}, GAMEOBJECTS);
+    var floorL1F2P2 = FLOOROBJ.make({x: floorL1F2P1.x + floorL1F2P1.width, y: floorL1F2P1.y, width: ladderWidth, height: floorHeight, transparent: true}, GAMEOBJECTS);
+    var floorL1F2P3 = FLOOROBJ.make({x: floorL1F2P2.x + floorL1F2P2.width, y: floorL1F2P1.y, width: rightWall.x - floorL1F2P2.x - floorL1F2P2.width, height: floorHeight}, GAMEOBJECTS);
+    var ladderL1F1 = LADDEROBJ.make({x: floorL1F2P2.x, y: floorL1F2P2.y, height: ladderHeight, lower: floorL1F1, upper: floorL1F2P2}, GAMEOBJECTS);
+    // var wallL1F1N1 = GAMEOBJ.make({x: ladderL1F1.x + 200, y: floorL1F2P1.y, width: wallWidth, height: floorL1F1.y - floorL1F2P1.y, solid: true, hideable: false, sprite: 'assets/Floor.png', tiled: true},  GAMEOBJECTS);
+    var flagL1F1 = GAMEOBJ.make({x: 400, y: floorL1F1.y - whaleHeight, width: 100, height: 112, solid: false, hideable: true, sprite: 'assets/flag_1.png', tiled: false}, GAMEOBJECTS);
 
-	var FLOOR = new FLOOROBJ(WALL.x + WALL.width,	Y-25, WALL2.x, 25, false, false,  new PIXI.TilingSprite(PIXI.Texture.fromImage("assets/Floor.png"), WALL2.x,25));
-	FLOOR.closestFloor = FLOOR;
-	GAMEOBJECTS.push(FLOOR);
+    // Level 1, Floor 2: three ladders and two guards.
+    var floorL1F3P1 = FLOOROBJ.make({x: leftWall.x + leftWall.width, y: floorL1F2P1.y - ladderHeight, width: 100, height: floorHeight}, GAMEOBJECTS);
+    var floorL1F3P2 = FLOOROBJ.make({x: floorL1F3P1.x + floorL1F3P1.width, y: floorL1F3P1.y, width: ladderWidth, height: floorHeight, transparent: true}, GAMEOBJECTS);
+    var ladderL1F2N1 = LADDEROBJ.make({x: floorL1F3P2.x, y: floorL1F3P2.y, height: ladderHeight, lower: floorL1F2P1, upper: floorL1F3P1}, GAMEOBJECTS);
+    var floorL1F3P3 = FLOOROBJ.make({x: floorL1F3P2.x + floorL1F3P2.width, y: floorL1F3P1.y, width: 300, height: floorHeight}, GAMEOBJECTS);
+    var floorL1F3P4 = FLOOROBJ.make({x: floorL1F3P3.x + floorL1F3P3.width, y: floorL1F3P1.y, width: ladderWidth, height: floorHeight, transparent: true}, GAMEOBJECTS);
+    var ladderL1F2N2 = LADDEROBJ.make({x: floorL1F3P4.x, y: floorL1F3P4.y, height: ladderHeight, lower: floorL1F2P1, upper: floorL1F3P1}, GAMEOBJECTS);
+    var floorL1F3P5 = FLOOROBJ.make({x: floorL1F3P4.x + floorL1F3P4.width, y: floorL1F3P1.y, width: 600, height: floorHeight}, GAMEOBJECTS);
+    var floorL1F3P6 = FLOOROBJ.make({x: floorL1F3P5.x + floorL1F3P5.width, y: floorL1F3P1.y, width: ladderWidth, height: floorHeight, transparent: true}, GAMEOBJECTS);
+    var ladderL1F2N3 = LADDEROBJ.make({x: floorL1F3P6.x, y: floorL1F3P6.y, height: ladderHeight, lower: floorL1F2P1, upper: floorL1F3P1}, GAMEOBJECTS);
+    var floorL1F3P7 = FLOOROBJ.make({x: floorL1F3P6.x + floorL1F3P6.width, y: floorL1F3P1.y, width: rightWall.x - floorL1F3P6.x - floorL1F3P6.width, height: floorHeight, transparent: true}, GAMEOBJECTS);
 
-	var FLOOR2 = new FLOOROBJ(WALL.x + WALL.width,Y-ladderHeight-FLOOR.height, WALL2.x, 25,  false, false, new PIXI.TilingSprite(PIXI.Texture.fromImage("assets/Floor.png"), WALL2.x, 25));
-	FLOOR2.closestFloor = FLOOR2;
-	GAMEOBJECTS.push(FLOOR2);
+    var npcL1F2N1Script = [{'move': ladderL1F2N2.x - 100}, {'wait': 1500}, {'move': ladderL1F1.x + 100}, {'wait': 1500}];
+    var npcL1F2N1 = ENEMYOBJ.make({x: ladderL1F1.x + 100, y: floorL1F2P1.y - npcHeight, sprite: 'assets/soldierNOGUN_L_stand.png', script: npcL1F2N1Script, rank: 0}, GAMEOBJECTS, NPCOBJECTS);
+    var npcL1F2N2Script = [{'move': ladderL1F2N3.x + 500}, {'wait': 1500}, {'move': ladderL1F2N3.x - 100}, {'wait': 1500}];
+    var npcL1F2N2 = ENEMYOBJ.make({x: ladderL1F2N3.x - 100, y: floorL1F2P1.y - npcHeight, sprite: 'assets/soldierNOGUN_L_stand.png', script: npcL1F2N2Script, rank: 0}, GAMEOBJECTS, NPCOBJECTS);
 
-	var FLOOR3 = new FLOOROBJ(WALL.x + WALL.width, Y-400 - FLOOR.height, WALL2.x, 25,  false, false,  new PIXI.TilingSprite(PIXI.Texture.fromImage("assets/Floor.png"), WALL2.x, 25))
-
-	FLOOR3.closestFloor = FLOOR3;
-	GAMEOBJECTS.push(FLOOR3);
-
-	
-	var LADDER = new LADDEROBJ(300,FLOOR2.y,80,ladderHeight,  false, false,   new PIXI.TilingSprite(PIXI.Texture.fromImage("assets/Ladder.png"), 80, ladderHeight));
-	GAMEOBJECTS.push(LADDER);
-
-	var LADDER2 = new LADDEROBJ(600, Y - 400 -FLOOR.height, 80, ladderHeight,  false, false, new PIXI.TilingSprite(PIXI.Texture.fromImage("assets/Ladder.png"), 80, ladderHeight));
-	GAMEOBJECTS.push(LADDER2);
-
-	LADDER.lowerFloor = FLOOR;
-	LADDER.upperFloor = FLOOR2;
-	LADDER2.lowerFloor = FLOOR2;
-	LADDER2.upperFloor = FLOOR3;
-
-
-	var FLAG = new GAMEOBJ(20+LADDER.x + LADDER.width, LADDER.y -142, 100, 112, false, true, new PIXI.Sprite(PIXI.Texture.fromImage("assets/flag_1.png")));
-	FLAG.blocksVision = false
-	GAMEOBJECTS.push(FLAG);
-
-	var FLAG2 = new GAMEOBJ(LADDER2.x - 30, LADDER2.y - 142, 100, 112, false, true, new PIXI.Sprite(PIXI.Texture.fromImage("assets/flag_1.png")));
-	GAMEOBJECTS.push(FLAG2);
-
-	var LEDER = new ITEMOBJ(500, FLOOR2.y - 40, 40,40, false, false, new PIXI.Sprite(PIXI.Texture.fromImage("assets/item_fedora_1.png")));
-	LEDER.currentRank =1;
-	GAMEOBJECTS.push(LEDER);
-
-	var FANCY = new ITEMOBJ(1000, FLOOR3.y - 40, 40,40, false, false, new PIXI.Sprite(PIXI.Texture.fromImage("assets/item_tophat_1.png")));
-	FANCY.currentRank = 2;
-	GAMEOBJECTS.push(FANCY);
-
-
-	var NPC1 = new ENEMYOBJ(1500, FLOOR2.y-60, 52,60, false, false, new PIXI.Sprite(PIXI.Texture.fromImage("assets/soldierNOGUN_L_stand.png")));
-	NPC1.closestFloor = FLOOR2;
-	NPC1.rank = 2;
-	GAMEOBJECTS.push(NPC1);
-	NPCOBJECTS.push(NPC1);
-	NPC1.script = [new SCRIPTOBJ(0, 200), new SCRIPTOBJ(1, 200), new SCRIPTOBJ(0, 600)];
-
-	
-
-	var NPC2 = new ENEMYOBJ(1200, FLOOR3.y-60, 52,60, false, false,new PIXI.Sprite(PIXI.Texture.fromImage("assets/soldierNOGUN_L_stand.png")));
-	NPC2.closestFloor = FLOOR3;
-	NPC2.rank = 0;
-	GAMEOBJECTS.push(NPC2);
-	NPCOBJECTS.push(NPC2);
-	NPC2.script = [new SCRIPTOBJ(0, 200), new SCRIPTOBJ(1, 200), new SCRIPTOBJ(0, 600)];
-
-	PLAYER.closestFloor = GAMEOBJECTS[2];
+	PLAYER.closestFloor = floorL1F1;
 
 	this.foreground.addChild(GAMEOBJECTS[0].vision);
 	for(var i =1; i <GAMEOBJECTS.length; i++)
