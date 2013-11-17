@@ -1,7 +1,6 @@
 
 	var LADDEROBJ = function(){
 		GAMEOBJ.apply(this, arguments);
-
 	}
 
 	LADDEROBJ.prototype = new GAMEOBJ();
@@ -38,12 +37,13 @@ var PLAYEROBJ = function(){
 
 	this.currentRank = 0;
 
-	this.vision = new Vision(this.sprite.position);
+	this.vision = new Vision(this.sprite.position, {x: 61, y: 25}, {x: 0, y: 0}, 400);
 
 };
 
 PLAYEROBJ.prototype = new GAMEOBJ();
 
+PLAYEROBJ.prototype.blocksVision = false;
 PLAYEROBJ.prototype.collide = function (GAMEOBJECTS, dx, dy) {
 
 var collided = [];
@@ -242,6 +242,7 @@ PLAYEROBJ.prototype.update = function(KEYS, foreground)
 		}
 
 	}
+
 }
 
 var ENEMYOBJ = function()
@@ -256,6 +257,8 @@ var ENEMYOBJ = function()
 	
 };
 ENEMYOBJ.prototype = new GAMEOBJ();
+
+ENEMYOBJ.prototype.blocksVision = false;
 
 ENEMYOBJ.prototype.lAssets = ['assets/soldierNOGUN_L_stand.png', 'assets/soldierNOGUN_L_walk_1.png', 'assets/soldierNOGUN_L_walk_2.png', 
 	'assets/soldierNOGUN_L_walk_3.png' , 'assets/soldierNOGUN_L_walk_4.png'];

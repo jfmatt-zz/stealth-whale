@@ -8,6 +8,10 @@
 		this.height = height;
 
 		this.sprite = sprite;
+		if (this.sprite) {
+			this.sprite.blocksVision = this.blocksVision
+			this.sprite.entity = this
+		}
 		// this.position = this.sprite.position;
 		this.isSolid = solid;
 		this.isHideable = isHideable;
@@ -17,11 +21,9 @@
 		this.down =0;
 
 		this.frameCount = 0;
-
-		this.blocksVision = true;
 	};
 
-	
+	GAMEOBJ.prototype.blocksVision = true
 	
 	GAMEOBJ.prototype.frameSwitcher = function(direction, assets, frameDelay)
 	{

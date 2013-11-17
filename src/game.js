@@ -91,6 +91,7 @@ app.World.prototype.game = function()
   	PLAYER.sprite.position.y = PLAYER.y;
 	
 	GAMEOBJECTS.push(PLAYER);
+	console.log("PLAYER IS VISIBLE? " + PLAYER.blocksVision);
 
 	var ladderHeight = 200;
 
@@ -166,6 +167,7 @@ app.World.prototype.game = function()
 
 	GAMEOBJECTS[0].sprite.position.x = GAMEOBJECTS[0].x;
 	GAMEOBJECTS[0].sprite.position.y = GAMEOBJECTS[0].y;
+	this.foreground.addChild(GAMEOBJECTS[0].vision);
 	this.foreground.addChild(GAMEOBJECTS[0].sprite);
 
 	var backgroundSprite = new PIXI.TilingSprite(new PIXI.Texture.fromImage('assets/background.png'), X, Y);
@@ -183,7 +185,8 @@ app.World.prototype.update = function()
 		GAMEOBJECTS[i].update(this.keys, this.foreground);
 	}
 
-	// GAMEOBJECTS[0].vision.calc(this.stage);
+	GAMEOBJECTS[0].vision.calc(this.foreground);
+	GAMEOBJECTS[0].vision.render();
 
   	// Whenever the player moves, center the camera on the player.
 	this.camera.update(GAMEOBJECTS[0].sprite.position.x, GAMEOBJECTS[0].sprite.position.y);
