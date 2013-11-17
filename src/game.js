@@ -136,6 +136,7 @@ app.World.prototype.game = function()
 
 
 	var FLAG = new GAMEOBJ(20+LADDER.x + LADDER.width, LADDER.y -142, 100, 112, false, true, new PIXI.Sprite(PIXI.Texture.fromImage("assets/item_glow_1.png")));
+	FLAG.blocksVision = false
 	GAMEOBJECTS.push(FLAG);
 
 	var FLAG2 = new GAMEOBJ(LADDER2.x - 30, LADDER2.y - 142, 100, 112, false, true, new PIXI.Sprite(PIXI.Texture.fromImage("assets/flag_1.png")));
@@ -190,25 +191,59 @@ app.World.prototype.game = function()
 
 app.World.prototype.update = function()
 {
+	var seen,
+			spottedLevels = {}
+
 	for(var i = 0; i <GAMEOBJECTS.length; i++)
 	{
 		GAMEOBJECTS[i].update(this.keys, this.foreground);
 		GAMEOBJECTS[i].seenDistance = 99999;
 	}
 
-	var seen = GAMEOBJECTS[0].vision.calc(this.foreground);
+	seen = GAMEOBJECTS[0].vision.calc(this.foreground);
 	//console.log(seen.length)
 	
 	_.each(GAMEOBJECTS, function (o) {
 		if (o instanceof ENEMYOBJ)
 			o.sprite.visible = false
+
+		if (o instanceof ITEMOBJ)
+			o.chooseSpriteSheet(0);
 	})
 
-	_.each(seen, function (x) {
-		if (!(x instanceof ENEMYOBJ))
+	_.each(seen, function (guard) {
+		if (guard instanceof ITEMOBJ) {
+			guard.chooseSpriteSheet(1);
+			return
+		}
+
+		if (!(guard instanceof ENEMYOBJ))
 			return
 
-		x.sprite.visible = true
+		guard.sprite.visible = true
+
+		var gsprite = guard.sprite,
+				whale = GAMEOBJECTS[0].sprite;
+
+		//if they're in visual range
+		if (guard.seenDistance <= guard.visionRange
+			//and care that you exist
+			&& whale.currentRank != guard.rank
+			//and don't have to look down
+			&& gsprite.position.y + gsprite.height >= whale.position.y
+			//and are facing the right way
+			&& (gsprite.position.x < GAMEOBJECTS[0].position.x) == guard.facingLeft
+			) {
+				//then all guards on this level know about the player
+				console.log(guard.uid + " can see you!");
+				spottedLevels[gsprite.position.y + gsprite.height] = true
+		}
+	})
+
+	_.each(GAMEOBJECTS, function (obj) {
+		if (obj instanceof ENEMYOBJ && spottedLevels[obj.sprite.position.y + obj.sprite.height]) {
+			console.log(obj.uid + " knows about you!");
+		}
 	})
 
 	GAMEOBJECTS[0].vision.render();

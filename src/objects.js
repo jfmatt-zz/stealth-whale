@@ -331,16 +331,10 @@ ENEMYOBJ.prototype.collide = function(GAMEOBJECTS, dx, dy)
 			return true;
 
 		}
-	
-
-		
-	
-	
 }
 
 ENEMYOBJ.prototype.update = function()
 {
-
 
 	var t = Date.now();
 	//if 0 then its a move command
@@ -394,9 +388,6 @@ ENEMYOBJ.prototype.update = function()
 	{
 		app.world.gameState = "LOST";
 	}
-	
-	
-	
 }
 
 
@@ -410,8 +401,12 @@ var ITEMOBJ = function()
 ITEMOBJ.prototype = new GAMEOBJ();
 
 ITEMOBJ.prototype.blocksVision = false;
+ITEMOBJ.prototype.chooseSpriteSheet = function (sheetnum) {
 
-
+	/////////////////
+	//TODO: JON
+	/////////////////
+}
 
 var SCRIPTOBJ = function(type, target)
 {
@@ -422,7 +417,3 @@ var SCRIPTOBJ = function(type, target)
 	// target is either the x coordinate to move to, or the number of seconds to wait
 	this.target = target;
 }
-
-
-
-
