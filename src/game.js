@@ -161,6 +161,7 @@ app.World.prototype.game = function()
 
 	PLAYER.closestFloor = GAMEOBJECTS[2];
 
+	this.foreground.addChild(GAMEOBJECTS[0].vision);
 	for(var i =1; i <GAMEOBJECTS.length; i++)
 	{
 		GAMEOBJECTS[i].sprite.position.x = GAMEOBJECTS[i].x;
@@ -172,7 +173,6 @@ app.World.prototype.game = function()
 
 	GAMEOBJECTS[0].sprite.position.x = GAMEOBJECTS[0].x;
 	GAMEOBJECTS[0].sprite.position.y = GAMEOBJECTS[0].y;
-	this.foreground.addChild(GAMEOBJECTS[0].vision);
 	this.foreground.addChild(GAMEOBJECTS[0].sprite);
 
 	var backgroundSprite = new PIXI.TilingSprite(new PIXI.Texture.fromImage('assets/background.png'), X, Y);

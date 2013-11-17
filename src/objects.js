@@ -246,7 +246,7 @@ PLAYEROBJ.prototype.update = function(KEYS, foreground)
 			}
 		}
 	}	
-	else if(KEYS['q'])
+	else if(KEYS['q'] && !this.hiding)
 	{
 		
 		var hideObj = this.collide(GAMEOBJECTS,0,0);
@@ -256,6 +256,8 @@ PLAYEROBJ.prototype.update = function(KEYS, foreground)
 			{
 				
 				foreground.addChildAt(this.sprite, 2);
+				this.vision.radius *= .75
+				this.hiding = true;
 				console.log("HIDING");
 				this.locked = true;
 
@@ -270,8 +272,10 @@ PLAYEROBJ.prototype.update = function(KEYS, foreground)
 			}
 		}
 	}
-	else if(KEYS['e'])
+	else if(KEYS['e'] && this.hiding)
 	{
+		this.vision.radius *= (4 / 3)
+		this.hiding = false
 		foreground.addChildAt(this.sprite, foreground.children.length-1);
 		this.sprite.setTexture(this.lastTexture);
 		this.locked = false;
