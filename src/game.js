@@ -70,9 +70,11 @@ app.World.prototype.startGame = function () {
     $(document).bind('keydown', $.proxy(function (event) { this.keys[keyName(event)] = true; }, this));
     $(document).bind('keyup', $.proxy(function (event) { this.keys[keyName(event)] = false; }, this));
 
+    // Tracks the state of the game. The run loop checks this to determine whether to continue rendering the game or show the 'win' or 'game over' screens
+    this.gameState = 'PLAYING';
+
 	this.game();
 	this.camera.update();
-
 	requestAnimFrame(this.update.bind(this));
 }
 
@@ -88,7 +90,6 @@ app.World.prototype.game = function()
   	PLAYER.sprite.position.x = PLAYER.x;
   	PLAYER.sprite.position.y = PLAYER.y;
 	
-
 	GAMEOBJECTS.push(PLAYER);
 
 	var ladderHeight = 200;
@@ -187,9 +188,29 @@ app.World.prototype.update = function()
   	// Whenever the player moves, center the camera on the player.
 	this.camera.update(GAMEOBJECTS[0].sprite.position.x, GAMEOBJECTS[0].sprite.position.y);
 
-	// Render the frame and request the next frame.
-	this.renderer.render(this.stage);
-	requestAnimFrame(this.update.bind(this));
+    // If the game is still running, render the next frame. Otherwise show the 'win' or 'loss' screens.
+    if (this.gameState == 'PLAYING') {
+        this.renderer.render(this.stage);
+        requestAnimFrame(this.update.bind(this));
+    } else if (this.gameState == 'LOST') {
+        this.showGameOver('GAME OVER');
+    } else if (this.gameState == 'WON') {
+        this.showGameOver('YOU WIN!');
+    }
+}
+
+// Show a 'GAME OVER' screen.
+app.World.prototype.showGameOver = function (text) {
+    var stage = new PIXI.Stage();
+
+    // Add text.
+    var text = new PIXI.Text(text, {font: 'bold 40px Avro', fill: 'white', align: 'center'});
+    text.position = new PIXI.Point(this.renderer.width / 2, this.renderer.height / 2);
+    text.anchor = new PIXI.Point(0.5, 0.5);
+    stage.addChild(text);
+
+    // Render the stage.
+    this.renderer.render(stage);
 }
 
 // Represents the view of the game world currently rendered to the screen.
@@ -216,5 +237,5 @@ app.Camera.prototype.update = function (x, y) {
 };
 
 $(function () {
-    new app.World();
+    app.world = new app.World();
 });
