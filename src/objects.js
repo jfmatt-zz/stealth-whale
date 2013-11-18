@@ -49,6 +49,10 @@ PLAYEROBJ.prototype.assets = {
 		'assets/whale_L_fancy_walk_6.png', 'assets/whale_L_fancy_walk_7.png', 'assets/whale_L_fancy_walk_8.png'],
 	rFANCY: ['assets/whale_R_fancy_stand.png', 'assets/whale_R_fancy_walk_1.png', 'assets/whale_R_fancy_walk_2.png', 'assets/whale_R_fancy_walk_3.png', 'assets/whale_R_fancy_walk_4.png', 'assets/whale_R_fancy_walk_5.png',
 	'assets/whale_R_fancy_walk_6.png', 'assets/whale_R_fancy_walk_7.png', 'assets/whale_R_fancy_walk_8.png'],
+	climbNAKED: ['assets/whale_naked_climb_1.PNG', 'assets/whale_naked_climb_2.PNG', 'assets/whale_naked_climb_3.PNG', 'assets/whale_naked_climb_4.PNG'],
+	climbLEDERHOSEN: ['assets/whale_lederhosen_climb_1.PNG','assets/whale_lederhosen_climb_2.PNG','assets/whale_lederhosen_climb_3.PNG','assets/whale_lederhosen_climb_4.PNG'],
+	climbFANCY: ['assets/whale_fancy_climb_1.PNG','assets/whale_fancy_climb_2.PNG','assets/whale_fancy_climb_3.PNG','assets/whale_fancy_climb_4.PNG'],
+
 
 	lHide: ['assets/whale_L_naked_hide.png', 'assets/whale_L_lederhosen_hide.png', 'assets/whale_L_fancy_hide.png'],
 	rHide: ['assets/whale_R_naked_hide.png', 'assets/whale_R_lederhosen_hide.png', 'assets/whale_R_fancy_hide.png']
@@ -58,6 +62,7 @@ PLAYEROBJ.prototype.lAssets = [PLAYEROBJ.prototype.assets.lNAKED, PLAYEROBJ.prot
 PLAYEROBJ.prototype.rAssets = [PLAYEROBJ.prototype.assets.rNAKED, PLAYEROBJ.prototype.assets.rLEDERHOSEN, PLAYEROBJ.prototype.assets.rFANCY];
 PLAYEROBJ.prototype.hide    = [PLAYEROBJ.prototype.assets.lHide, PLAYEROBJ.prototype.assets.rHide];
 PLAYEROBJ.prototype.nonHide = [PLAYEROBJ.prototype.lAssets, PLAYEROBJ.prototype.rAssets]
+PLAYEROBJ.prototype.climbAssets = [PLAYEROBJ.prototype.assets.climbNAKED, PLAYEROBJ.prototype.assets.climbLEDERHOSEN, PLAYEROBJ.prototype.assets.climbFANCY];
 
 
 PLAYEROBJ.prototype.blocksVision = false;
@@ -216,18 +221,22 @@ PLAYEROBJ.prototype.update = function(KEYS, foreground)
    		 // Check for vertical movement.
 	 if (KEYS['s']) 
 	 {
-	 	collideObj = this.collide(GAMEOBJECTS,0 ,5);
+	 	collideObj = this.collide(GAMEOBJECTS,0 ,2*speed);
 		ladderVal = this.ladderCheck(collideObj);
 		if(!ladderVal[0] && ladderVal[1] != -1 && !this.locked)
 		{
-			if(this.sprite.position.y + this.sprite.height + 5   <= collideObj[ladderVal[1]].sprite.position.y + collideObj[ladderVal[1]].sprite.height)
+			if(this.sprite.position.y + this.sprite.height + 2*speed   <= collideObj[ladderVal[1]].sprite.position.y + collideObj[ladderVal[1]].sprite.height)
 			{
-				this.sprite.position.y += 5;
+				this.sprite.position.y += 2*speed;
+				this.frameSwitcher(3, this.climbAssets[this.currentRank], 3);
+				this.frameCount++;
 				
 			}
-			else if(this.sprite.position.y + this.sprite.height + 5 > collideObj[ladderVal[1]].lowerFloor.sprite.position.y)
+			else if(this.sprite.position.y + this.sprite.height + 2*speed > collideObj[ladderVal[1]].lowerFloor.sprite.position.y)
 			{
 				this.sprite.position.y = collideObj[ladderVal[1]].lowerFloor.sprite.position.y-this.sprite.height;
+				this.frameSwitcher(3, this.climbAssets[this.currentRank], 3);
+				this.frameCount++;
 			}
 				
 		}
@@ -235,22 +244,25 @@ PLAYEROBJ.prototype.update = function(KEYS, foreground)
 	}	 
 	else if (KEYS['w']) 
 	{
-		collideObj = this.collide(GAMEOBJECTS,0 ,-5);
+		collideObj = this.collide(GAMEOBJECTS,0 ,-(2*speed));
 		ladderVal = this.ladderCheck(collideObj);
 		if(!ladderVal[0] && ladderVal[1] != -1 && !this.locked)
 		{
 			
-			if(this.sprite.position.y + this.sprite.height -5 >= collideObj[ladderVal[1]].sprite.position.y)
+			if(this.sprite.position.y + this.sprite.height -(2*speed) >= collideObj[ladderVal[1]].sprite.position.y)
 			{
 					//sets that you are on the ladder to true, so that you cant walk off the side of the ladder
 					//then adjusts the thiss y coordinate 
-					this.onLadder = true;
-					this.sprite.position.y -= 5;
+					this.sprite.position.y -= 2*speed;
+					this.frameSwitcher(2, this.climbAssets[this.currentRank], 3);
+					this.frameCount++;
 				
 			}
-			else if(this.sprite.position.y + this.sprite.height -5 >= collideObj[ladderVal[1]].sprite.position.y)
+			else if(this.sprite.position.y + this.sprite.height -(2*speed) >= collideObj[ladderVal[1]].sprite.position.y)
 			{
 				this.sprite.position.u = collideObj[ladderVal[1]].sprite.position.y + this.sprite.height;
+				this.frameSwitcher(2, this.climbAssets[this.currentRank], 3);
+				this.frameCount++;
 			}
 		}
 	}	

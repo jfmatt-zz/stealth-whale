@@ -66,22 +66,47 @@ var GAMEOBJ = function(x,y,width, height,solid, isHideable, sprite)
 			this.frameCount = 0;
 		}
 
-			if(direction == 99)
-			{
-				if(this.frameCount == frameDelay)
-				{
-					this.sprite.setTexture(PIXI.Texture.fromImage(assets[this.right]));
-					this.right++;
+		if(direction = 2 && this.frameCount == frameDelay)
+		{
+			this.sprite.setTexture(PIXI.Texture.fromImage(assets[this.up]));
+			this.up++;
 
-					if(this.right > assets.length-1)
-					{
-						this.right = 0;
-					}
-					this.frameCount = 0;
+			if(this.up > assets.length-1)
+			{
+				this.up = 0;
+			}
+			this.frameCount = 0;
+		
+		}
+		if(direction = 3 && this.frameCount == frameDelay)
+		{
+			this.sprite.setTexture(PIXI.Texture.fromImage(assets[this.up]));
+			this.up++;
+
+			if(this.up > assets.length-1)
+			{
+				this.up = 0;
+			}
+			this.frameCount = 0;
+		
+		}
+
+		if(direction == 99)
+		{
+			if(this.frameCount == frameDelay)
+			{
+				this.sprite.setTexture(PIXI.Texture.fromImage(assets[this.right]));
+				this.right++;
+
+				if(this.right > assets.length-1)
+				{
+					this.right = 0;
 				}
 				this.frameCount = 0;
-
 			}
+			this.frameCount = 0;
+
+		}
 	}
 
 
