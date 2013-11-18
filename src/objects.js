@@ -49,9 +49,9 @@ PLAYEROBJ.prototype.assets = {
 		'assets/whale_L_fancy_walk_6.png', 'assets/whale_L_fancy_walk_7.png', 'assets/whale_L_fancy_walk_8.png'],
 	rFANCY: ['assets/whale_R_fancy_stand.png', 'assets/whale_R_fancy_walk_1.png', 'assets/whale_R_fancy_walk_2.png', 'assets/whale_R_fancy_walk_3.png', 'assets/whale_R_fancy_walk_4.png', 'assets/whale_R_fancy_walk_5.png',
 	'assets/whale_R_fancy_walk_6.png', 'assets/whale_R_fancy_walk_7.png', 'assets/whale_R_fancy_walk_8.png'],
-	climbNAKED: ['assets/whale_naked_climb_1.PNG', 'assets/whale_naked_climb_2.PNG', 'assets/whale_naked_climb_3.PNG', 'assets/whale_naked_climb_4.PNG'],
-	climbLEDERHOSEN: ['assets/whale_lederhosen_climb_1.PNG','assets/whale_lederhosen_climb_2.PNG','assets/whale_lederhosen_climb_3.PNG','assets/whale_lederhosen_climb_4.PNG'],
-	climbFANCY: ['assets/whale_fancy_climb_1.PNG','assets/whale_fancy_climb_2.PNG','assets/whale_fancy_climb_3.PNG','assets/whale_fancy_climb_4.PNG'],
+	climbNAKED: ['assets/whale_naked_climb_1.png', 'assets/whale_naked_climb_2.png', 'assets/whale_naked_climb_3.png', 'assets/whale_naked_climb_4.png'],
+	climbLEDERHOSEN: ['assets/whale_lederhosen_climb_1.png','assets/whale_lederhosen_climb_2.png','assets/whale_lederhosen_climb_3.png','assets/whale_lederhosen_climb_4.png'],
+	climbFANCY: ['assets/whale_fancy_climb_1.png','assets/whale_fancy_climb_2.png','assets/whale_fancy_climb_3.png','assets/whale_fancy_climb_4.png'],
 
 
 	lHide: ['assets/whale_L_naked_hide.png', 'assets/whale_L_lederhosen_hide.png', 'assets/whale_L_fancy_hide.png'],

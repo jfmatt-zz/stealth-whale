@@ -148,7 +148,7 @@ app.World.prototype.game = function()
     var ladderL2F1N1 = LADDEROBJ.make({x: floorL2F1P2.x, y: floorL2F1P2.y, height: ladderHeight, lower: floorL1F4P1, upper: floorL2F1P2}, GAMEOBJECTS);
     var floorL2F1P3 = FLOOROBJ.make({x: floorL2F1P2.x + floorL2F1P2.width, y: floorL2F1P1.y, width: rightWall.x - floorL2F1P2.x - floorL2F1P2.width, height: floorHeight}, GAMEOBJECTS);
 
-    var item = ITEMOBJ.make({x: 700, y: Y - floorHeight-40, width:40, height: 40, rank: 1, sprite: 'assets/item_tophat_1.PNG'}, GAMEOBJECTS);
+    var item = ITEMOBJ.make({x: 700, y: Y - floorHeight-40, width:40, height: 40, rank: 1, sprite: 'assets/item_tophat_1.png'}, GAMEOBJECTS);
 
 
 	PLAYER.closestFloor = floorL1F1;
