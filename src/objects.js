@@ -92,8 +92,7 @@ PLAYEROBJ.prototype.floorCheck = function(collideObj)
 		{
 			if(collideObj[i] instanceof ENEMYOBJ && !this.locked)
 			{
-				console.log("GAME OVER");
-				app.world.gameState = 'LOST';
+				app.world.loseGame();
 			}
 			if(collideObj[i].isSolid)
 			{
@@ -132,8 +131,7 @@ PLAYEROBJ.prototype.ladderCheck = function(collideObj)
 	{
 		if(collideObj[i] instanceof ENEMYOBJ && !this.locked)
 		{
-			console.log("GAME OVER");
-			app.world.gameState = 'LOST';
+			app.world.loseGame();
 		}
 		else if(collideObj[i].isSolid)
 		{
@@ -394,7 +392,7 @@ ENEMYOBJ.prototype.update = function()
 
 	if(this.collide(GAMEOBJECTS,0,0))
 	{
-		app.world.gameState = "LOST";
+		app.world.loseGame();
 	}
 }
 

@@ -240,6 +240,11 @@ app.World.prototype.update = function()
     }
 }
 
+app.World.prototype.loseGame = function () {
+    console.log("GAME OVER");
+    app.world.gameState = 'LOST';
+};
+
 // Show a 'GAME OVER' screen.
 app.World.prototype.showGameOver = function (text) {
     var stage = new PIXI.Stage();
