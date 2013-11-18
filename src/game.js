@@ -151,7 +151,7 @@ app.World.prototype.game = function()
 	GAMEOBJECTS.push(FANCY);
 
 
-	var NPC1 = new ENEMYOBJ(800, FLOOR2.y-60, 52,60, false, false, new PIXI.Sprite(PIXI.Texture.fromImage("assets/soldierNOGUN_L_stand.png")));
+	var NPC1 = new ENEMYOBJ(1500, FLOOR2.y-60, 52,60, false, false, new PIXI.Sprite(PIXI.Texture.fromImage("assets/soldierNOGUN_L_stand.png")));
 	NPC1.closestFloor = FLOOR2;
 	NPC1.rank = 2;
 	GAMEOBJECTS.push(NPC1);
@@ -269,6 +269,18 @@ app.World.prototype.showGameOver = function (text) {
     var stage = new PIXI.Stage();
 
     // Add text.
+    var text = new PIXI.Text(text, {font: 'bold 40px Avro', fill: 'white', align: 'center'});
+    text.position = new PIXI.Point(this.renderer.width / 2, this.renderer.height / 2);
+    text.anchor = new PIXI.Point(0.5, 0.5);
+    stage.addChild(text);
+
+    // Render the stage.
+    this.renderer.render(stage);
+}
+
+app.World.prototype.showWon = function(text)
+{
+ 	// Add text.
     var text = new PIXI.Text(text, {font: 'bold 40px Avro', fill: 'white', align: 'center'});
     text.position = new PIXI.Point(this.renderer.width / 2, this.renderer.height / 2);
     text.anchor = new PIXI.Point(0.5, 0.5);

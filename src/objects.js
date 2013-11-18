@@ -111,6 +111,10 @@ PLAYEROBJ.prototype.floorCheck = function(collideObj)
 				this.right =0;
 				this.left =0;
 			}
+			else if(collideObj[i] instanceof ITEMOBJ && collideObj[i].victory)
+			{
+				app.world.gameState = 'WON';
+			}
 		}
 
 		return floorCheck;
@@ -134,6 +138,10 @@ PLAYEROBJ.prototype.ladderCheck = function(collideObj)
 		else if(collideObj[i] instanceof LADDEROBJ)
 		{
 			ladderCheck[1] = i;
+		}
+		else if(collideObj[i] instanceof ITEMOBJ && collideObj[i].victory)
+		{
+			app.world.gameState = 'WON';
 		}
 	}
 	return ladderCheck;
@@ -259,8 +267,6 @@ PLAYEROBJ.prototype.update = function(KEYS, foreground)
 				this.hiding = true;
 				console.log("HIDING");
 				this.locked = true;
-
-				//this.sprite.setTexture(PIXI.Texture.fromImage(this.hide[this.direction[this.currentRank]]));
 				var tempArray = this.hide[this.direction];
 				this.lastTexture = this.sprite.texture;
 				this.sprite.setTexture(PIXI.Texture.fromImage(tempArray[this.currentRank]));
@@ -416,15 +422,10 @@ ITEMOBJ.prototype.inView = [ITEMOBJ.prototype.assets.inViewLEDER, ITEMOBJ.protot
 
 
 ITEMOBJ.prototype.chooseSpriteSheet = function (sheetnum) {
-
-	/////////////////
-	//TODO: JON
-	/////////////////
-
 	//if the item is not within view
 	if(sheetnum == 0)
 	{
-		console.log("item not visible!"); 
+		
 		this.frameSwitcher(99, this.hidden[0], 6);
 		this.frameCount++;
 	}
