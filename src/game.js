@@ -280,6 +280,7 @@ app.World.prototype.showGameOver = function (text) {
 
 app.World.prototype.showWon = function(text)
 {
+	var stage = new PIXI.Stage();
  	// Add text.
     var text = new PIXI.Text(text, {font: 'bold 40px Avro', fill: 'white', align: 'center'});
     text.position = new PIXI.Point(this.renderer.width / 2, this.renderer.height / 2);
