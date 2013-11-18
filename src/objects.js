@@ -401,11 +401,39 @@ var ITEMOBJ = function()
 ITEMOBJ.prototype = new GAMEOBJ();
 
 ITEMOBJ.prototype.blocksVision = false;
+
+ITEMOBJ.prototype.assets = {
+	hidden: ['assets/item_glow_1.png','assets/item_glow_2.png', 'assets/item_glow_3.png', 'assets/item_glow_4.png','assets/item_glow_5.png',
+'assets/item_glow_6.png','assets/item_glow_7.png','assets/item_glow_8.png','assets/item_glow_9.png', 'assets/item_glow_10.png'],
+	inViewLEDER: ['assets/item_fedora_1.png','assets/item_fedora_2.png','assets/item_fedora_3.png','assets/item_fedora_4.png','assets/item_fedora_5.png','assets/item_fedora_6.png',
+	'assets/item_fedora_7.png','assets/item_fedora_8.png','assets/item_fedora_9.png','assets/item_fedora_10.png'],
+	inViewFANCY: ['assets/item_tophat_1.png','assets/item_tophat_2.png','assets/item_tophat_3.png','assets/item_tophat_4.png','assets/item_tophat_5.png','assets/item_tophat_6.png',
+	'assets/item_tophat_7.png', 'assets/item_tophat_8.png','assets/item_tophat_9.png','assets/item_tophat_10.png'],
+};
+
+ITEMOBJ.prototype.hidden = [ITEMOBJ.prototype.assets.hidden];
+
+ITEMOBJ.prototype.inView = [ITEMOBJ.prototype.assets.inViewLEDER, ITEMOBJ.prototype.assets.inViewFANCY];
+
+
 ITEMOBJ.prototype.chooseSpriteSheet = function (sheetnum) {
 
 	/////////////////
 	//TODO: JON
 	/////////////////
+
+	//if the item is not within view
+	if(sheetnum == 0)
+	{
+		console.log("item not visible!"); 
+		this.frameSwitcher(99, this.hidden[0], 6);
+		this.frameCount++;
+	}
+	else if(sheetnum == 1)
+	{
+		this.frameSwitcher(99, this.inView[this.currentRank-1], 6);
+		this.frameCount++;
+	}
 }
 
 var SCRIPTOBJ = function(type, target)

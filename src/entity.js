@@ -15,6 +15,7 @@
 		// this.position = this.sprite.position;
 		this.isSolid = solid;
 		this.isHideable = isHideable;
+
 		this.right =0;
 		this.left =0;
 		this.up =0;
@@ -69,7 +70,22 @@
 
 				}
 			}
-			
+
+
+			if(direction == 99)
+			{
+				if(this.frameCount == frameDelay)
+				{
+					this.sprite.setTexture(PIXI.Texture.fromImage(assets[this.right]));
+					this.right++;
+
+					if(this.right > assets.length-1)
+					{
+						this.right = 0;
+					}
+					this.frameCount = 0;
+				}
+			}
 	}
 
 

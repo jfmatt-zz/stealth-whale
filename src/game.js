@@ -54,7 +54,7 @@ app.World.prototype.showTitleScreen = function () {
 
     // Start the asset loader.
     var assets = []
-    _.each([PLAYEROBJ, ENEMYOBJ], function (f) {
+    _.each([PLAYEROBJ, ENEMYOBJ, ITEMOBJ], function (f) {
 	    for (var k in f.prototype.assets) {
 	    	console.log(k);
 	    	assets = assets.concat(f.prototype.assets[k]);
@@ -135,18 +135,18 @@ app.World.prototype.game = function()
 	LADDER2.upperFloor = FLOOR3;
 
 
-	var FLAG = new GAMEOBJ(20+LADDER.x + LADDER.width, LADDER.y -142, 100, 112, false, true, new PIXI.Sprite(PIXI.Texture.fromImage("assets/item_glow_1.png")));
+	var FLAG = new GAMEOBJ(20+LADDER.x + LADDER.width, LADDER.y -142, 100, 112, false, true, new PIXI.Sprite(PIXI.Texture.fromImage("assets/flag_1.png")));
 	FLAG.blocksVision = false
 	GAMEOBJECTS.push(FLAG);
 
 	var FLAG2 = new GAMEOBJ(LADDER2.x - 30, LADDER2.y - 142, 100, 112, false, true, new PIXI.Sprite(PIXI.Texture.fromImage("assets/flag_1.png")));
 	GAMEOBJECTS.push(FLAG2);
 
-	var LEDER = new ITEMOBJ(500, FLOOR.y - 40, 40,40, false, false, new PIXI.Sprite(PIXI.Texture.fromImage("assets/item_fedora_1.png")));
+	var LEDER = new ITEMOBJ(500, FLOOR2.y - 40, 40,40, false, false, new PIXI.Sprite(PIXI.Texture.fromImage("assets/item_fedora_1.png")));
 	LEDER.currentRank =1;
 	GAMEOBJECTS.push(LEDER);
 
-	var FANCY = new ITEMOBJ(1000, FLOOR.y - 40, 40,40, false, false, new PIXI.Sprite(PIXI.Texture.fromImage("assets/item_tophat_1.png")));
+	var FANCY = new ITEMOBJ(1000, FLOOR3.y - 40, 40,40, false, false, new PIXI.Sprite(PIXI.Texture.fromImage("assets/item_tophat_1.png")));
 	FANCY.currentRank = 2;
 	GAMEOBJECTS.push(FANCY);
 
