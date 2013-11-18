@@ -1,0 +1,20 @@
+body {
+    margin: 0;
+}
+/* Outer div for vertical centering, see http://stackoverflow.com/questions/396145/whats-the-best-way-of-centering-a-div-vertically-with-css */
+.center-outer {
+    display: table;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+}
+/* Inner div for vertical centering */
+.center-inner {
+    display: table-cell;
+    vertical-align: middle;
+}
+/* Main game div */
+#game {
+    display: block;
+    margin: auto;
+}
