@@ -54,19 +54,17 @@ var GAMEOBJ = function(x,y,width, height,solid, isHideable, sprite)
 			}
 		}
 
-		if(direction ==1)
+		if(direction == 1 && this.frameCount == frameDelay)
 		{
-			if(this.frameCount == frameDelay)
+			this.sprite.setTexture(PIXI.Texture.fromImage(assets[this.left]));
+			this.left++;
+
+			if(this.left > assets.length-1)
 			{
-				
-
-				this.sprite.setTexture(PIXI.Texture.fromImage(assets[this.left]));
-				this.left++;
-
-
-				}
+				this.left = 0;
 			}
-
+			this.frameCount = 0;
+		}
 
 			if(direction == 99)
 			{

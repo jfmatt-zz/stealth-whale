@@ -505,3 +505,4 @@ ENEMYOBJ.make = function(options, objectArray, npcObjectArray) {
 	npcObjectArray.push(npc);
 	return npc;
 }
+		
