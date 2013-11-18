@@ -46,7 +46,6 @@ app.World.prototype.showTitleScreen = function () {
 
     // When space is pressed, fade the title screen out and start the game.
     hideTitleScreen = $.proxy(function () {
-    	console.log("hideTitleScreen called");
         $(document).unbind('keypress');
        // music.fadeOut(2.0, function () { music.stop(); });
         this.startGame();
@@ -117,7 +116,7 @@ app.World.prototype.game = function()
     var floorL1F2P2 = FLOOROBJ.make({x: floorL1F2P1.x + floorL1F2P1.width, y: floorL1F2P1.y, width: ladderWidth, height: floorHeight, transparent: true}, GAMEOBJECTS);
     var floorL1F2P3 = FLOOROBJ.make({x: floorL1F2P2.x + floorL1F2P2.width, y: floorL1F2P1.y, width: rightWall.x - floorL1F2P2.x - floorL1F2P2.width, height: floorHeight}, GAMEOBJECTS);
     var ladderL1F1 = LADDEROBJ.make({x: floorL1F2P2.x, y: floorL1F2P2.y, height: ladderHeight, lower: floorL1F1, upper: floorL1F2P2}, GAMEOBJECTS);
-    var wallL1F1N1 = GAMEOBJ.make({x: ladderL1F1.x + 200, y: floorL1F2P1.y, width: wallWidth, height: floorL1F1.y - floorL1F2P1.y, solid: true, hideable: false, sprite: 'assets/Floor.png', tiled: true},  GAMEOBJECTS);
+    var wallL1F1N1 = GAMEOBJ.make({x: ladderL1F1.x + 200, y: floorL1F2P1.y + floorHeight, width: wallWidth, height: floorL1F1.y - floorL1F2P1.y, solid: true, hideable: false, sprite: 'assets/Floor.png', tiled: true},  GAMEOBJECTS);
     var flagL1F1 = GAMEOBJ.make({x: 400, y: floorL1F1.y - whaleHeight, width: 100, height: 112, solid: false, hideable: true, sprite: 'assets/flag_1.png', tiled: false}, GAMEOBJECTS);
 
     // Level 1, Floor 2: three ladders and two guards.
@@ -141,7 +140,13 @@ app.World.prototype.game = function()
     var floorL1F4P2 = FLOOROBJ.make({x: floorL1F4P1.x + floorL1F4P1.width, y: floorL1F4P1.y, width: ladderWidth, height: floorHeight, transparent: true}, GAMEOBJECTS);
     var ladderL1F4N1 = LADDEROBJ.make({x: floorL1F4P2.x, y: floorL1F4P2.y, height: ladderHeight, lower: floorL1F3P1, upper: floorL1F4P1}, GAMEOBJECTS);
     var floorL1F4P3 = FLOOROBJ.make({x: floorL1F4P2.x + floorL1F4P2.width, y: floorL1F4P1.y, width: rightWall.x - floorL1F4P2.x - floorL1F4P2.width, height: floorHeight}, GAMEOBJECTS);
-    var wallL1F4N1 = GAMEOBJ.make({x: ladderL1F4N1.x + 150, y: floorL1F4P1.y, width: wallWidth, height: floorL1F3P1.y - floorL1F4P1.y, solid: true, hideable: false, sprite: 'assets/Floor.png', tiled: true},  GAMEOBJECTS);
+    var wallL1F4N1 = GAMEOBJ.make({x: ladderL1F4N1.x + 150, y: floorL1F4P1.y + floorHeight, width: wallWidth, height: floorL1F3P1.y - floorL1F4P1.y, solid: true, hideable: false, sprite: 'assets/Floor.png', tiled: true},  GAMEOBJECTS);
+
+    // Level 2, Floor 1: one guard passing a hiding spot and blocking a ladder
+    var floorL2F1P1 = FLOOROBJ.make({x: leftWall.x + leftWall.width, y: floorL1F4P1.y - ladderHeight, width: 900, height: floorHeight}, GAMEOBJECTS);
+    var floorL2F1P2 = FLOOROBJ.make({x: floorL2F1P1.x + floorL2F1P1.width, y: floorL2F1P1.y, width: ladderWidth, height: floorHeight, transparent: true}, GAMEOBJECTS);
+    var ladderL2F1N1 = LADDEROBJ.make({x: floorL2F1P2.x, y: floorL2F1P2.y, height: ladderHeight, lower: floorL1F4P1, upper: floorL2F1P2}, GAMEOBJECTS);
+    var floorL2F1P3 = FLOOROBJ.make({x: floorL2F1P2.x + floorL2F1P2.width, y: floorL2F1P1.y, width: rightWall.x - floorL2F1P2.x - floorL2F1P2.width, height: floorHeight}, GAMEOBJECTS);
 
 	PLAYER.closestFloor = floorL1F1;
 
@@ -234,7 +239,7 @@ app.World.prototype.update = function()
         this.renderer.render(this.stage);
         requestAnimFrame(this.update.bind(this));
     } else if (this.gameState == 'LOST') {
-        this.showGameOver('GAME OVER');
+        this.showGameOver('FIN');
     } else if (this.gameState == 'WON') {
         this.showGameOver('YOU WIN!');
     }
