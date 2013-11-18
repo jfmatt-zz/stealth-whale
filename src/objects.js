@@ -448,6 +448,30 @@ ITEMOBJ.prototype.chooseSpriteSheet = function (sheetnum) {
 	}
 }
 
+var HIDEOBJ = function()
+{
+	GAMEOBJ.apply(this, arguments);
+}
+
+HIDEOBJ.prototype = new GAMEOBJ();
+
+HIDEOBJ.prototype.assets = {
+	FLAG1: ['assets/flag_1_still.png','assets/flag_1_moving_1.png','assets/flag_1_moving_2.png','assets/flag_1_moving_3.png'],
+	FLAG2: ['assets/flag_2_still.png','assets/flag_2_moving_1.png','assets/flag_2_moving_2.png','assets/flag_2_moving_3.png'],
+	FLAG3: ['assets/flag_3_still.png','assets/flag_3_moving_1.png','assets/flag_3_moving_2.png','assets/flag_3_moving_3.png'],
+	CACTUS: ['assets/plant_cactus_still.png', 'assets/plant_cactus_moving_1.png','assets/plant_cactus_moving_2.png','assets/plant_cactus_moving_3.png'],
+	FERN: ['assets/plant_fern_still.png', 'assets/plant_fern_moving_1.png','assets/plant_fern_moving_2.png','assets/plant_fern_moving_3.png'],
+	TREE: ['assets/plant_tree_still.png', 'assets/plant_tree_moving_1.png','assets/plant_tree_moving_2.png','assets/plant_tree_moving_3.png'],
+};
+
+HIDEOBJ.prototype.cycles = [HIDEOBJ.prototype.assets.FLAG1,HIDEOBJ.prototype.assets.FLAG2,HIDEOBJ.prototype.assets.FLAG3, HIDEOBJ.prototype.assets.CACTUS, HIDEOBJ.prototype.assets.FERN,HIDEOBJ.prototype.assets.TREE]
+
+HIDEOBJ.prototype.update = function()
+{
+	this.frameSwitcher(99, this.cycles[this.itemID], 20);
+	this.frameCount++;
+}
+
 var SCRIPTOBJ = function(type, target)
 {
 
@@ -476,6 +500,12 @@ ITEMOBJ.make = function (options, objectArray) {
 	var item = makeObject(ITEMOBJ, options, objectArray);
 	item.currentRank = options.rank;
 	return item;
+}
+HIDEOBJ.make = function(options, objectArray)
+{
+	var hide = makeObject(HIDEOBJ, options, objectArray);
+	hide.itemID = options.itemID;
+	return hide;
 }
 LADDEROBJ.make = function(options, objectArray) {
 	options.width = 80;

@@ -112,5 +112,4 @@ var GAMEOBJ = function(x,y,width, height,solid, isHideable, sprite)
 
 GAMEOBJ.prototype.update = function()
 {
-
 };

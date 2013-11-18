@@ -53,7 +53,7 @@ app.World.prototype.showTitleScreen = function () {
 
     // Start the asset loader.
     var assets = []
-    _.each([PLAYEROBJ, ENEMYOBJ, ITEMOBJ], function (f) {
+    _.each([PLAYEROBJ, ENEMYOBJ, ITEMOBJ, HIDEOBJ], function (f) {
 	    for (var k in f.prototype.assets) {
 	    	assets = assets.concat(f.prototype.assets[k]);
 		}
@@ -117,7 +117,7 @@ app.World.prototype.game = function()
     var floorL1F2P3 = FLOOROBJ.make({x: floorL1F2P2.x + floorL1F2P2.width, y: floorL1F2P1.y, width: rightWall.x - floorL1F2P2.x - floorL1F2P2.width, height: floorHeight}, GAMEOBJECTS);
     var ladderL1F1 = LADDEROBJ.make({x: floorL1F2P2.x, y: floorL1F2P2.y, height: ladderHeight, lower: floorL1F1, upper: floorL1F2P2}, GAMEOBJECTS);
     var wallL1F1N1 = GAMEOBJ.make({x: ladderL1F1.x + 200, y: floorL1F2P1.y + floorHeight, width: wallWidth, height: floorL1F1.y - floorL1F2P1.y, solid: true, hideable: false, sprite: 'assets/Floor.png', tiled: true},  GAMEOBJECTS);
-    var flagL1F1 = GAMEOBJ.make({x: 400, y: floorL1F1.y - whaleHeight, width: 100, height: 112, solid: false, hideable: true, sprite: 'assets/flag_1.png', tiled: false}, GAMEOBJECTS);
+    var flagL1F1 = HIDEOBJ.make({x: 400, y: floorL1F1.y - whaleHeight, width: 100, height: 112, solid: false, hideable: true, sprite: 'assets/flag_1_still.png', tiled: false, itemID: 0}, GAMEOBJECTS);
 
     // Level 1, Floor 2: three ladders and two guards.
     var floorL1F3P1 = FLOOROBJ.make({x: leftWall.x + leftWall.width, y: floorL1F2P1.y - ladderHeight, width: 100, height: floorHeight}, GAMEOBJECTS);
