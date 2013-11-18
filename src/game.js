@@ -48,7 +48,7 @@ app.World.prototype.showTitleScreen = function () {
     hideTitleScreen = $.proxy(function () {
     	console.log("hideTitleScreen called");
         $(document).unbind('keypress');
-        music.fadeOut(2.0, function () { music.stop(); });
+       // music.fadeOut(2.0, function () { music.stop(); });
         this.startGame();
     }, this);
 
@@ -153,6 +153,7 @@ app.World.prototype.game = function()
 
 	var NPC1 = new ENEMYOBJ(800, FLOOR2.y-60, 52,60, false, false, new PIXI.Sprite(PIXI.Texture.fromImage("assets/soldierNOGUN_L_stand.png")));
 	NPC1.closestFloor = FLOOR2;
+	NPC1.rank = 2;
 	GAMEOBJECTS.push(NPC1);
 	NPCOBJECTS.push(NPC1);
 	NPC1.script = [new SCRIPTOBJ(0, 200), new SCRIPTOBJ(1, 200), new SCRIPTOBJ(0, 600)];
@@ -161,6 +162,7 @@ app.World.prototype.game = function()
 
 	var NPC2 = new ENEMYOBJ(1200, FLOOR3.y-60, 52,60, false, false,new PIXI.Sprite(PIXI.Texture.fromImage("assets/soldierNOGUN_L_stand.png")));
 	NPC2.closestFloor = FLOOR3;
+	NPC2.rank = 0;
 	GAMEOBJECTS.push(NPC2);
 	NPCOBJECTS.push(NPC2);
 	NPC2.script = [new SCRIPTOBJ(0, 200), new SCRIPTOBJ(1, 200), new SCRIPTOBJ(0, 600)];

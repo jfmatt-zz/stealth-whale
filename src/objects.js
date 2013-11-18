@@ -58,12 +58,6 @@ PLAYEROBJ.prototype.nonHide = [PLAYEROBJ.prototype.lAssets, PLAYEROBJ.prototype.
 
 PLAYEROBJ.prototype.blocksVision = false;
 
-PLAYEROBJ.prototype.sounds = ['sound/WhaleWalk-01.wav'];
-
-PLAYEROBJ.prototype.s = new buzz.sound('sound/WhaleWalk-01.wav');
-
-
-
 PLAYEROBJ.prototype.collide = function (GAMEOBJECTS, dx, dy) {
 
 var collided = [];
@@ -176,11 +170,7 @@ PLAYEROBJ.prototype.update = function(KEYS, foreground)
 			}
 			this.direction = 1;	
 
-			if(this.frameCount == 3)
-			{
-					
-    				this.s.play();
-			}
+			
 			
 		}
 					
@@ -208,10 +198,7 @@ PLAYEROBJ.prototype.update = function(KEYS, foreground)
 				this.frameCount++;
 			}
 			this.direction = 0;
-			if(this.frameCount == 3)
-			{
-				this.s.play();
-			}
+			
 
 			
 		}
@@ -301,7 +288,6 @@ var ENEMYOBJ = function()
 	GAMEOBJ.apply(this, arguments);
 
 	this.counter = 0;
-	this.inAction = false;
 	this.waitDelay =0;
 	this.time =0;
 
@@ -311,11 +297,22 @@ ENEMYOBJ.prototype = new GAMEOBJ();
 
 ENEMYOBJ.prototype.blocksVision = false;
 
-ENEMYOBJ.prototype.assets = {};
-ENEMYOBJ.prototype.lAssets = ENEMYOBJ.prototype.assets.lAssets = ['assets/soldierNOGUN_L_stand.png', 'assets/soldierNOGUN_L_walk_1.png', 'assets/soldierNOGUN_L_walk_2.png', 
-	'assets/soldierNOGUN_L_walk_3.png' , 'assets/soldierNOGUN_L_walk_4.png'];
-ENEMYOBJ.prototype.rAssets = ENEMYOBJ.prototype.assets.rAssets = ['assets/soldierNOGUN_R_stand.png', 'assets/soldierNOGUN_R_walk_1.png', 'assets/soldierNOGUN_R_walk_2.png', 
-	'assets/soldierNOGUN_R_walk_3.png','assets/soldierNOGUN_R_walk_4.png'];
+ENEMYOBJ.prototype.assets = {
+	lAssetsNORMAL: ['assets/soldierNOGUN_L_stand.png', 'assets/soldierNOGUN_L_walk_1.png', 'assets/soldierNOGUN_L_walk_2.png', 
+	'assets/soldierNOGUN_L_walk_3.png' , 'assets/soldierNOGUN_L_walk_4.png'],
+	rAssetsNORMAL: ['assets/soldierNOGUN_R_stand.png', 'assets/soldierNOGUN_R_walk_1.png', 'assets/soldierNOGUN_R_walk_2.png', 
+	'assets/soldierNOGUN_R_walk_3.png','assets/soldierNOGUN_R_walk_4.png'],
+	lAssetsLEDER: ['assets/soldierLEDERHOSEN_L_stand.png','assets/soldierLEDERHOSEN_L_walk_1.png','assets/soldierLEDERHOSEN_L_walk_2.png','assets/soldierLEDERHOSEN_L_walk_3.png',
+	'assets/soldierLEDERHOSEN_L_walk_4.png'],
+	rAssetsLEDER: ['assets/soldierLEDERHOSEN_R_stand.png','assets/soldierLEDERHOSEN_R_walk_1.png','assets/soldierLEDERHOSEN_R_walk_2.png','assets/soldierLEDERHOSEN_R_walk_3.png',
+	'assets/soldierLEDERHOSEN_R_walk_4.png'],
+	lAssetsFANCY: ['assets/soldierFANCY_L_stand.png','assets/soldierFANCY_L_walk_1.png','assets/soldierFANCY_L_walk_2.png','assets/soldierFANCY_L_walk_3.png',
+	'assets/soldierFANCY_L_walk_4.png'],
+	rAssetsFANCY: ['assets/soldierFANCY_R_stand.png','assets/soldierFANCY_R_walk_1.png','assets/soldierFANCY_R_walk_2.png','assets/soldierFANCY_R_walk_3.png',
+	'assets/soldierFANCY_R_walk_4.png'],
+};
+ENEMYOBJ.prototype.lAssets = [ENEMYOBJ.prototype.assets.lAssetsNORMAL, ENEMYOBJ.prototype.assets.lAssetsLEDER, ENEMYOBJ.prototype.assets.lAssetsFANCY];
+ENEMYOBJ.prototype.rAssets = [ENEMYOBJ.prototype.assets.rAssetsNORMAL, ENEMYOBJ.prototype.assets.rAssetsLEDER, ENEMYOBJ.prototype.assets.rAssetsFANCY];
 
 
 ENEMYOBJ.prototype.collide = function(GAMEOBJECTS, dx, dy)
@@ -348,13 +345,15 @@ ENEMYOBJ.prototype.update = function()
 		if(this.sprite.position.x - xTARGET > 0)
 		{
 			this.sprite.position.x -= 2.5;
-			this.frameSwitcher(1, this.lAssets, 6);
+			this.frameSwitcher(1, this.lAssets[this.rank], 6);
+			this.direction = 0;
 			this.frameCount++;
 		}
 		else if(this.sprite.position.x - xTARGET < 0)
 		{
 			this.sprite.position.x += 2.5;
-			this.frameSwitcher(0, this.rAssets, 6);
+			this.frameSwitcher(0, this.rAssets[this.rank], 6);
+			this.direction = 1;
 			this.frameCount++;
 		}
 
