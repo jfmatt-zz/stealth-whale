@@ -338,9 +338,10 @@ ENEMYOBJ.prototype.collide = function(GAMEOBJECTS, dx, dy)
 {
 	if(this.sprite.position.x + this.sprite.width + dx >= GAMEOBJECTS[0].sprite.position.x 
 			&& GAMEOBJECTS[0].sprite.position.x+GAMEOBJECTS[0].sprite.width >= this.sprite.position.x + dx
-			&& this.sprite.position.y + this.sprite.height + dy >= GAMEOBJECTS[0].sprite.position.y
-			&& GAMEOBJECTS[0].sprite.position.y + GAMEOBJECTS[0].sprite.height >= this.sprite.position.y + dy
-			&& !GAMEOBJECTS[0].locked)
+			&& this.sprite.position.y - this.sprite.height + 2*this.sprite.height >= GAMEOBJECTS[0].sprite.position.y
+			&& GAMEOBJECTS[0].sprite.position.y + GAMEOBJECTS[0].sprite.height >= this.sprite.position.y - this.sprite.height
+			&& !GAMEOBJECTS[0].locked
+			&& (!GAMEOBJECTS[0].currentRank != this.rank || this.suspicion))
 			
 		{
 			
