@@ -86,6 +86,7 @@ app.World.prototype.startGame = function () {
 
 app.World.prototype.game = function()
 {
+<<<<<<< HEAD
     //Initializes all of the objects on the map except for the player and NPCs
     //Since these are all static elements, they are drawn once.
     //Once there are maps bigger than one screen the drawing aspect will need to be reworked.
@@ -97,6 +98,19 @@ app.World.prototype.game = function()
     PLAYER.sprite.position.y = PLAYER.y;
     
     GAMEOBJECTS.push(PLAYER);
+=======
+	//Initializes all of the objects on the map except for the player and NPCs
+	//Since these are all static elements, they are drawn once.
+	//Once there are maps bigger than one screen the drawing aspect will need to be reworked.
+	//THE PLAYER IS ALWAYS THE FIRST ITEM IN THE GAMEOBJECTS ARRAY, DO NOT ADD THINGS BEFORE IT
+	var PLAYER = new PLAYEROBJ(200, Y - 165, 123, 140, true, false, new PIXI.Sprite(PIXI.Texture.fromImage("assets/whale_L_naked_stand.png")));
+	PLAYER.sprite.width = PLAYER.width;
+	PLAYER.sprite.height = PLAYER.height;
+  	PLAYER.sprite.position.x = PLAYER.x;
+  	PLAYER.sprite.position.y = PLAYER.y;
+	
+	GAMEOBJECTS.push(PLAYER);
+>>>>>>> c22790098e88fad729fa81551de202b6064eaa02
 
     var whaleHeight = PLAYER.height;
     var ladderHeight = 300;
@@ -151,7 +165,7 @@ app.World.prototype.game = function()
     var floorL2F1P3 = FLOOROBJ.make({x: floorL2F1P2.x + floorL2F1P2.width, y: floorL2F1P1.y, width: rightWall.x - floorL2F1P2.x - floorL2F1P2.width, height: floorHeight}, GAMEOBJECTS);
 
     var flagL2F1 = HIDEOBJ.make({x:ladderL1F4N1.x + ladderL1F4N1.width + 350, y: floorL1F4P1.y - 165, width: 100, height: 140, hideable:true, solid:false, sprite: 'assets/flag_2_still.png', tiled: false, itemID: 1}, GAMEOBJECTS);
-    // var wallL2F1N1 = GAMEOBJ.make(x:leftWall.x + leftWall.width +1000, y: floorL1F4P1.y , width: wallWidth, height)
+    var wallL2F1N1 = GAMEOBJ.make({x: ladderL2F1N1.x + ladderL2F1N1.width + 120, y: floorL2F1P3.y + floorHeight, width: wallWidth, height: floorL1F4P3.y-floorL2F1P3.y, solid: true, hideable:false, sprite: 'assets/Floor.png', tiled: true}, GAMEOBJECTS);
 
 
     PLAYER.closestFloor = floorL1F1;
