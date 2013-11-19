@@ -109,6 +109,7 @@ PLAYEROBJ.prototype.floorCheck = function(collideObj)
 			{
 				floorCheck[1] = true;
 				floorCheck[2] = i;
+
 			}
 			if(collideObj[i] instanceof ITEMOBJ && !collideObj[i].pickedUp)
 			{
@@ -349,6 +350,28 @@ ENEMYOBJ.prototype.collide = function(GAMEOBJECTS, dx, dy)
 			return true;
 
 		}
+}
+
+ENEMYOBJ.prototype.collideAll = function(GAMEOBJECTS, dx)
+{
+	var collided = [];
+	for(var i = 1; i < GAMEOBJECTS.length; i++)
+	{
+		
+		if(this.sprite.position.x + this.sprite.width + dx >= GAMEOBJECTS[i].sprite.position.x 
+			&& GAMEOBJECTS[i].sprite.position.x+GAMEOBJECTS[i].sprite.width >= this.sprite.position.x + dx
+			&& this.sprite.position.y + this.sprite.height >= GAMEOBJECTS[i].sprite.position.y
+			&& GAMEOBJECTS[i].sprite.position.y + GAMEOBJECTS[i].sprite.height >= this.sprite.position.y 
+			&& GAMEOBJECTS[i] != this)
+			
+		{
+			
+			collided.push(GAMEOBJECTS[i]);
+			
+
+		}
+	}
+	return collided;
 }
 
 ENEMYOBJ.prototype.update = function()
