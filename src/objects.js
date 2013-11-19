@@ -413,6 +413,7 @@ var ITEMOBJ = function()
 {
 	GAMEOBJ.apply(this, arguments);
 	this.pickedUp = false;
+	this.sheetnum = 0;
 }
 
 ITEMOBJ.prototype = new GAMEOBJ();
@@ -428,24 +429,31 @@ ITEMOBJ.prototype.assets = {
 	'assets/item_tophat_7.png', 'assets/item_tophat_8.png','assets/item_tophat_9.png','assets/item_tophat_10.png'],
 };
 
-ITEMOBJ.prototype.hidden = [ITEMOBJ.prototype.assets.hidden];
 
 ITEMOBJ.prototype.inView = [ITEMOBJ.prototype.assets.inViewLEDER, ITEMOBJ.prototype.assets.inViewFANCY];
 
 
 ITEMOBJ.prototype.chooseSpriteSheet = function (sheetnum) {
-	//if the item is not within view
-	if(sheetnum == 0)
-	{
-		
-		this.frameSwitcher(99, this.hidden[0], 6);
-		this.frameCount++;
-	}
-	else if(sheetnum == 1)
+
+	if(sheetnum == 1)
 	{
 		this.frameSwitcher(99, this.inView[this.currentRank-1], 6);
 		this.frameCount++;
+		this.sheetnum = 0;
+		
 	}
+	else
+	{
+		
+		this.frameSwitcher(99, this.assets.hidden, 6);
+		this.frameCount++;
+	}
+	
+}
+
+ITEMOBJ.prototype.update = function()
+{
+	this.chooseSpriteSheet(this.sheetnum);
 }
 
 var HIDEOBJ = function()

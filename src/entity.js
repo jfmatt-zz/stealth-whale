@@ -93,6 +93,7 @@ var GAMEOBJ = function(x,y,width, height,solid, isHideable, sprite)
 
 		if(direction == 99)
 		{
+			console.log(this.sheetnum);
 			if(this.frameCount == frameDelay)
 			{
 				this.sprite.setTexture(PIXI.Texture.fromImage(assets[this.right]));
