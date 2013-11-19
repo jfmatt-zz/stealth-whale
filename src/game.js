@@ -86,19 +86,6 @@ app.World.prototype.startGame = function () {
 
 app.World.prototype.game = function()
 {
-<<<<<<< HEAD
-    //Initializes all of the objects on the map except for the player and NPCs
-    //Since these are all static elements, they are drawn once.
-    //Once there are maps bigger than one screen the drawing aspect will need to be reworked.
-    //THE PLAYER IS ALWAYS THE FIRST ITEM IN THE GAMEOBJECTS ARRAY, DO NOT ADD THINGS BEFORE IT
-    var PLAYER = new PLAYEROBJ(200, Y - 165, 123, 140, true, false, new PIXI.Sprite(PIXI.Texture.fromImage("assets/Whale_L_stand.png")));
-    PLAYER.sprite.width = PLAYER.width;
-    PLAYER.sprite.height = PLAYER.height;
-    PLAYER.sprite.position.x = PLAYER.x;
-    PLAYER.sprite.position.y = PLAYER.y;
-    
-    GAMEOBJECTS.push(PLAYER);
-=======
 	//Initializes all of the objects on the map except for the player and NPCs
 	//Since these are all static elements, they are drawn once.
 	//Once there are maps bigger than one screen the drawing aspect will need to be reworked.
@@ -110,7 +97,6 @@ app.World.prototype.game = function()
   	PLAYER.sprite.position.y = PLAYER.y;
 	
 	GAMEOBJECTS.push(PLAYER);
->>>>>>> c22790098e88fad729fa81551de202b6064eaa02
 
     var whaleHeight = PLAYER.height;
     var ladderHeight = 300;
