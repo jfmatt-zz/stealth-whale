@@ -99,7 +99,7 @@ PLAYEROBJ.prototype.floorCheck = function(collideObj)
 	var floorCheck = [false, false, -1];
 	for(var i =0; i < collideObj.length; i++)
 		{
-			if(collideObj[i] instanceof ENEMYOBJ && !this.locked)
+			if(collideObj[i] instanceof ENEMYOBJ && !this.locked && this.currentRank != collideObj[i].rank)
 			{
 				app.world.loseGame();
 			}
@@ -321,8 +321,6 @@ var ENEMYOBJ = function()
 	this.exclaimSprite = new PIXI.Sprite(this.exclaimTexture);
 	this.exclaimSprite.visible = false;
 	this.exclaimSprite.visionIgnore = true;
-
-	
 };
 ENEMYOBJ.prototype = new GAMEOBJ();
 
@@ -355,7 +353,7 @@ ENEMYOBJ.prototype.collide = function(GAMEOBJECTS, dx, dy)
 			&& this.sprite.position.y - this.sprite.height + 2*this.sprite.height >= GAMEOBJECTS[0].sprite.position.y
 			&& GAMEOBJECTS[0].sprite.position.y + GAMEOBJECTS[0].sprite.height >= this.sprite.position.y - this.sprite.height
 			&& !GAMEOBJECTS[0].locked
-			&& ((!GAMEOBJECTS[0].currentRank != this.rank) || this.suspicion))
+			&& ((GAMEOBJECTS[0].currentRank != this.rank) || this.suspicion))
 			
 		{
 			
@@ -389,7 +387,7 @@ ENEMYOBJ.prototype.update = function()
 {
 
 	var t = Date.now(),
-			thisScript = this.script[this.counter];
+	thisScript = this.script[this.counter];
 
 	//chase the whale
 	if (this.suspicion) {
