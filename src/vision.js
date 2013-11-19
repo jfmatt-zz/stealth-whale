@@ -12,7 +12,7 @@ function Vision (whalePos, offset, pointer, radius, fov, resolution, color) {
     this.width = this.height = this.radius * 2
 
     this.fov = fov || (Math.PI / 2)
-    this.resolution = resolution = resolution || 200
+    this.resolution = resolution = resolution || 100
                         
     this.color = color || 0xFF7E00
     this.color = 0xFFFFFF
@@ -49,7 +49,7 @@ _.extend(Vision.prototype, {
             threePiOver2 = piOver2 * 3,
             dTh = 2 * Math.PI / this.resolution,
             th = 0,
-            thisR, thisX, thisY, seenSegments,
+            thisSeg, thisR, thisX, thisY, seenSegments, bestR,
 
             Pt
 
@@ -69,7 +69,8 @@ _.extend(Vision.prototype, {
         this.center.y = this.whalePos.y + this.offset.y
         
         //Add things we're colliding with
-        for (ii = 0; ii < args.length; ii++)
+        ii = args.length;
+        while (ii--)
             sprites = sprites.concat(flattenStage(args[ii]))
 
 
@@ -94,7 +95,7 @@ _.extend(Vision.prototype, {
                     y2: bottom,
                     vert: true,
                     tempR: 9999,
-                    sprite: o
+                    entity: o.entity
                 })
             //right
             if (right < this.center.x + this.radius)
@@ -104,7 +105,7 @@ _.extend(Vision.prototype, {
                     y2: bottom,
                     vert: true,
                     tempR: 9999,
-                    sprite: o
+                    entity: o.entity
                 })
             //top
             if (top > this.center.y - this.radius)
@@ -114,7 +115,7 @@ _.extend(Vision.prototype, {
                     y: top,
                     vert: false,
                     tempR: 9999,
-                    sprite: o
+                    entity: o.entity
                 })
             //bottom
             if (bottom < this.center.y + this.radius)
@@ -124,42 +125,44 @@ _.extend(Vision.prototype, {
                     y: bottom,
                     vert: false,
                     tempR: 9999,
-                    sprite: o
+                    entity: o.entity
                 })
         }, this)
         //console.log(segments.length + " segments possibly visible")
         
         //yay ugly
-        for (ii = 0; ii < this.resolution; ii++) {
+        ii = this.resolution
+        th = (2 * Math.PI) - dTh
+        while (ii--) {
             Pt = this.pts[ii]
-            Pt.r = this.radius
-            Pt.th = th
-            thisThing = null
+            bestR = this.radius
+//            Pt.th = th
             seenSegments = []
 
             for (jj = 0; jj < segments.length; jj++) {
+                thisSeg = segments[jj]
                 //vert
-                if (segments[jj].vert) {
+                if (thisSeg.vert) {
                     if (th < piOver2 || th > threePiOver2) {
-                        if (segments[jj].x < 0)
+                        if (thisSeg.x < 0)
                             continue
                     }
                     else {
-                        if (segments[jj].x > 0)
+                        if (thisSeg.x > 0)
                             continue
                     }
 
                             
                     //x = r*cos(th) -> solve for x
-                    thisR = segments[jj].x / Math.cos(Pt.th)
+                    thisR = thisSeg.x / Math.cos(th)
                     //get y of intersection
-                    thisY = -1 * thisR * Math.sin(Pt.th)
+                    thisY = -1 * thisR * Math.sin(th)
                     //check if intersection is in segment
-                    if (segments[jj].y1 < thisY && thisY < segments[jj].y2) {
-                        segments[jj].tempR = thisR
-                        seenSegments.push(segments[jj]);
-                        if (thisR < Pt.r && segments[jj].sprite.entity.blocksVision) {
-                            Pt.r = thisR
+                    if (thisSeg.y1 < thisY && thisY < thisSeg.y2) {
+                        thisSeg.tempR = thisR
+                        seenSegments.push(thisSeg);
+                        if (thisR < bestR && thisSeg.entity.blocksVision) {
+                            bestR = thisR
                         }
                     }
                 }
@@ -169,36 +172,38 @@ _.extend(Vision.prototype, {
                     //these are inverted b/c y is flipped from standard
                     // unit circle identities
                     if (th > Math.PI) {
-                        if (segments[jj].y < 0)
+                        if (thisSeg.y < 0)
                             continue
                     }
                     else {
-                        if (segments[jj].y > 0)
+                        if (thisSeg.y > 0)
                             continue
                     }
 
 
                     //y = r*sin(th) -> solve for r
                     //and remember to flip y
-                    thisR = -1 * segments[jj].y / Math.sin(Pt.th)
+                    thisR = -1 * thisSeg.y / Math.sin(th)
                     //get x of intersection PIXI.Point
-                    thisX = thisR * Math.cos(Pt.th)
+                    thisX = thisR * Math.cos(th)
                     //check if intersection is within segment
-                    if (segments[jj].x1 < thisX && thisX < segments[jj].x2) {
-                        segments[jj].tempR = thisR
-                        seenSegments.push(segments[jj]);
-                        if (thisR < Pt.r && segments[jj].sprite.entity.blocksVision) {
-                            Pt.r = thisR
+                    if (thisSeg.x1 < thisX && thisX < thisSeg.x2) {
+                        thisSeg.tempR = thisR
+                        seenSegments.push(thisSeg);
+                        if (thisR < bestR && thisSeg.entity.blocksVision) {
+                            bestR = thisR
                         }
                     }
                 }
 
             }
+//            console.log(seenSegments.length)
+            Pt.r = bestR
             var entity
             for (jj = 0; jj < seenSegments.length; jj++) {
 
-                if (seenSegments[jj].tempR <= Pt.r) {
-                    entity = seenSegments[jj].sprite.entity
+                if (seenSegments[jj].tempR <= bestR) {
+                    entity = seenSegments[jj].entity
                     
                     //first time it's been seen
                     if (entity.seenDistance > this.radius)
@@ -211,7 +216,7 @@ _.extend(Vision.prototype, {
                 }
 
             }
-            th += dTh
+            th -= dTh
         }
 //        console.log(objectsSeen.length)
         return objectsSeen

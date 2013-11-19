@@ -7,7 +7,7 @@ var GAMEOBJECTS = [];
 var NPCOBJECTS = [];
 
 app.World = function() {
-	this.size = new PIXI.Rectangle(0, 0, X, Y);
+    this.size = new PIXI.Rectangle(0, 0, X, Y);
     this.camera = new app.Camera(this, 980, 720);
     this.renderer = new PIXI.CanvasRenderer(this.camera.view.width, this.camera.view.height, $('#game')[0]);
     this.showTitleScreen();
@@ -34,7 +34,7 @@ app.World.prototype.showTitleScreen = function () {
 
     // Play the title music.
     var music = new buzz.sound('sound/TheDukeofWhales.mp3');
-    	
+        
     music.play();
 
     // When all assets are loaded, let player press space to start the game.
@@ -54,9 +54,9 @@ app.World.prototype.showTitleScreen = function () {
     // Start the asset loader.
     var assets = []
     _.each([PLAYEROBJ, ENEMYOBJ, ITEMOBJ, HIDEOBJ], function (f) {
-	    for (var k in f.prototype.assets) {
-	    	assets = assets.concat(f.prototype.assets[k]);
-		}
+        for (var k in f.prototype.assets) {
+            assets = assets.concat(f.prototype.assets[k]);
+        }
     })
     var assetLoader = new PIXI.AssetLoader(assets);
     assetLoader.onComplete = doneLoading;
@@ -64,12 +64,12 @@ app.World.prototype.showTitleScreen = function () {
 };
 
 app.World.prototype.startGame = function () {
-	this.stage = new PIXI.Stage();
-	this.foreground = new PIXI.DisplayObjectContainer();
-	this.background = new PIXI.DisplayObjectContainer();
+    this.stage = new PIXI.Stage();
+    this.foreground = new PIXI.DisplayObjectContainer();
+    this.background = new PIXI.DisplayObjectContainer();
 
-	// Track which keys are pressed.
-	this.keys =  {};
+    // Track which keys are pressed.
+    this.keys =  {};
     var keyName = function (event) {
         return jQuery.hotkeys.specialKeys[event.which] || String.fromCharCode(event.which).toLowerCase();
     };
@@ -79,27 +79,27 @@ app.World.prototype.startGame = function () {
     // Tracks the state of the game. The run loop checks this to determine whether to continue rendering the game or show the 'win' or 'game over' screens
     this.gameState = 'PLAYING';
 
-	this.game();
-	this.camera.update();
-	requestAnimFrame(this.update.bind(this));
+    this.game();
+    this.camera.update();
+    requestAnimFrame(this.update.bind(this));
 }
 
 app.World.prototype.game = function()
 {
-	//Initializes all of the objects on the map except for the player and NPCs
-	//Since these are all static elements, they are drawn once.
-	//Once there are maps bigger than one screen the drawing aspect will need to be reworked.
-	//THE PLAYER IS ALWAYS THE FIRST ITEM IN THE GAMEOBJECTS ARRAY, DO NOT ADD THINGS BEFORE IT
-	var PLAYER = new PLAYEROBJ(200, Y - 165, 123, 140, true, false, new PIXI.Sprite(PIXI.Texture.fromImage("assets/Whale_L_stand.png")));
-	PLAYER.sprite.width = PLAYER.width;
-	PLAYER.sprite.height = PLAYER.height;
-  	PLAYER.sprite.position.x = PLAYER.x;
-  	PLAYER.sprite.position.y = PLAYER.y;
-	
-	GAMEOBJECTS.push(PLAYER);
+    //Initializes all of the objects on the map except for the player and NPCs
+    //Since these are all static elements, they are drawn once.
+    //Once there are maps bigger than one screen the drawing aspect will need to be reworked.
+    //THE PLAYER IS ALWAYS THE FIRST ITEM IN THE GAMEOBJECTS ARRAY, DO NOT ADD THINGS BEFORE IT
+    var PLAYER = new PLAYEROBJ(200, Y - 165, 123, 140, true, false, new PIXI.Sprite(PIXI.Texture.fromImage("assets/Whale_L_stand.png")));
+    PLAYER.sprite.width = PLAYER.width;
+    PLAYER.sprite.height = PLAYER.height;
+    PLAYER.sprite.position.x = PLAYER.x;
+    PLAYER.sprite.position.y = PLAYER.y;
+    
+    GAMEOBJECTS.push(PLAYER);
 
     var whaleHeight = PLAYER.height;
-	var ladderHeight = 300;
+    var ladderHeight = 300;
     var ladderWidth = 80;
     var wallWidth = 10;
     var floorHeight = 25;
@@ -151,93 +151,102 @@ app.World.prototype.game = function()
     var item = ITEMOBJ.make({x: 950, y: Y - floorHeight-40, width:40, height: 40, rank: 1, sprite: 'assets/item_fedora_1.png'}, GAMEOBJECTS);
 
 
-	PLAYER.closestFloor = floorL1F1;
+    PLAYER.closestFloor = floorL1F1;
 
-	this.foreground.addChild(GAMEOBJECTS[0].vision);
-	for(var i =1; i <GAMEOBJECTS.length; i++)
-	{
-		GAMEOBJECTS[i].sprite.position.x = GAMEOBJECTS[i].x;
-		GAMEOBJECTS[i].sprite.position.y = GAMEOBJECTS[i].y;
-		GAMEOBJECTS[i].sprite.width = GAMEOBJECTS[i].width;
-		GAMEOBJECTS[i].sprite.height = GAMEOBJECTS[i].height;
-		this.foreground.addChild(GAMEOBJECTS[i].sprite);
-	}
+    this.foreground.addChild(GAMEOBJECTS[0].vision);
+    for(var i =1; i <GAMEOBJECTS.length; i++)
+    {
+        GAMEOBJECTS[i].sprite.position.x = GAMEOBJECTS[i].x;
+        GAMEOBJECTS[i].sprite.position.y = GAMEOBJECTS[i].y;
+        GAMEOBJECTS[i].sprite.width = GAMEOBJECTS[i].width;
+        GAMEOBJECTS[i].sprite.height = GAMEOBJECTS[i].height;
+        this.foreground.addChild(GAMEOBJECTS[i].sprite);
+    }
 
     
     
 
-	GAMEOBJECTS[0].sprite.position.x = GAMEOBJECTS[0].x;
-	GAMEOBJECTS[0].sprite.position.y = GAMEOBJECTS[0].y;
-	this.foreground.addChild(GAMEOBJECTS[0].sprite);
+    GAMEOBJECTS[0].sprite.position.x = GAMEOBJECTS[0].x;
+    GAMEOBJECTS[0].sprite.position.y = GAMEOBJECTS[0].y;
+    this.foreground.addChild(GAMEOBJECTS[0].sprite);
 
-	var backgroundSprite = new PIXI.TilingSprite(new PIXI.Texture.fromImage('assets/background.png'), X, Y);
-	this.background.addChild(backgroundSprite);
+    var backgroundSprite = new PIXI.TilingSprite(new PIXI.Texture.fromImage('assets/background.png'), X, Y);
+    this.background.addChild(backgroundSprite);
 
-	// Add the containers to the stage.
-	this.stage.addChild(this.background);
-	this.stage.addChild(this.foreground);
+    // Add the containers to the stage.
+    this.stage.addChild(this.background);
+    this.stage.addChild(this.foreground);
 }
+
+var lastFrame = Date.now()
 
 app.World.prototype.update = function()
 {
-	var seen,
-			spottedLevels = {}
+    // var now = Date.now()
+    // if (now - lastFrame < 30) {
+    //     requestAnimFrame(this.update.bind(this));
+    //     return;
+    // }
+    // lastFrame = now
 
-	for(var i = 0; i <GAMEOBJECTS.length; i++)
-	{
-		GAMEOBJECTS[i].update(this.keys, this.foreground);
-		GAMEOBJECTS[i].seenDistance = 99999;
-	}
+    var seen,
+        spottedLevels = {}
 
-	seen = GAMEOBJECTS[0].vision.calc(this.foreground);
-	//console.log(seen.length)
-	
-	_.each(GAMEOBJECTS, function (o) {
-		if (o instanceof ENEMYOBJ)
-			o.sprite.visible = false
+    for(var i = 0; i <GAMEOBJECTS.length; i++)
+    {
+        GAMEOBJECTS[i].update(this.keys, this.foreground);
+        GAMEOBJECTS[i].seenDistance = 99999;
+    }
+
+    seen = GAMEOBJECTS[0].vision.calc(this.foreground);
+    //console.log(seen.length)
+    
+    _.each(GAMEOBJECTS, function (o) {
+        if (o instanceof ENEMYOBJ)
+            o.sprite.visible = false
 
 
-	})
+    })
 
-	_.each(seen, function (guard) {
-		if (guard instanceof ITEMOBJ) {
-			guard.sheetnum = 1;
-			return
-		}
+    _.each(seen, function (guard) {
+        if (guard instanceof ITEMOBJ) {
+            guard.sheetnum = 1;
+            return
+        }
 
-		if (!(guard instanceof ENEMYOBJ))
-			return
+        if (!(guard instanceof ENEMYOBJ))
+            return
 
-		guard.sprite.visible = true
+        guard.sprite.visible = true
 
-		var gsprite = guard.sprite,
-				whale = GAMEOBJECTS[0].sprite;
+        var gsprite = guard.sprite,
+            whale = GAMEOBJECTS[0].sprite;
 
-		//if they're in visual range
-		if (guard.seenDistance <= guard.visionRange
-			//and care that you exist
-			&& whale.currentRank != guard.rank
-			//and don't have to look down
-			&& gsprite.position.y + gsprite.height >= whale.position.y
-			//and are facing the right way
-			&& (gsprite.position.x < GAMEOBJECTS[0].position.x) == guard.facingLeft
-			) {
-				//then all guards on this level know about the player
-				console.log(guard.uid + " can see you!");
-				spottedLevels[gsprite.position.y + gsprite.height] = true
-		}
-	})
+        //if they're in visual range
+        if (guard.seenDistance <= guard.visionRange
+            //and care that you exist
+            && whale.currentRank != guard.rank
+            //and don't have to look down
+            && gsprite.position.y + gsprite.height >= whale.position.y
+            //and are facing the right way
+            && (gsprite.position.x < GAMEOBJECTS[0].position.x) == guard.facingLeft
+            ) {
+                //then all guards on this level know about the player
+                console.log(guard.uid + " can see you!");
+                spottedLevels[gsprite.position.y + gsprite.height] = true
+        }
+    })
 
-	_.each(GAMEOBJECTS, function (obj) {
-		if (obj instanceof ENEMYOBJ && spottedLevels[obj.sprite.position.y + obj.sprite.height]) {
-			console.log(obj.uid + " knows about you!");
-		}
-	})
+    _.each(GAMEOBJECTS, function (obj) {
+        if (obj instanceof ENEMYOBJ && spottedLevels[obj.sprite.position.y + obj.sprite.height]) {
+            console.log(obj.uid + " knows about you!");
+        }
+    })
 
-	GAMEOBJECTS[0].vision.render();
+    GAMEOBJECTS[0].vision.render();
 
-  	// Whenever the player moves, center the camera on the player.
-	this.camera.update(GAMEOBJECTS[0].sprite.position.x, GAMEOBJECTS[0].sprite.position.y);
+    // Whenever the player moves, center the camera on the player.
+    this.camera.update(GAMEOBJECTS[0].sprite.position.x, GAMEOBJECTS[0].sprite.position.y);
 
     // If the game is still running, render the next frame. Otherwise show the 'win' or 'loss' screens.
     if (this.gameState == 'PLAYING') {
@@ -271,8 +280,8 @@ app.World.prototype.showGameOver = function (text) {
 
 app.World.prototype.showWon = function(text)
 {
-	var stage = new PIXI.Stage();
- 	// Add text.
+    var stage = new PIXI.Stage();
+    // Add text.
     var text = new PIXI.Text(text, {font: 'bold 40px Avro', fill: 'white', align: 'center'});
     text.position = new PIXI.Point(this.renderer.width / 2, this.renderer.height / 2);
     text.anchor = new PIXI.Point(0.5, 0.5);
@@ -284,15 +293,15 @@ app.World.prototype.showWon = function(text)
 
 // Represents the view of the game world currently rendered to the screen.
 app.Camera = function (world, width, height) {
-	this.world = world;
+    this.world = world;
     this.view = new PIXI.Rectangle(0, 0, width, height);
     this.boundary = new PIXI.Rectangle(width / 2, height / 2, this.world.size.width - width, this.world.size.height - height);
 };
 
 // Center the camera on the x and y coordinates provided, but clamp to the game world.
 app.Camera.prototype.update = function (x, y) {
-	var x = GAMEOBJECTS[0].sprite.position.x;
-	var y = GAMEOBJECTS[0].sprite.position.y;
+    var x = GAMEOBJECTS[0].sprite.position.x;
+    var y = GAMEOBJECTS[0].sprite.position.y;
     var cameraX = this.view.width / 2 - Math.max(this.boundary.x, Math.min(this.boundary.x + this.boundary.width, x));
     var cameraY = this.view.height / 2 - Math.max(this.boundary.y, Math.min(this.boundary.y + this.boundary.height, y));
 
