@@ -350,7 +350,7 @@ ENEMYOBJ.prototype.collide = function(GAMEOBJECTS, dx, dy)
 			&& this.sprite.position.y - this.sprite.height + 2*this.sprite.height >= GAMEOBJECTS[0].sprite.position.y
 			&& GAMEOBJECTS[0].sprite.position.y + GAMEOBJECTS[0].sprite.height >= this.sprite.position.y - this.sprite.height
 			&& !GAMEOBJECTS[0].locked
-			&& (!GAMEOBJECTS[0].currentRank != this.rank || this.suspicion))
+			&& ((!GAMEOBJECTS[0].currentRank != this.rank) || this.suspicion))
 			
 		{
 			
