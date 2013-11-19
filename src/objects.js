@@ -366,24 +366,23 @@ ENEMYOBJ.prototype.collide = function(GAMEOBJECTS, dx, dy)
 
 ENEMYOBJ.prototype.collideAll = function(GAMEOBJECTS, dx)
 {
-	var collided = [];
-	for(var i = 1; i < GAMEOBJECTS.length; i++)
+	for(var i = 0; i < GAMEOBJECTS.length; i++)
 	{
 		
 		if(this.sprite.position.x + this.sprite.width + dx >= GAMEOBJECTS[i].sprite.position.x 
 			&& GAMEOBJECTS[i].sprite.position.x+GAMEOBJECTS[i].sprite.width >= this.sprite.position.x + dx
 			&& this.sprite.position.y + this.sprite.height >= GAMEOBJECTS[i].sprite.position.y
 			&& GAMEOBJECTS[i].sprite.position.y + GAMEOBJECTS[i].sprite.height >= this.sprite.position.y 
-			&& GAMEOBJECTS[i] != this)
-			
+			&& GAMEOBJECTS[i] != this
+			&& GAMEOBJECTS[i].isSolid)
 		{
 			
-			collided.push(GAMEOBJECTS[i]);
+			return true;
 			
 
 		}
 	}
-	return collided;
+
 }
 
 ENEMYOBJ.prototype.update = function()
@@ -410,19 +409,30 @@ ENEMYOBJ.prototype.update = function()
 		// Check if you are moving left 
 		if(this.sprite.position.x - xTARGET > 0)
 		{
-			this.sprite.position.x -= speed;
-			this.exclaimSprite.position.x -= speed;
-			this.frameSwitcher(1, this.lAssets[this.rank], 6);
-			this.direction = 0;
-			this.frameCount++;
+			
+			if(!this.collideAll(GAMEOBJECTS, -speed))
+			{
+
+				this.sprite.position.x -= speed;
+				this.exclaimSprite.position.x -= speed;
+				this.frameSwitcher(1, this.lAssets[this.rank], 6);
+				this.direction = 0;
+				this.frameCount++;
+			}
+
 		}
 		else if(this.sprite.position.x - xTARGET < 0)
 		{
-			this.sprite.position.x += speed;
-			this.exclaimSprite.position.x += speed;
-			this.frameSwitcher(0, this.rAssets[this.rank], 6);
-			this.direction = 1;
-			this.frameCount++;
+			
+			if(!this.collideAll(GAMEOBJECTS, speed))
+			{
+				this.sprite.position.x += speed;
+				this.exclaimSprite.position.x += speed;
+				this.frameSwitcher(0, this.rAssets[this.rank], 6);
+				this.direction = 1;
+				this.frameCount++;
+			}
+			
 		}
 
 	}

@@ -36,7 +36,7 @@ app.World.prototype.showTitleScreen = function () {
     // Play the title music.
     var music = new buzz.sound('sound/TheDukeofWhales.mp3');
         
-    music.play();
+    music.play().loop();
 
     // When all assets are loaded, let player press space to start the game.
     doneLoading = $.proxy(function () {
@@ -157,7 +157,9 @@ app.World.prototype.game = function()
 
     var flagL2F1 = HIDEOBJ.make({x:ladderL1F4N1.x + ladderL1F4N1.width + 350, y: floorL1F4P1.y - 165, width: 100, height: 140, hideable:true, solid:false, sprite: 'assets/flag_2_still.png', tiled: false, itemID: 1}, GAMEOBJECTS);
     var wallL2F1N1 = GAMEOBJ.make({x: ladderL2F1N1.x + ladderL2F1N1.width + 120, y: floorL2F1P3.y + floorHeight, width: wallWidth, height: floorL1F4P3.y-floorL2F1P3.y, solid: true, hideable:false, sprite: 'assets/Floor.png', tiled: true}, GAMEOBJECTS);
-
+    var npcL2F1N1Script = [{'move': ladderL1F4N1.x + 15}, {'wait' : 1500}, {'move': ladderL2F1N1.x - 50}, {'wait': 1500}];
+    var npcL2F1N1 = ENEMYOBJ.make({x:ladderL2F1N1.x - 50, y: floorL1F4P3.y - npcHeight, sprite: 'assets/soldierNOGUN_L_stand.png', script: npcL2F1N1Script, rank: 1}, GAMEOBJECTS, NPCOBJECTS);
+   
 
     PLAYER.closestFloor = floorL1F1;
 
@@ -252,6 +254,8 @@ app.World.prototype.update = function()
             && gsprite.position.y + gsprite.height >= whale.position.y
             //and are facing the right way
             && (gsprite.position.x < whale.position.x) == guard.direction
+            //and you are not hiding
+            && !GAMEOBJECTS[0].hiding
             ) {
                 //then all guards on this level know about the player
 //                console.log(guard.uid + " can see you!");
