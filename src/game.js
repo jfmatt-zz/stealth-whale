@@ -123,13 +123,15 @@ app.World.prototype.game = function()
     var floorL1F3P1 = FLOOROBJ.make({x: leftWall.x + leftWall.width, y: floorL1F2P1.y - ladderHeight, width: 100, height: floorHeight}, GAMEOBJECTS);
     var floorL1F3P2 = FLOOROBJ.make({x: floorL1F3P1.x + floorL1F3P1.width, y: floorL1F3P1.y, width: ladderWidth, height: floorHeight, transparent: true}, GAMEOBJECTS);
     var ladderL1F2N1 = LADDEROBJ.make({x: floorL1F3P2.x, y: floorL1F3P2.y, height: ladderHeight, lower: floorL1F2P1, upper: floorL1F3P1}, GAMEOBJECTS);
-    var floorL1F3P3 = FLOOROBJ.make({x: floorL1F3P2.x + floorL1F3P2.width, y: floorL1F3P1.y, width: 300, height: floorHeight}, GAMEOBJECTS);
+    var floorL1F3P3 = FLOOROBJ.make({x: floorL1F3P2.x + floorL1F3P2.width, y: floorL1F3P1.y, width: 360, height: floorHeight}, GAMEOBJECTS);
     var floorL1F3P4 = FLOOROBJ.make({x: floorL1F3P3.x + floorL1F3P3.width, y: floorL1F3P1.y, width: ladderWidth, height: floorHeight, transparent: true}, GAMEOBJECTS);
     var ladderL1F2N2 = LADDEROBJ.make({x: floorL1F3P4.x, y: floorL1F3P4.y, height: ladderHeight, lower: floorL1F2P1, upper: floorL1F3P1}, GAMEOBJECTS);
     var floorL1F3P5 = FLOOROBJ.make({x: floorL1F3P4.x + floorL1F3P4.width, y: floorL1F3P1.y, width: 600, height: floorHeight}, GAMEOBJECTS);
     var floorL1F3P6 = FLOOROBJ.make({x: floorL1F3P5.x + floorL1F3P5.width, y: floorL1F3P1.y, width: ladderWidth, height: floorHeight, transparent: true}, GAMEOBJECTS);
     var ladderL1F2N3 = LADDEROBJ.make({x: floorL1F3P6.x, y: floorL1F3P6.y, height: ladderHeight, lower: floorL1F2P1, upper: floorL1F3P1}, GAMEOBJECTS);
     var floorL1F3P7 = FLOOROBJ.make({x: floorL1F3P6.x + floorL1F3P6.width, y: floorL1F3P1.y, width: rightWall.x - floorL1F3P6.x - floorL1F3P6.width, height: floorHeight}, GAMEOBJECTS);
+   
+
     var npcL1F2N1Script = [{'move': ladderL1F2N2.x - 100}, {'wait': 1500}, {'move': ladderL1F1.x + 100}, {'wait': 1500}];
     var npcL1F2N1 = ENEMYOBJ.make({x: ladderL1F1.x + 100, y: floorL1F2P1.y - npcHeight, sprite: 'assets/soldierNOGUN_L_stand.png', script: npcL1F2N1Script, rank: 0}, GAMEOBJECTS, NPCOBJECTS);
     var npcL1F2N2Script = [{'move': ladderL1F2N3.x + 500}, {'wait': 1500}, {'move': ladderL1F2N3.x - 100}, {'wait': 1500}];
@@ -143,12 +145,13 @@ app.World.prototype.game = function()
     var wallL1F4N1 = GAMEOBJ.make({x: ladderL1F4N1.x + 150, y: floorL1F4P1.y + floorHeight, width: wallWidth, height: floorL1F3P1.y - floorL1F4P1.y, solid: true, hideable: false, sprite: 'assets/Floor.png', tiled: true},  GAMEOBJECTS);
 
     // Level 2, Floor 1: one guard passing a hiding spot and blocking a ladder
-    var floorL2F1P1 = FLOOROBJ.make({x: leftWall.x + leftWall.width, y: floorL1F4P1.y - ladderHeight, width: 900, height: floorHeight}, GAMEOBJECTS);
+    var floorL2F1P1 = FLOOROBJ.make({x: leftWall.x + leftWall.width+700, y: floorL1F4P1.y - ladderHeight, width: 900, height: floorHeight}, GAMEOBJECTS);
     var floorL2F1P2 = FLOOROBJ.make({x: floorL2F1P1.x + floorL2F1P1.width, y: floorL2F1P1.y, width: ladderWidth, height: floorHeight, transparent: true}, GAMEOBJECTS);
     var ladderL2F1N1 = LADDEROBJ.make({x: floorL2F1P2.x, y: floorL2F1P2.y, height: ladderHeight, lower: floorL1F4P1, upper: floorL2F1P2}, GAMEOBJECTS);
     var floorL2F1P3 = FLOOROBJ.make({x: floorL2F1P2.x + floorL2F1P2.width, y: floorL2F1P1.y, width: rightWall.x - floorL2F1P2.x - floorL2F1P2.width, height: floorHeight}, GAMEOBJECTS);
 
-    var item = ITEMOBJ.make({x: 950, y: Y - floorHeight-40, width:40, height: 40, rank: 1, sprite: 'assets/item_fedora_1.png'}, GAMEOBJECTS);
+    var flagL2F1 = HIDEOBJ.make({x:ladderL1F4N1.x + ladderL1F4N1.width + 350, y: floorL1F4P1.y - 165, width: 100, height: 140, hideable:true, solid:false, sprite: 'assets/flag_2_still.png', tiled: false, itemID: 1}, GAMEOBJECTS);
+    // var wallL2F1N1 = GAMEOBJ.make(x:leftWall.x + leftWall.width +1000, y: floorL1F4P1.y , width: wallWidth, height)
 
 
     PLAYER.closestFloor = floorL1F1;
