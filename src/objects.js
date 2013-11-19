@@ -166,6 +166,9 @@ PLAYEROBJ.prototype.update = function(KEYS, foreground)
 	var floorVal = [];
 	var ladderVal = [];
 
+	if (!KEYS['space'])
+		this.spaceReset = true
+
 	if (KEYS['d']) 
 	{
 		//console.log(this.collide(GAMEOBJECTS));
@@ -271,36 +274,38 @@ PLAYEROBJ.prototype.update = function(KEYS, foreground)
 			}
 		}
 	}	
-	else if(KEYS['q'] && !this.hiding)
-	{
-		
-		var hideObj = this.collide(GAMEOBJECTS,0,0);
-		for(var i =0; i <hideObj.length; i++)
-		{
-			if(hideObj[i].isHideable)
+	else if(KEYS['space'] && this.spaceReset) {
+		this.spaceReset = false
+
+		//come out of hiding
+		if (this.hiding) {
+			this.vision.radius *= (4 / 3)
+			this.hiding = false
+			foreground.addChildAt(this.sprite, foreground.children.length-1);
+			this.sprite.setTexture(this.lastTexture);
+			this.locked = false;
+		}
+		//go into hiding if possible
+		else {
+			var hideObj = this.collide(GAMEOBJECTS,0,0);
+			for(var i =0; i <hideObj.length; i++)
 			{
-				
-				foreground.addChildAt(this.sprite, 2);
-				this.vision.radius *= .75
-				this.hiding = true;
-				console.log("HIDING");
-				this.locked = true;
-				var tempArray = this.hide[this.direction];
-				this.lastTexture = this.sprite.texture;
-				this.sprite.setTexture(PIXI.Texture.fromImage(tempArray[this.currentRank]));
-				
+				if(hideObj[i].isHideable)
+				{
+					
+					foreground.addChildAt(this.sprite, 2);
+					this.vision.radius *= .75
+					this.hiding = true;
+					console.log("HIDING");
+					this.locked = true;
+					var tempArray = this.hide[this.direction];
+					this.lastTexture = this.sprite.texture;
+					this.sprite.setTexture(PIXI.Texture.fromImage(tempArray[this.currentRank]));
+					
+				}
 			}
 		}
 	}
-	else if(KEYS['e'] && this.hiding)
-	{
-		this.vision.radius *= (4 / 3)
-		this.hiding = false
-		foreground.addChildAt(this.sprite, foreground.children.length-1);
-		this.sprite.setTexture(this.lastTexture);
-		this.locked = false;
-	}
-	
 
 }
 
@@ -507,6 +512,7 @@ var HIDEOBJ = function()
 }
 
 HIDEOBJ.prototype = new GAMEOBJ();
+HIDEOBJ.prototype.blocksVision = false
 
 HIDEOBJ.prototype.assets = {
 	FLAG1: ['assets/flag_1_still.png','assets/flag_1_moving_1.png','assets/flag_1_moving_2.png','assets/flag_1_moving_3.png'],

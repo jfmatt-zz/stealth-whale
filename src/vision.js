@@ -12,7 +12,7 @@ function Vision (whalePos, offset, pointer, radius, fov, resolution, color) {
     this.width = this.height = this.radius * 2
 
     this.fov = fov || (Math.PI / 2)
-    this.resolution = resolution = resolution || 100
+    this.resolution = resolution = resolution || 200
                         
     this.color = color || 0xFF7E00
     this.color = 0xFFFFFF
@@ -136,7 +136,7 @@ _.extend(Vision.prototype, {
         while (ii--) {
             Pt = this.pts[ii]
             bestR = this.radius
-//            Pt.th = th
+            Pt.th = th
             seenSegments = []
 
             for (jj = 0; jj < segments.length; jj++) {

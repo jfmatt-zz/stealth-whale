@@ -74,8 +74,8 @@ app.World.prototype.startGame = function () {
     var keyName = function (event) {
         return jQuery.hotkeys.specialKeys[event.which] || String.fromCharCode(event.which).toLowerCase();
     };
-    $(document).bind('keydown', $.proxy(function (event) { this.keys[keyName(event)] = true; }, this));
-    $(document).bind('keyup', $.proxy(function (event) { this.keys[keyName(event)] = false; }, this));
+    $(document).bind('keydown', function (event) { this.keys[keyName(event)] = true; }.bind(this));
+    $(document).bind('keyup', function (event) { this.keys[keyName(event)] = false; }.bind(this));
 
     // Tracks the state of the game. The run loop checks this to determine whether to continue rendering the game or show the 'win' or 'game over' screens
     this.gameState = 'PLAYING';
