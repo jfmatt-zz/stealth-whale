@@ -99,7 +99,7 @@ PLAYEROBJ.prototype.floorCheck = function(collideObj)
 	var floorCheck = [false, false, -1];
 	for(var i =0; i < collideObj.length; i++)
 		{
-			if(collideObj[i] instanceof ENEMYOBJ && !this.locked && this.currentRank != collideObj[i].rank)
+			if(collideObj[i] instanceof ENEMYOBJ && !this.locked && ((this.currentRank != collideObj[i].rank) || collideObj[i].suspicion))
 			{
 				app.world.loseGame();
 			}
@@ -113,7 +113,13 @@ PLAYEROBJ.prototype.floorCheck = function(collideObj)
 				floorCheck[2] = i;
 
 			}
-			if(collideObj[i] instanceof ITEMOBJ && !collideObj[i].pickedUp)
+			if(collideObj[i] instanceof ITEMOBJ && collideObj[i].victory)
+			{
+				app.world.gameState = 'WON';
+				collideObj[i].pickedUp = true;
+				console.log("GAME WON");
+			}
+			else if(collideObj[i] instanceof ITEMOBJ && !collideObj[i].pickedUp)
 			{
 				console.log("PICKED UP ITEM");
 
@@ -123,10 +129,6 @@ PLAYEROBJ.prototype.floorCheck = function(collideObj)
 				this.currentRank = collideObj[i].currentRank;
 				this.right =0;
 				this.left =0;
-			}
-			else if(collideObj[i] instanceof ITEMOBJ && collideObj[i].victory)
-			{
-				app.world.gameState = 'WON';
 			}
 		}
 
@@ -139,7 +141,9 @@ PLAYEROBJ.prototype.ladderCheck = function(collideObj)
 	var ladderCheck =[false, -1];
 	for(var i =0; i < collideObj.length; i++)
 	{
-		if(collideObj[i] instanceof ENEMYOBJ && !this.locked)
+		if(collideObj[i] instanceof ENEMYOBJ 
+			&& !this.locked 
+			&& ((this.currentRank != collideObj[i].rank) || collideObj[i].suspicion))
 		{
 			app.world.loseGame();
 		}
@@ -485,10 +489,11 @@ ITEMOBJ.prototype.assets = {
 	'assets/item_fedora_7.png','assets/item_fedora_8.png','assets/item_fedora_9.png','assets/item_fedora_10.png'],
 	inViewFANCY: ['assets/item_tophat_1.png','assets/item_tophat_2.png','assets/item_tophat_3.png','assets/item_tophat_4.png','assets/item_tophat_5.png','assets/item_tophat_6.png',
 	'assets/item_tophat_7.png', 'assets/item_tophat_8.png','assets/item_tophat_9.png','assets/item_tophat_10.png'],
+	
 };
 
 
-ITEMOBJ.prototype.inView = [ITEMOBJ.prototype.assets.inViewLEDER, ITEMOBJ.prototype.assets.inViewFANCY];
+ITEMOBJ.prototype.inView = [[],ITEMOBJ.prototype.assets.inViewLEDER, ITEMOBJ.prototype.assets.inViewFANCY];
 
 
 ITEMOBJ.prototype.chooseSpriteSheet = function (sheetnum) {
