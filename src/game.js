@@ -2,6 +2,7 @@ var app = app || {};
 
 var X = 2000;
 var Y = 2000;
+var GUARD_PARANOIA = 5;
 
 var GAMEOBJECTS = [];
 var NPCOBJECTS = [];
@@ -105,6 +106,10 @@ app.World.prototype.game = function()
     var floorHeight = 25;
     var npcWidth = 52;
     var npcHeight = 60;
+    var neinWidth = 43;
+    var neinHeight = 35;
+    var neinOffsetX = 5;
+    var neinOffsetY = -50;
 
     // Level bounding walls.
     var leftWall = GAMEOBJ.make({x: 0, y: 0, width: wallWidth, height: Y, solid: true, hideable: false, sprite: 'assets/Floor.png', tiled: true}, GAMEOBJECTS);
@@ -133,9 +138,9 @@ app.World.prototype.game = function()
    
 
     var npcL1F2N1Script = [{'move': ladderL1F2N2.x - 100}, {'wait': 1500}, {'move': ladderL1F1.x + 100}, {'wait': 1500}];
-    var npcL1F2N1 = ENEMYOBJ.make({x: ladderL1F1.x + 100, y: floorL1F2P1.y - npcHeight, sprite: 'assets/soldierNOGUN_L_stand.png', script: npcL1F2N1Script, rank: 0}, GAMEOBJECTS, NPCOBJECTS);
+    var npcL1F2N1 = ENEMYOBJ.make({x: ladderL1F1.x + 100, y: floorL1F2P1.y - npcHeight, sprite: 'assets/soldierNOGUN_L_stand.png', script: npcL1F2N1Script, rank: 1}, GAMEOBJECTS, NPCOBJECTS);
     var npcL1F2N2Script = [{'move': ladderL1F2N3.x + 500}, {'wait': 1500}, {'move': ladderL1F2N3.x - 100}, {'wait': 1500}];
-    var npcL1F2N2 = ENEMYOBJ.make({x: ladderL1F2N3.x - 100, y: floorL1F2P1.y - npcHeight, sprite: 'assets/soldierNOGUN_L_stand.png', script: npcL1F2N2Script, rank: 0}, GAMEOBJECTS, NPCOBJECTS);
+    var npcL1F2N2 = ENEMYOBJ.make({x: ladderL1F2N3.x - 100, y: floorL1F2P1.y - npcHeight, sprite: 'assets/soldierNOGUN_L_stand.png', script: npcL1F2N2Script, rank: 1}, GAMEOBJECTS, NPCOBJECTS);
 
     // Level 1, Floor 3: one ladder and a wall.
     var floorL1F4P1 = FLOOROBJ.make({x: leftWall.x + leftWall.width, y: floorL1F3P1.y - ladderHeight, width: 300, height: floorHeight}, GAMEOBJECTS);
@@ -164,6 +169,14 @@ app.World.prototype.game = function()
         GAMEOBJECTS[i].sprite.width = GAMEOBJECTS[i].width;
         GAMEOBJECTS[i].sprite.height = GAMEOBJECTS[i].height;
         this.foreground.addChild(GAMEOBJECTS[i].sprite);
+
+        if (GAMEOBJECTS[i] instanceof ENEMYOBJ) {
+            GAMEOBJECTS[i].exclaimSprite.position.y = GAMEOBJECTS[i].y + neinOffsetY;
+            GAMEOBJECTS[i].exclaimSprite.position.x = GAMEOBJECTS[i].x + neinOffsetX;
+            GAMEOBJECTS[i].exclaimSprite.height     = neinHeight;
+            GAMEOBJECTS[i].exclaimSprite.width      = neinWidth;
+            this.foreground.addChild(GAMEOBJECTS[i].exclaimSprite);
+        }
     }
 
     
@@ -207,6 +220,7 @@ app.World.prototype.update = function()
     _.each(GAMEOBJECTS, function (o) {
         if (o instanceof ENEMYOBJ) {
             o.sprite.visible = false
+            o.exclaimSprite.visible = false
             if (o.suspicion)
                 o.suspicion--
         }
@@ -223,6 +237,8 @@ app.World.prototype.update = function()
             return
 
         guard.sprite.visible = true
+        if (guard.suspicion)
+            guard.exclaimSprite.visible = true
 
         var gsprite = guard.sprite,
             whale = GAMEOBJECTS[0].sprite;
@@ -231,7 +247,7 @@ app.World.prototype.update = function()
         //if they're in visual range
         if (guard.seenDistance <= guard.visionRange
             //and care that you exist
-            && whale.currentRank != guard.rank
+            && GAMEOBJECTS[0].currentRank != guard.rank
             //and don't have to look down
             && gsprite.position.y + gsprite.height >= whale.position.y
             //and are facing the right way
@@ -246,7 +262,7 @@ app.World.prototype.update = function()
     _.each(GAMEOBJECTS, function (obj) {
         if (obj instanceof ENEMYOBJ && spottedLevels[obj.sprite.position.y + obj.sprite.height]) {
 //            console.log(obj.uid + " knows about you!");
-            obj.suspicion += 10
+            obj.suspicion += GUARD_PARANOIA;
             obj.lastSeenWhaleX = GAMEOBJECTS[0].sprite.position.x
         }
     })

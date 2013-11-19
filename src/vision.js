@@ -78,7 +78,7 @@ _.extend(Vision.prototype, {
         _.each(sprites, function (o) {
             var top, bottom, left, right
             
-            if (o === this)
+            if (o.visionIgnore || o === this)
                 return
 
             

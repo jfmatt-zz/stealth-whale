@@ -32,6 +32,8 @@ var PLAYEROBJ = function(){
 
 	this.vision = new Vision(this.sprite.position, {x: 61, y: 25}, {x: 0, y: 0}, this.visionRange);
 
+	this.sprite.visionIgnore = true
+
 };
 
 PLAYEROBJ.prototype = new GAMEOBJ();
@@ -311,12 +313,17 @@ var ENEMYOBJ = function()
 	this.time =0;
 	this.suspicion = 0;
 
+	this.exclaimSprite = new PIXI.Sprite(this.exclaimTexture);
+	this.exclaimSprite.visible = false;
+	this.exclaimSprite.visionIgnore = true;
+
 	
 };
 ENEMYOBJ.prototype = new GAMEOBJ();
 
 ENEMYOBJ.prototype.blocksVision = false;
 ENEMYOBJ.prototype.visionRange = PLAYEROBJ.prototype.visionRange * .75
+ENEMYOBJ.prototype.exclaimTexture = new PIXI.Texture.fromImage('assets/alert_nine.png');
 
 ENEMYOBJ.prototype.assets = {
 	lAssetsNORMAL: ['assets/soldierNOGUN_L_stand.png', 'assets/soldierNOGUN_L_walk_1.png', 'assets/soldierNOGUN_L_walk_2.png', 
@@ -332,8 +339,8 @@ ENEMYOBJ.prototype.assets = {
 	rAssetsFANCY: ['assets/soldierFANCY_R_stand.png','assets/soldierFANCY_R_walk_1.png','assets/soldierFANCY_R_walk_2.png','assets/soldierFANCY_R_walk_3.png',
 	'assets/soldierFANCY_R_walk_4.png'],
 };
-ENEMYOBJ.prototype.lAssets = [ENEMYOBJ.prototype.assets.lAssetsNORMAL, ENEMYOBJ.prototype.assets.lAssetsLEDER, ENEMYOBJ.prototype.assets.lAssetsFANCY];
-ENEMYOBJ.prototype.rAssets = [ENEMYOBJ.prototype.assets.rAssetsNORMAL, ENEMYOBJ.prototype.assets.rAssetsLEDER, ENEMYOBJ.prototype.assets.rAssetsFANCY];
+ENEMYOBJ.prototype.lAssets = [[], ENEMYOBJ.prototype.assets.lAssetsNORMAL, ENEMYOBJ.prototype.assets.lAssetsLEDER, ENEMYOBJ.prototype.assets.lAssetsFANCY];
+ENEMYOBJ.prototype.rAssets = [[], ENEMYOBJ.prototype.assets.rAssetsNORMAL, ENEMYOBJ.prototype.assets.rAssetsLEDER, ENEMYOBJ.prototype.assets.rAssetsFANCY];
 
 
 ENEMYOBJ.prototype.collide = function(GAMEOBJECTS, dx, dy)
@@ -399,6 +406,7 @@ ENEMYOBJ.prototype.update = function()
 		if(this.sprite.position.x - xTARGET > 0)
 		{
 			this.sprite.position.x -= speed;
+			this.exclaimSprite.position.x -= speed;
 			this.frameSwitcher(1, this.lAssets[this.rank], 6);
 			this.direction = 0;
 			this.frameCount++;
@@ -406,6 +414,7 @@ ENEMYOBJ.prototype.update = function()
 		else if(this.sprite.position.x - xTARGET < 0)
 		{
 			this.sprite.position.x += speed;
+			this.exclaimSprite.position.x += speed;
 			this.frameSwitcher(0, this.rAssets[this.rank], 6);
 			this.direction = 1;
 			this.frameCount++;
@@ -441,6 +450,7 @@ ENEMYOBJ.prototype.update = function()
 	{
 		app.world.loseGame();
 	}
+
 }
 
 
