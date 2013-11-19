@@ -58,15 +58,15 @@ PLAYEROBJ.prototype.assets = {
 	climbFANCY: ['assets/whale_fancy_climb_1.png','assets/whale_fancy_climb_2.png','assets/whale_fancy_climb_3.png','assets/whale_fancy_climb_4.png'],
 
 
-	lHide: ['assets/whale_L_naked_hide.png', 'assets/whale_L_lederhosen_hide.png', 'assets/whale_L_fancy_hide.png'],
-	rHide: ['assets/whale_R_naked_hide.png', 'assets/whale_R_lederhosen_hide.png', 'assets/whale_R_fancy_hide.png']
+	lHide: ['assets/whale_L_naked_hide.png', '', 'assets/whale_L_lederhosen_hide.png', 'assets/whale_L_fancy_hide.png'],
+	rHide: ['assets/whale_R_naked_hide.png', '', 'assets/whale_R_lederhosen_hide.png', 'assets/whale_R_fancy_hide.png']
 };
 
-PLAYEROBJ.prototype.lAssets = [PLAYEROBJ.prototype.assets.lNAKED, PLAYEROBJ.prototype.assets.lLEDERHOSEN, PLAYEROBJ.prototype.assets.lFANCY];
-PLAYEROBJ.prototype.rAssets = [PLAYEROBJ.prototype.assets.rNAKED, PLAYEROBJ.prototype.assets.rLEDERHOSEN, PLAYEROBJ.prototype.assets.rFANCY];
+PLAYEROBJ.prototype.lAssets = [PLAYEROBJ.prototype.assets.lNAKED, [], PLAYEROBJ.prototype.assets.lLEDERHOSEN, PLAYEROBJ.prototype.assets.lFANCY];
+PLAYEROBJ.prototype.rAssets = [PLAYEROBJ.prototype.assets.rNAKED, [], PLAYEROBJ.prototype.assets.rLEDERHOSEN, PLAYEROBJ.prototype.assets.rFANCY];
 PLAYEROBJ.prototype.hide    = [PLAYEROBJ.prototype.assets.lHide, PLAYEROBJ.prototype.assets.rHide];
 PLAYEROBJ.prototype.nonHide = [PLAYEROBJ.prototype.lAssets, PLAYEROBJ.prototype.rAssets]
-PLAYEROBJ.prototype.climbAssets = [PLAYEROBJ.prototype.assets.climbNAKED, PLAYEROBJ.prototype.assets.climbLEDERHOSEN, PLAYEROBJ.prototype.assets.climbFANCY];
+PLAYEROBJ.prototype.climbAssets = [PLAYEROBJ.prototype.assets.climbNAKED, [], PLAYEROBJ.prototype.assets.climbLEDERHOSEN, PLAYEROBJ.prototype.assets.climbFANCY];
 
 
 PLAYEROBJ.prototype.blocksVision = false;

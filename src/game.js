@@ -56,7 +56,7 @@ app.World.prototype.showTitleScreen = function () {
     var assets = []
     _.each([PLAYEROBJ, ENEMYOBJ, ITEMOBJ, HIDEOBJ], function (f) {
         for (var k in f.prototype.assets) {
-            assets = assets.concat(f.prototype.assets[k]);
+            assets = assets.concat(_.filter(f.prototype.assets[k], function (arr) { return arr.length }));
         }
     })
     var assetLoader = new PIXI.AssetLoader(assets);
