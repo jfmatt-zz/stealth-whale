@@ -30,11 +30,13 @@ var PLAYEROBJ = function(){
 
 	this.lastTexture;
 
-	this.vision = new Vision(this.sprite.position, {x: 61, y: 25}, {x: 0, y: 0}, 400);
+	this.vision = new Vision(this.sprite.position, {x: 61, y: 25}, {x: 0, y: 0}, this.visionRange);
 
 };
 
 PLAYEROBJ.prototype = new GAMEOBJ();
+
+PLAYEROBJ.prototype.visionRange = 400;
 
 PLAYEROBJ.prototype.assets = {
 	lNAKED: ['assets/whale_L_naked_stand.png', 'assets/whale_L_naked_walk_1.png','assets/whale_L_naked_walk_2.png','assets/whale_L_naked_walk_3.png',
@@ -283,9 +285,6 @@ PLAYEROBJ.prototype.update = function(KEYS, foreground)
 				var tempArray = this.hide[this.direction];
 				this.lastTexture = this.sprite.texture;
 				this.sprite.setTexture(PIXI.Texture.fromImage(tempArray[this.currentRank]));
-
-
-				
 				
 			}
 		}
@@ -309,12 +308,14 @@ var ENEMYOBJ = function()
 	this.counter = 0;
 	this.waitDelay =0;
 	this.time =0;
+	this.suspicion = 0;
 
 	
 };
 ENEMYOBJ.prototype = new GAMEOBJ();
 
 ENEMYOBJ.prototype.blocksVision = false;
+ENEMYOBJ.prototype.visionRange = PLAYEROBJ.prototype.visionRange * .75
 
 ENEMYOBJ.prototype.assets = {
 	lAssetsNORMAL: ['assets/soldierNOGUN_L_stand.png', 'assets/soldierNOGUN_L_walk_1.png', 'assets/soldierNOGUN_L_walk_2.png', 
@@ -352,12 +353,22 @@ ENEMYOBJ.prototype.collide = function(GAMEOBJECTS, dx, dy)
 ENEMYOBJ.prototype.update = function()
 {
 
-	var t = Date.now();
+	var t = Date.now(),
+			thisScript = this.script[this.counter];
+
+	//chase the whale
+	if (this.suspicion) {
+		thisScript = {
+			type: 0,
+			target: this.lastSeenWhaleX
+		}
+	}
+
 	//if 0 then its a move command
-	if(this.script[this.counter].type == 0 && this.sprite.position.x != this.script[this.counter].target)
+	if(thisScript.type == 0 && this.sprite.position.x != thisScript.target)
 	{
 
-		var xTARGET = this.script[this.counter].target;
+		var xTARGET = thisScript.target;
 
 
 		// Check if you are moving left 
@@ -377,7 +388,7 @@ ENEMYOBJ.prototype.update = function()
 		}
 
 	}
-	else if(this.script[this.counter].type == 0 && this.sprite.position.x == this.script[this.counter].target)
+	else if(thisScript.type == 0 && this.sprite.position.x == thisScript.target && !this.suspicion)
 	{
 		this.counter++;
 	
@@ -387,12 +398,12 @@ ENEMYOBJ.prototype.update = function()
 			
 		}
 	}
-	else if(this.script[this.counter].type == 1 && this.time ==0)
+	else if(thisScript.type == 1 && this.time ==0)
 	{
 		this.time = t;
 		
 	}
-	else if(this.script[this.counter].type == 1 && t- this.time >= this.script[this.counter].target)
+	else if(thisScript.type == 1 && t- this.time >= thisScript.target)
 	{
 		this.counter++;
 		this.time =0;

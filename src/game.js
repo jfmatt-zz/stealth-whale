@@ -205,9 +205,11 @@ app.World.prototype.update = function()
     //console.log(seen.length)
     
     _.each(GAMEOBJECTS, function (o) {
-        if (o instanceof ENEMYOBJ)
+        if (o instanceof ENEMYOBJ) {
             o.sprite.visible = false
-
+            if (o.suspicion)
+                o.suspicion--
+        }
 
     })
 
@@ -225,6 +227,7 @@ app.World.prototype.update = function()
         var gsprite = guard.sprite,
             whale = GAMEOBJECTS[0].sprite;
 
+
         //if they're in visual range
         if (guard.seenDistance <= guard.visionRange
             //and care that you exist
@@ -232,17 +235,19 @@ app.World.prototype.update = function()
             //and don't have to look down
             && gsprite.position.y + gsprite.height >= whale.position.y
             //and are facing the right way
-            && (gsprite.position.x < GAMEOBJECTS[0].position.x) == guard.facingLeft
+            && (gsprite.position.x < whale.position.x) == guard.direction
             ) {
                 //then all guards on this level know about the player
-                console.log(guard.uid + " can see you!");
+//                console.log(guard.uid + " can see you!");
                 spottedLevels[gsprite.position.y + gsprite.height] = true
         }
     })
 
     _.each(GAMEOBJECTS, function (obj) {
         if (obj instanceof ENEMYOBJ && spottedLevels[obj.sprite.position.y + obj.sprite.height]) {
-            console.log(obj.uid + " knows about you!");
+//            console.log(obj.uid + " knows about you!");
+            obj.suspicion += 10
+            obj.lastSeenWhaleX = GAMEOBJECTS[0].sprite.position.x
         }
     })
 
