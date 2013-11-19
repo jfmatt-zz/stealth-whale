@@ -175,7 +175,7 @@ PLAYEROBJ.prototype.update = function(KEYS, foreground)
 				this.frameCount++;
 					
 			}
-			else if(this.sprite.position.y + this.sprite.height > collideObj[floorVal[2]].sprite.position.y +5)
+			else if(this.sprite.position.y + this.sprite.height > collideObj[floorVal[2]].sprite.position.y +5 && this.sprite.position.y + this.sprite.height -80 < collideObj[floorVal[2]].sprite.position.y)
 			{
 				this.sprite.position.x += speed;
 				this.sprite.position.y = collideObj[floorVal[2]].sprite.position.y - this.sprite.height;
@@ -204,7 +204,7 @@ PLAYEROBJ.prototype.update = function(KEYS, foreground)
 				this.frameSwitcher(1, this.lAssets[this.currentRank], 3);
 				this.frameCount++;
 			}
-			else if(this.sprite.position.y +this.sprite.height > collideObj[floorVal[2]].sprite.position.y+5)
+			else if(this.sprite.position.y +this.sprite.height > collideObj[floorVal[2]].sprite.position.y+5 && this.sprite.position.y + this.sprite.height -80 < collideObj[floorVal[2]].sprite.position.y)
 			{
 				this.sprite.position.x -= speed;
 				this.sprite.position.y = collideObj[floorVal[2]].sprite.position.y - this.sprite.height;
