@@ -339,9 +339,9 @@ app.World.prototype.update = function()
         this.renderer.render(this.stage);
         requestAnimFrame(this.update.bind(this));
     } else if (this.gameState == 'LOST') {
-        this.showGameOver('assets/screen_gameover.png');
+        this.showGameOver('assets/screen_gameover.png', 'sound/FinGameOver.mp3');
     } else if (this.gameState == 'WON') {
-        this.showGameOver('assets/screen_youwin.png');
+        this.showGameOver('assets/screen_youwin.png', 'sound/TheDukeofWhales.mp3');
     }
 }
 
@@ -350,7 +350,7 @@ app.World.prototype.loseGame = function () {
 };
 
 // Show a 'GAME OVER' screen.
-app.World.prototype.showGameOver = function (imagePath) {
+app.World.prototype.showGameOver = function (imagePath, soundPath) {
     var stage = new PIXI.Stage();
 
     // Add title image.
@@ -360,7 +360,7 @@ app.World.prototype.showGameOver = function (imagePath) {
     image.scale = new PIXI.Point(0.5, 0.5);
     stage.addChild(image);
 
-    this.playMusic('sound/FinGameOver.mp3');
+    this.playMusic(soundPath);
 
     // Render the stage.
     this.renderer.render(stage);
