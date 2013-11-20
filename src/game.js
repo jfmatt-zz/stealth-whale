@@ -216,7 +216,7 @@ app.World.prototype.game = function()
     var hitler = ITEMOBJ.make({x: ladderL2F3N1.x + ladderL2F3N1.width + 10, y: floorL2F3P2.y - npcHeight, width: npcWidth, height: npcHeight, rank: 3, sprite: 'assets/item_tophat_1.png'}, GAMEOBJECTS);
     hitler.victory = true;
 
-    
+
 
     PLAYER.closestFloor = floorL1F1;
 
