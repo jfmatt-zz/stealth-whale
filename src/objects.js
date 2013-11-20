@@ -62,6 +62,8 @@ PLAYEROBJ.prototype.assets = {
 	rHide: ['assets/whale_R_naked_hide.png', '', 'assets/whale_R_lederhosen_hide.png', 'assets/whale_R_fancy_hide.png']
 };
 
+PLAYEROBJ.prototype.disguiseMusic = ['sound/BlubberBlues.mp3', 'sound/FolkWhale.mp3', 'sound/ScotchAndGingerWhale.mp3'];
+
 PLAYEROBJ.prototype.lAssets = [PLAYEROBJ.prototype.assets.lNAKED, [], PLAYEROBJ.prototype.assets.lLEDERHOSEN, PLAYEROBJ.prototype.assets.lFANCY];
 PLAYEROBJ.prototype.rAssets = [PLAYEROBJ.prototype.assets.rNAKED, [], PLAYEROBJ.prototype.assets.rLEDERHOSEN, PLAYEROBJ.prototype.assets.rFANCY];
 PLAYEROBJ.prototype.hide    = [PLAYEROBJ.prototype.assets.lHide, PLAYEROBJ.prototype.assets.rHide];
@@ -124,6 +126,7 @@ PLAYEROBJ.prototype.floorCheck = function(collideObj)
 				collideObj[i].pickedUp = true;
 
 				this.currentRank = collideObj[i].currentRank;
+				app.world.playMusic(this.disguiseMusic[this.currentRank]);
 				this.right =0;
 				this.left =0;
 			}
