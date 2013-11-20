@@ -336,9 +336,9 @@ app.World.prototype.update = function()
         this.renderer.render(this.stage);
         requestAnimFrame(this.update.bind(this));
     } else if (this.gameState == 'LOST') {
-        this.showGameOver('FIN');
+        this.showGameOver();
     } else if (this.gameState == 'WON') {
-        this.showGameOver('YOU WIN!');
+        this.showWon();
     }
 }
 
@@ -351,23 +351,28 @@ app.World.prototype.showGameOver = function (text) {
     var stage = new PIXI.Stage();
 
     // Add text.
-    var text = new PIXI.Text(text, {font: 'bold 40px Avro', fill: 'white', align: 'center'});
+    var text = new PIXI.Text('FIN', {font: 'bold 40px Avro', fill: 'white', align: 'center'});
     text.position = new PIXI.Point(this.renderer.width / 2, this.renderer.height / 2);
     text.anchor = new PIXI.Point(0.5, 0.5);
     stage.addChild(text);
+
+    this.playMusic('sound/FinGameOver.mp3');
 
     // Render the stage.
     this.renderer.render(stage);
 }
 
+//
 app.World.prototype.showWon = function(text)
 {
     var stage = new PIXI.Stage();
     // Add text.
-    var text = new PIXI.Text(text, {font: 'bold 40px Avro', fill: 'white', align: 'center'});
+    var text = new PIXI.Text('YOU WIN', {font: 'bold 40px Avro', fill: 'white', align: 'center'});
     text.position = new PIXI.Point(this.renderer.width / 2, this.renderer.height / 2);
     text.anchor = new PIXI.Point(0.5, 0.5);
     stage.addChild(text);
+
+    this.playMusic('sound/FinGameOver.mp3');
 
     // Render the stage.
     this.renderer.render(stage);
