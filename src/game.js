@@ -14,6 +14,20 @@ app.World = function() {
     this.showTitleScreen();
 }
 
+// Start playing music. Chrome does not allow seeking unless the server responds to
+// HTTP 206 "Partial Content" requests: http://stackoverflow.com/questions/8088364/html5-video-will-not-loop
+// so looping will only work if the sound object is re-created when it completes.
+app.World.prototype.playMusic = function (music) {
+    if (this.music) {
+        this.music.unbind('ended');
+        this.music.fadeOut(2000);
+    }
+    this.music = new buzz.sound(music);
+    this.music.bind('ended', function () { this.playMusic(music); }.bind(this));
+    this.music.fadeIn(2000);
+    this.music.play();
+};
+
 app.World.prototype.showTitleScreen = function () {
     var doneLoading, hideTitleScreen;
     var titleStage = new PIXI.Stage();
@@ -34,8 +48,7 @@ app.World.prototype.showTitleScreen = function () {
     this.renderer.render(titleStage);
 
     // Play the title music.
-    this.music = new buzz.sound('sound/TheDukeofWhales.mp3');
-    this.music.play().loop();
+    this.playMusic('sound/TheDukeofWhales.mp3');
 
     // When all assets are loaded, let player press space to start the game.
     doneLoading = $.proxy(function () {
@@ -86,8 +99,7 @@ app.World.prototype.startGame = function () {
     this.gameState = 'PLAYING';
 
     // Start the naked whale music.
-    var newMusic = new buzz.sound('sound/BlubberBlues.mp3');
-    this.music.fadeWith(newMusic, 2000);
+    this.playMusic('sound/BlubberBlues.mp3')
 
     this.game();
     this.camera.update();
