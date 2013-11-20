@@ -62,7 +62,7 @@ PLAYEROBJ.prototype.assets = {
 	rHide: ['assets/whale_R_naked_hide.png', '', 'assets/whale_R_lederhosen_hide.png', 'assets/whale_R_fancy_hide.png']
 };
 
-PLAYEROBJ.prototype.disguiseMusic = ['sound/BlubberBlues.mp3', 'sound/FolkWhale.mp3', 'sound/ScotchAndGingerWhale.mp3'];
+PLAYEROBJ.prototype.disguiseMusic = ['sound/BlubberBlues.mp3', '', 'sound/FolkWhale.mp3', 'sound/ScotchAndGingerWhale.mp3'];
 
 PLAYEROBJ.prototype.lAssets = [PLAYEROBJ.prototype.assets.lNAKED, [], PLAYEROBJ.prototype.assets.lLEDERHOSEN, PLAYEROBJ.prototype.assets.lFANCY];
 PLAYEROBJ.prototype.rAssets = [PLAYEROBJ.prototype.assets.rNAKED, [], PLAYEROBJ.prototype.assets.rLEDERHOSEN, PLAYEROBJ.prototype.assets.rFANCY];
@@ -392,6 +392,7 @@ ENEMYOBJ.prototype.update = function()
 	var t = Date.now(),
 	thisScript = this.script[this.counter];
 
+
 	//chase the whale
 	if (this.suspicion) {
 		thisScript = {
@@ -404,18 +405,21 @@ ENEMYOBJ.prototype.update = function()
 	if(thisScript.type == 0 && this.sprite.position.x != thisScript.target)
 	{
 
-		var xTARGET = thisScript.target;
+		var xTARGET = thisScript.target,
+		    distanceToTarget = Math.abs(this.sprite.position.x - xTARGET),
+		    dx = Math.min(speed, distanceToTarget)
 
 
 		// Check if you are moving left 
 		if(this.sprite.position.x - xTARGET > 0)
 		{
 			
-			if(!this.collideAll(GAMEOBJECTS, -speed))
+			if(!this.collideAll(GAMEOBJECTS, -dx))
 			{
 
-				this.sprite.position.x -= speed;
-				this.exclaimSprite.position.x -= speed;
+
+				this.sprite.position.x -= dx;
+				this.exclaimSprite.position.x -= dx;
 				this.frameSwitcher(1, this.lAssets[this.rank], 6);
 				this.direction = 0;
 				this.frameCount++;
@@ -425,10 +429,10 @@ ENEMYOBJ.prototype.update = function()
 		else if(this.sprite.position.x - xTARGET < 0)
 		{
 			
-			if(!this.collideAll(GAMEOBJECTS, speed))
+			if(!this.collideAll(GAMEOBJECTS, dx))
 			{
-				this.sprite.position.x += speed;
-				this.exclaimSprite.position.x += speed;
+				this.sprite.position.x += dx;
+				this.exclaimSprite.position.x += dx;
 				this.frameSwitcher(0, this.rAssets[this.rank], 6);
 				this.direction = 1;
 				this.frameCount++;

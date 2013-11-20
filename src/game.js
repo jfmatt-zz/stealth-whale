@@ -100,7 +100,7 @@ app.World.prototype.startGame = function () {
     this.gameState = 'PLAYING';
 
     // Start the naked whale music.
-    this.playMusic('sound/BlubberBlues.mp3')
+    this.playMusic(PLAYEROBJ.prototype.disguiseMusic[0]);
 
     this.game();
     this.camera.update();
@@ -324,6 +324,8 @@ app.World.prototype.update = function()
 //            console.log(obj.uid + " knows about you!");
             obj.suspicion += GUARD_PARANOIA;
             obj.lastSeenWhaleX = GAMEOBJECTS[0].sprite.position.x
+            if (obj.sprite.position.x > GAMEOBJECTS[0].sprite.position.x)
+                obj.lastSeenWhaleX += GAMEOBJECTS[0].sprite.width
         }
     })
 
