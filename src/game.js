@@ -34,9 +34,8 @@ app.World.prototype.showTitleScreen = function () {
     this.renderer.render(titleStage);
 
     // Play the title music.
-    var music = new buzz.sound('sound/TheDukeofWhales.mp3');
-        
-    music.play().loop();
+    this.music = new buzz.sound('sound/TheDukeofWhales.mp3');
+    this.music.play().loop();
 
     // When all assets are loaded, let player press space to start the game.
     doneLoading = $.proxy(function () {
@@ -48,7 +47,6 @@ app.World.prototype.showTitleScreen = function () {
     // When space is pressed, fade the title screen out and start the game.
     hideTitleScreen = $.proxy(function () {
         $(document).unbind('keypress');
-       // music.fadeOut(2.0, function () { music.stop(); });
         this.startGame();
         return false;
     }, this);
@@ -86,6 +84,10 @@ app.World.prototype.startGame = function () {
 
     // Tracks the state of the game. The run loop checks this to determine whether to continue rendering the game or show the 'win' or 'game over' screens
     this.gameState = 'PLAYING';
+
+    // Start the naked whale music.
+    var newMusic = new buzz.sound('sound/BlubberBlues.mp3');
+    this.music.fadeWith(newMusic, 2000);
 
     this.game();
     this.camera.update();
@@ -259,7 +261,6 @@ app.World.prototype.update = function()
     }
 
     seen = GAMEOBJECTS[0].vision.calc(this.foreground);
-    //console.log(seen.length)
     
     _.each(GAMEOBJECTS, function (o) {
         if (o instanceof ENEMYOBJ) {
@@ -330,7 +331,6 @@ app.World.prototype.update = function()
 }
 
 app.World.prototype.loseGame = function () {
-    console.log("GAME OVER");
     app.world.gameState = 'LOST';
 };
 

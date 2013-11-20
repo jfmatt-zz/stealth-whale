@@ -117,12 +117,9 @@ PLAYEROBJ.prototype.floorCheck = function(collideObj)
 			{
 				app.world.gameState = 'WON';
 				collideObj[i].pickedUp = true;
-				console.log("GAME WON");
 			}
 			else if(collideObj[i] instanceof ITEMOBJ && !collideObj[i].pickedUp)
 			{
-				console.log("PICKED UP ITEM");
-
 				collideObj[i].sprite.visible = false;
 				collideObj[i].pickedUp = true;
 
@@ -300,7 +297,6 @@ PLAYEROBJ.prototype.update = function(KEYS, foreground)
 					foreground.addChildAt(this.sprite, 2);
 					this.vision.radius *= .75
 					this.hiding = true;
-					console.log("HIDING");
 					this.locked = true;
 					var tempArray = this.hide[this.direction];
 					this.lastTexture = this.sprite.texture;
