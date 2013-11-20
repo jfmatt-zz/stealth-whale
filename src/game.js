@@ -30,22 +30,23 @@ app.World.prototype.playMusic = function (music) {
 
 app.World.prototype.showTitleScreen = function () {
     var doneLoading, hideTitleScreen;
-    var titleStage = new PIXI.Stage();
+    var stage = new PIXI.Stage();
 
-    // Add title text.
-    var title = new PIXI.Text('German Whale of Mystery', {font: 'bold 40px Avro', fill: 'white', align: 'center'});
-    title.position = new PIXI.Point(this.renderer.width / 2, (this.renderer.height / 2) - 50);
-    title.anchor = new PIXI.Point(0.5, 0.5);
-    titleStage.addChild(title);
+    // Add title image.
+    var image = new PIXI.Sprite(PIXI.Texture.fromImage('assets/screen_title.png'));
+    image.anchor = new PIXI.Point(0.5, 0.5);
+    image.position = new PIXI.Point(this.renderer.width / 2, this.renderer.height / 2);
+    image.scale = new PIXI.Point(0.5, 0.5);
+    stage.addChild(image);
 
     // Add subtitle text.
     var subtitle = new PIXI.Text('', {font: 'bold italic 40px Avro', fill: 'white', align: 'center'});
-    subtitle.position = new PIXI.Point(this.renderer.width / 2, (this.renderer.height / 2) + 50);
+    subtitle.position = new PIXI.Point(this.renderer.width / 2, this.renderer.height - subtitle.height);
     subtitle.anchor = new PIXI.Point(0.5, 0.5);
-    titleStage.addChild(subtitle);
+    stage.addChild(subtitle);
 
     // Render the stage.
-    this.renderer.render(titleStage);
+    this.renderer.render(stage);
 
     // Play the title music.
     this.playMusic('sound/TheDukeofWhales.mp3');
@@ -53,7 +54,7 @@ app.World.prototype.showTitleScreen = function () {
     // When all assets are loaded, let player press space to start the game.
     doneLoading = $.proxy(function () {
         subtitle.setText('Press space to play.');
-        this.renderer.render(titleStage);
+        this.renderer.render(stage);
         $(document).bind('keypress', 'space', hideTitleScreen);
     }, this);
 
