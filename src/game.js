@@ -66,7 +66,7 @@ app.World.prototype.showTitleScreen = function () {
     }, this);
 
     // Start the asset loader.
-    var assets = []
+    var assets = ['assets/screen_youwin.png', 'assets/screen_gameover.png'];
     _.each([PLAYEROBJ, ENEMYOBJ, ITEMOBJ, HIDEOBJ], function (f) {
         for (var k in f.prototype.assets) {
             assets = assets.concat(_.filter(f.prototype.assets[k], function (arr) { return arr.length }));
@@ -337,9 +337,9 @@ app.World.prototype.update = function()
         this.renderer.render(this.stage);
         requestAnimFrame(this.update.bind(this));
     } else if (this.gameState == 'LOST') {
-        this.showGameOver();
+        this.showGameOver('assets/screen_gameover.png');
     } else if (this.gameState == 'WON') {
-        this.showWon();
+        this.showGameOver('assets/screen_youwin.png');
     }
 }
 
@@ -348,30 +348,15 @@ app.World.prototype.loseGame = function () {
 };
 
 // Show a 'GAME OVER' screen.
-app.World.prototype.showGameOver = function (text) {
+app.World.prototype.showGameOver = function (imagePath) {
     var stage = new PIXI.Stage();
 
-    // Add text.
-    var text = new PIXI.Text('FIN', {font: 'bold 40px Avro', fill: 'white', align: 'center'});
-    text.position = new PIXI.Point(this.renderer.width / 2, this.renderer.height / 2);
-    text.anchor = new PIXI.Point(0.5, 0.5);
-    stage.addChild(text);
-
-    this.playMusic('sound/FinGameOver.mp3');
-
-    // Render the stage.
-    this.renderer.render(stage);
-}
-
-//
-app.World.prototype.showWon = function(text)
-{
-    var stage = new PIXI.Stage();
-    // Add text.
-    var text = new PIXI.Text('YOU WIN', {font: 'bold 40px Avro', fill: 'white', align: 'center'});
-    text.position = new PIXI.Point(this.renderer.width / 2, this.renderer.height / 2);
-    text.anchor = new PIXI.Point(0.5, 0.5);
-    stage.addChild(text);
+    // Add title image.
+    var image = new PIXI.Sprite(PIXI.Texture.fromImage(imagePath));
+    image.anchor = new PIXI.Point(0.5, 0.5);
+    image.position = new PIXI.Point(this.renderer.width / 2, this.renderer.height / 2);
+    image.scale = new PIXI.Point(0.5, 0.5);
+    stage.addChild(image);
 
     this.playMusic('sound/FinGameOver.mp3');
 
