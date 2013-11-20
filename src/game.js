@@ -50,6 +50,7 @@ app.World.prototype.showTitleScreen = function () {
         $(document).unbind('keypress');
        // music.fadeOut(2.0, function () { music.stop(); });
         this.startGame();
+        return false;
     }, this);
 
     // Start the asset loader.
@@ -74,7 +75,13 @@ app.World.prototype.startGame = function () {
     var keyName = function (event) {
         return jQuery.hotkeys.specialKeys[event.which] || String.fromCharCode(event.which).toLowerCase();
     };
-    $(document).bind('keydown', function (event) { this.keys[keyName(event)] = true; }.bind(this));
+    $(document).bind('keydown', function (event) {
+        var key = keyName(event);
+        this.keys[key] = true;
+        if (key == 'space') {
+            return false;
+        }
+    }.bind(this));
     $(document).bind('keyup', function (event) { this.keys[keyName(event)] = false; }.bind(this));
 
     // Tracks the state of the game. The run loop checks this to determine whether to continue rendering the game or show the 'win' or 'game over' screens
