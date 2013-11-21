@@ -62,7 +62,7 @@ PLAYEROBJ.prototype.assets = {
 	rHide: ['assets/whale_R_naked_hide.png', '', 'assets/whale_R_lederhosen_hide.png', 'assets/whale_R_fancy_hide.png']
 };
 
-PLAYEROBJ.prototype.disguiseMusic = ['sound/BlubberBlues.mp3', '', 'sound/FolkWhale.mp3', 'sound/ScotchAndGingerWhale.mp3'];
+PLAYEROBJ.prototype.disguiseMusic = ['sound/TheDukeofWhales.mp3', '', 'sound/FolkWhale.mp3', 'sound/ScotchAndGingerWhale.mp3'];
 
 PLAYEROBJ.prototype.lAssets = [PLAYEROBJ.prototype.assets.lNAKED, [], PLAYEROBJ.prototype.assets.lLEDERHOSEN, PLAYEROBJ.prototype.assets.lFANCY];
 PLAYEROBJ.prototype.rAssets = [PLAYEROBJ.prototype.assets.rNAKED, [], PLAYEROBJ.prototype.assets.rLEDERHOSEN, PLAYEROBJ.prototype.assets.rFANCY];

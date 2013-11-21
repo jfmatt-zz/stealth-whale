@@ -49,7 +49,7 @@ app.World.prototype.showTitleScreen = function () {
     this.renderer.render(stage);
 
     // Play the title music.
-    this.playMusic('sound/TheDukeofWhales.mp3');
+    this.playMusic('sound/BlubberBlues.mp3');
 
     // When all assets are loaded, let player press space to start the game.
     doneLoading = $.proxy(function () {
