@@ -7,10 +7,39 @@ var GUARD_PARANOIA = 5;
 var GAMEOBJECTS = [];
 var NPCOBJECTS = [];
 
+// Manages state of sounds and rotates them when they're done playing.
+app.SoundManager = function () {
+    this.loaded = false;
+    this.sounds = {
+        'walk': {'index': 0, 'playing': false, 'sounds': ['sound/WhaleWalk-01.mp3', 'sound/WhaleWalk-02.mp3', 'sound/WhaleWalk-03.mp3']},
+        'nein': {'index': 0, 'playing': false, 'sounds': ['sound/Nein-01.mp3', 'sound/Nein-02.mp3', 'sound/Nein-03.mp3', 'sound/Nein-04.mp3', 'sound/Nein-05.mp3']}
+    }
+};
+
+// Play a sound in the given sound rotation if one is not already playing. 
+app.SoundManager.prototype.playSound = function (soundName) {
+    // Do nothing if the sound is already playing.
+    var soundData = this.sounds[soundName];
+    if (soundData.playing) {
+        return;
+    }
+
+    // Move to the next sound in the sequence and play it.
+    soundData.playing = true;
+    var sound = new buzz.sound(soundData.sounds[soundData.index]);
+    console.log('Playing ' + soundData.sounds[soundData.index]);
+    sound.bind('ended', function () {
+        soundData.playing = false;
+        soundData.index = (soundData.index + 1) % soundData.sounds.length;
+    });
+    sound.play();
+};
+
 app.World = function() {
     this.size = new PIXI.Rectangle(0, 0, X, Y);
     this.camera = new app.Camera(this, 980, 720);
     this.renderer = new PIXI.CanvasRenderer(this.camera.view.width, this.camera.view.height, $('#game')[0]);
+    this.soundManager = new app.SoundManager();
     this.showTitleScreen();
 }
 
@@ -302,8 +331,10 @@ app.World.prototype.update = function()
             return
 
         guard.sprite.visible = true
-        if (guard.suspicion)
+        if (guard.suspicion) {
             guard.exclaimSprite.visible = true
+            app.world.soundManager.playSound('nein');
+        }
 
         var gsprite = guard.sprite,
             whale = GAMEOBJECTS[0].sprite;

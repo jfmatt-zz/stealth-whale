@@ -185,7 +185,7 @@ PLAYEROBJ.prototype.update = function(KEYS, foreground)
 				this.sprite.position.x += speed;
 				this.frameSwitcher(0, this.rAssets[this.currentRank],3);
 				this.frameCount++;
-					
+				app.world.soundManager.playSound('walk');
 			}
 			else if(this.sprite.position.y + this.sprite.height > collideObj[floorVal[2]].sprite.position.y +5 && this.sprite.position.y + this.sprite.height -80 < collideObj[floorVal[2]].sprite.position.y)
 			{
@@ -222,6 +222,8 @@ PLAYEROBJ.prototype.update = function(KEYS, foreground)
 				this.sprite.position.y = collideObj[floorVal[2]].sprite.position.y - this.sprite.height;
 				this.frameSwitcher(1, this.lAssets[this.currentRank], 3);
 				this.frameCount++;
+				app.world.soundManager.playSound('walk');
+
 			}
 			this.direction = 0;
 			
