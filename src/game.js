@@ -29,52 +29,64 @@ app.World.prototype.playMusic = function (music) {
 };
 
 app.World.prototype.showTitleScreen = function () {
-    var doneLoading, hideTitleScreen;
+    var titleImageLoaded, levelAssetsLoaded, hideTitleScreen;
+    console.log('showTitleScreen');
+
+    // Prepare the stage and subtitle text.
     var stage = new PIXI.Stage();
-
-    // Add title image.
-    var image = new PIXI.Sprite(PIXI.Texture.fromImage('assets/screen_title.png'));
-    image.anchor = new PIXI.Point(0.5, 0.5);
-    image.position = new PIXI.Point(this.renderer.width / 2, this.renderer.height / 2);
-    image.scale = new PIXI.Point(0.5, 0.5);
-    stage.addChild(image);
-
-    // Add subtitle text.
-    var subtitle = new PIXI.Text('', {font: 'bold italic 40px Avro', fill: 'white', align: 'center'});
+    var subtitle = new PIXI.Text('Loading...', {font: 'bold italic 40px Avro', fill: 'white', align: 'center'});
     subtitle.position = new PIXI.Point(this.renderer.width / 2, this.renderer.height - subtitle.height);
     subtitle.anchor = new PIXI.Point(0.5, 0.5);
     stage.addChild(subtitle);
 
-    // Render the stage.
-    this.renderer.render(stage);
+    // Render the title screen and start loading the level assets.
+    titleImageLoaded = function () {
+        console.log('Title image loaded');
 
-    // Play the title music.
-    this.playMusic('sound/BlubberBlues.mp3');
+        // Add title image and render the stage.
+        var image = new PIXI.Sprite(PIXI.Texture.fromImage('assets/screen_title.png'));
+        image.anchor = new PIXI.Point(0.5, 0.5);
+        image.position = new PIXI.Point(this.renderer.width / 2, this.renderer.height / 2);
+        image.scale = new PIXI.Point(0.5, 0.5);
+        stage.addChildAt(image, 0);
+        this.renderer.render(stage);
 
-    // When all assets are loaded, let player press space to start the game.
-    doneLoading = $.proxy(function () {
+        // Begin loading the level assets.
+        var assets = ['assets/screen_youwin.png', 'assets/screen_gameover.png', 'assets/background.png'];
+        _.each([PLAYEROBJ, ENEMYOBJ, ITEMOBJ, HIDEOBJ], function (f) {
+            for (var k in f.prototype.assets) {
+                assets = assets.concat(_.filter(f.prototype.assets[k], function (arr) { return arr.length }));
+            }
+        })
+        var levelAssetLoader = new PIXI.AssetLoader(assets);
+        levelAssetLoader.onComplete = levelAssetsLoaded;
+        levelAssetLoader.load();
+
+        // Play the title music.
+        this.playMusic('sound/BlubberBlues.mp3');
+    }.bind(this);
+
+    // Set the subtitle and listen for a spacebar keypress.
+    levelAssetsLoaded = function () {
+        console.log('Level assets loaded');
+
         subtitle.setText('Press space to play.');
         this.renderer.render(stage);
         $(document).bind('keypress', 'space', hideTitleScreen);
-    }, this);
+    }.bind(this);
 
     // When space is pressed, fade the title screen out and start the game.
-    hideTitleScreen = $.proxy(function () {
+    hideTitleScreen = function () {
         $(document).unbind('keypress');
         this.startGame();
         return false;
-    }, this);
+    }.bind(this);
 
-    // Start the asset loader.
-    var assets = ['assets/screen_youwin.png', 'assets/screen_gameover.png'];
-    _.each([PLAYEROBJ, ENEMYOBJ, ITEMOBJ, HIDEOBJ], function (f) {
-        for (var k in f.prototype.assets) {
-            assets = assets.concat(_.filter(f.prototype.assets[k], function (arr) { return arr.length }));
-        }
-    })
-    var assetLoader = new PIXI.AssetLoader(assets);
-    assetLoader.onComplete = doneLoading;
-    assetLoader.load();
+    // Load the title image.
+    var titleImagePath = 'assets/screen_title.png';
+    var titleAssetLoader = new PIXI.AssetLoader([titleImagePath]);
+    titleAssetLoader.onComplete = titleImageLoaded;
+    titleAssetLoader.load();
 };
 
 app.World.prototype.startGame = function () {
