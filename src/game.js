@@ -30,7 +30,6 @@ app.World.prototype.playMusic = function (music) {
 
 app.World.prototype.showTitleScreen = function () {
     var titleImageLoaded, levelAssetsLoaded, hideTitleScreen;
-    console.log('showTitleScreen');
 
     // Prepare the stage and subtitle text.
     var stage = new PIXI.Stage();
@@ -41,8 +40,6 @@ app.World.prototype.showTitleScreen = function () {
 
     // Render the title screen and start loading the level assets.
     titleImageLoaded = function () {
-        console.log('Title image loaded');
-
         // Add title image and render the stage.
         var image = new PIXI.Sprite(PIXI.Texture.fromImage('assets/screen_title.png'));
         image.anchor = new PIXI.Point(0.5, 0.5);
@@ -68,8 +65,6 @@ app.World.prototype.showTitleScreen = function () {
 
     // Set the subtitle and listen for a spacebar keypress.
     levelAssetsLoaded = function () {
-        console.log('Level assets loaded');
-
         subtitle.setText('Press space to play.');
         this.renderer.render(stage);
         $(document).bind('keypress', 'space', hideTitleScreen);
