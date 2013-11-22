@@ -331,14 +331,12 @@ app.World.prototype.update = function()
             return
 
         guard.sprite.visible = true
-        if (guard.suspicion) {
-            guard.exclaimSprite.visible = true
-            app.world.soundManager.playSound('nein');
-        }
 
         var gsprite = guard.sprite,
             whale = GAMEOBJECTS[0].sprite;
 
+        if (guard.suspicion)
+            guard.exclaimSprite.visible = true
 
         //if they're in visual range
         if (guard.seenDistance <= guard.visionRange
@@ -354,6 +352,12 @@ app.World.prototype.update = function()
                 //then all guards on this level know about the player
 //                console.log(guard.uid + " can see you!");
                 spottedLevels[gsprite.position.y + gsprite.height] = true
+
+                //if you were just noticed, announce it
+                if (!guard.suspicion) {
+                    app.world.soundManager.playSound('nein');
+                }
+
         }
     })
 
