@@ -1,7 +1,5 @@
 var app = app || {};
 
-// How fast the whale moves.
-var speed = 2.5;
 
 var WALLOBJ = function () {
 	GAMEOBJ.apply(this, arguments);
@@ -233,7 +231,6 @@ PLAYEROBJ.prototype.update = function(KEYS, foreground)
 			this.direction = 0;
 			
 
-			
 		}
 	}
 		
