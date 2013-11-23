@@ -630,13 +630,79 @@ function makeLevels (whaleHeight, go) {
         width: npcWidth,
         height: npcHeight,
         rank: 3
-    });
+    }),
 
     //TODO: 10 NPCs for level 3
+    //3 on the bottom floor
+    npcL3F1N1 = npc({
+        x: wallWidth,
+        bottom: floorL3F1.y,
+        rank: 3, //fancy
+        script: [
+            {'move': ladderL3F2.x + ladderWidth },
+            {'move': wallWidth + 5}
+        ]
+    }),
+    npcL3F1N2 = npc({
+        x: ladderL3F2.x,
+        bottom: floorL3F1.y,
+        rank: 1, // uniform
+        script: [
+            {'move': hideL3F1N2.x + 200 },
+            {'move': hideL3F1N1.x }
+        ]
+    }),
+    npcL3F1N3 = npc({
+        x: ladderL3F3N2.x,
+        bottom: floorL3F1.y,
+        rank: 1, //uniform
+        script: [
+            {'move': rightWall.x - npcWidth},
+            {'move': ladderL3F3N2.x}
+        ]
+    }),
+    //1 pacing in the middle left
+    npcL3F3N1 = npc({
+        x: wallL3F2N1.x + wallWidth,
+        bottom: floorL3F3P1.y,
+        rank: 1, //uniform
+        script: [
+            {'move': wallL3F2N2.x - npcWidth},
+            {'move': wallL3F2N1.x + wallWidth}
+        ]
+    }),
+    //1 stationary lederhosen
+    npcL3F3N2 = npc({
+        x: wallL3F2N2.x + wallWidth,
+        bottom: floorL3F3P1.y,
+        rank: 2, //lederhosen
+        script: [
+            {'move': wallL3F2N2.x + wallWidth},
+            {'move': wallL3F2N2.x + wallWidth + 1},
+            {'wait': 5000}
+        ]
+    }),
+    //1 pacing lederhosen on floor 5
+    npcL3F5N1 = npc({
+        x: floorL3F5P1.x,
+        bottom: floorL3F5P1.y,
+        rank: 2, //lederhosen
+        script: [
+            {'move': floorL3F5P1.x},
+            {'move': floorL3F3P5.x + floorL3F3P5.width - npcWidth }
+        ]
+    }),
+    //1 pacing fancy at the top
+    npcL3F6N1 = npc({
+        x: floorL3F6P1.x,
+        bottom: floorL3F6P1.y,
+        rank: 3, //fancy
+        script: [
+            {'move': floorL3F6P1.x},
+            {'move': floorL3F6P5.x + floorL3F6P5.width - npcWidth}
+        ]
+    })
 
-
-
-    //TODO: Make this up to L3F5
     //TODO: add Hitler assets for item
     //TODO: add real Hitler on L3F7
 //    hitler.victory = true;
