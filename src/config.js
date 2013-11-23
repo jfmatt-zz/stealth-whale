@@ -17,3 +17,5 @@ var GUARD_PARANOIA = 5;
 
 // How fast the whale moves.
 var speed = 2.5;
+
+var GODMODE = false;

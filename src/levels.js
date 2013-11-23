@@ -355,10 +355,10 @@ function makeLevels (whaleHeight, go) {
         x: floorL3F2P2.x + floorL3F2P2.width,
         y: floorL3F2P1.y,
         width: 500 - ladderWidth - npcWidth
-    })
+    }),
 
     //floor 3 goes across all floating boxes
-    var floorL3F3P1 = floor({
+    floorL3F3P1 = floor({
         x: floorL3F2P1.x,
         y: floorL3F1.y - (2 * ladderHeight),
         width: 500 - npcWidth - ladderWidth
@@ -592,21 +592,52 @@ function makeLevels (whaleHeight, go) {
         x: floorL3F6P4.x,
         upper: floorL3F6P4,
         lower: floorL3F5P5
-    })
+    }),
 
-    //TODO: 5 hiding spots for level 3
+    //5 hiding spots for level 3
+    //3 on the bottom floor
+    hideL3F1N1 = hide({
+        x: (ladderL3F2.x + ladderL3F3N2.x - 100) / 2,
+        bottom: floorL3F1.y,
+        itemID: 4 //fern
+    }),
+    hideL3F1N2 = hide({
+        x: (ladderL2F3N1.x  - ladderL3F3N2.x) / 3 + ladderL3F3N2.x - 40,
+        bottom: floorL3F1.y,
+        itemID: 5 //tree
+    }),
+    hideL3F1N3 = hide({
+        x: 2 * ((ladderL2F3N1.x  - ladderL3F3N2.x) / 3) + ladderL3F3N2.x - 20,
+        bottom: floorL3F1.y,
+        itemID: 5 //tree
+    }),
+    //one each in the two left-hand boxes with guards
+    hideL3F3N1 = hide({
+        x: floorL3F3P1.x + 200,
+        y: floorL3F3P1.y - whaleHeight,
+        itemID: 2 // SS flag
+    }),
+    hideL3F4N1 = hide({
+        x: floorL3F4P1.x + 250,
+        bottom: floorL3F4P1.y,
+        itemID: 3 // cactus
+    }),
 
-    //TODO: 10 NPCs for level 3
-
-    //TODO: Make this up to L3F5
-    //TODO: add Hitler assets for item
-    //TODO: add real Hitler on L3F7
-    var hitler = item({
-        x: ladderL2F3N1.x + ladderL2F3N1.width + 10,
-        y: floorL2F3P2.y - npcHeight,
+    //Fancy suit is on floor 5
+    fancy = item({
+        x: (ladderL3F5N2.x + ladderL3F6N2.x) / 2,
+        bottom: floorL3F5P1.y,
         width: npcWidth,
         height: npcHeight,
         rank: 3
     });
-    hitler.victory = true;
+
+    //TODO: 10 NPCs for level 3
+
+
+
+    //TODO: Make this up to L3F5
+    //TODO: add Hitler assets for item
+    //TODO: add real Hitler on L3F7
+//    hitler.victory = true;
 }

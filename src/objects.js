@@ -238,9 +238,9 @@ PLAYEROBJ.prototype.update = function(KEYS, foreground)
 	 {
 	 	collideObj = this.collide(GAMEOBJECTS,0 ,2*speed);
 		ladderVal = this.ladderCheck(collideObj);
-		if(!ladderVal[0] && ladderVal[1] != -1 && !this.locked)
+		if(GODMODE || !ladderVal[0] && ladderVal[1] != -1 && !this.locked)
 		{
-			if(this.sprite.position.y + this.sprite.height + 2*speed   <= collideObj[ladderVal[1]].sprite.position.y + collideObj[ladderVal[1]].sprite.height)
+			if(GODMODE || this.sprite.position.y + this.sprite.height + 2*speed   <= collideObj[ladderVal[1]].sprite.position.y + collideObj[ladderVal[1]].sprite.height)
 			{
 				this.sprite.position.y += 2*speed;
 				this.frameSwitcher(3, this.climbAssets[this.currentRank], 3);
@@ -261,10 +261,10 @@ PLAYEROBJ.prototype.update = function(KEYS, foreground)
 	{
 		collideObj = this.collide(GAMEOBJECTS,0 ,-(2*speed));
 		ladderVal = this.ladderCheck(collideObj);
-		if(!ladderVal[0] && ladderVal[1] != -1 && !this.locked)
+		if(GODMODE || !ladderVal[0] && ladderVal[1] != -1 && !this.locked)
 		{
 			
-			if(this.sprite.position.y + this.sprite.height -(2*speed) >= collideObj[ladderVal[1]].sprite.position.y)
+			if(GODMODE || this.sprite.position.y + this.sprite.height -(2*speed) >= collideObj[ladderVal[1]].sprite.position.y)
 			{
 					//sets that you are on the ladder to true, so that you cant walk off the side of the ladder
 					//then adjusts the thiss y coordinate 
@@ -543,8 +543,8 @@ HIDEOBJ.prototype.assets = {
 };
 
 HIDEOBJ.prototype.cycles = [HIDEOBJ.prototype.assets.FLAG1,HIDEOBJ.prototype.assets.FLAG2,HIDEOBJ.prototype.assets.FLAG3, HIDEOBJ.prototype.assets.CACTUS, HIDEOBJ.prototype.assets.FERN,HIDEOBJ.prototype.assets.TREE]
-HIDEOBJ.widths =  [100, 100, 100]
-HIDEOBJ.heights = [112, 140, 125]
+HIDEOBJ.widths =  [100, 100, 100,  95, 100,  88]
+HIDEOBJ.heights = [112, 140, 125, 230, 141, 132]
 
 HIDEOBJ.prototype.update = function()
 {
