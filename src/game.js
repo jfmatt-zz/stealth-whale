@@ -1,7 +1,7 @@
 var app = app || {};
 
 var X = 2000;
-var Y = 2000;
+var Y = 3000;
 var GUARD_PARANOIA = 5;
 
 var GAMEOBJECTS = [];
@@ -243,11 +243,10 @@ app.World.prototype.game = function()
     var floorL2F3P3 = FLOOROBJ.make({x: ladderL2F3N1.x + ladderL2F3N1.width, y: ladderL2F3N1.y, width: X - (ladderL2F3N1.x+ladderL2F3N1.width), height: floorHeight}, GAMEOBJECTS);
     var wallL2F3P4 = GAMEOBJ.make({x:ladderL2F2N2.x + ladderL2F2N2.width + 80, y: floorL2F3P3.y, width: wallWidth, height: floorL2F2P8.y - floorL2F3P3.y, solid: true, hideable: false, sprite: 'assets/Floor.png', tiled: true}, GAMEOBJECTS);
 
-    var npcL2F3N1Script = [{'wait': 3000}, {'move': ladderL2F2N3.x - 49}, {'wait': 3000}, {'move': ladderL2F2N3.x - 50}];
+    var npcL2F3N1Script = [{'wait': 3000}, {'move': ladderL2F2N3.x - 50}];
     var npcL2F3N1 = ENEMYOBJ.make({x: ladderL2F2N3.x - 50, y: floorL2F2P2.y - npcHeight, sprite:'assets/soldierLEDERHOSEN_L_stand.png', script: npcL2F3N1Script, rank: 2}, GAMEOBJECTS, NPCOBJECTS);
     var npcL2F2N4Script = [{'move': ladderL2F2N1.x - 60}, {'wait': 1500}, {'move': ladderL2F3N1.x - 50}];
     var npcL2F2N4 = ENEMYOBJ.make({x: ladderL2F2N3.x - 70, y: floorL2F1P1.y - npcHeight, sprite: 'assets/soldierNOGUN_L_stand.png', script: npcL2F2N4Script, rank: 1}, GAMEOBJECTS, NPCOBJECTS);
-
 
     var hitler = ITEMOBJ.make({x: ladderL2F3N1.x + ladderL2F3N1.width + 10, y: floorL2F3P2.y - npcHeight, width: npcWidth, height: npcHeight, rank: 3, sprite: 'assets/item_tophat_1.png'}, GAMEOBJECTS);
     hitler.victory = true;
