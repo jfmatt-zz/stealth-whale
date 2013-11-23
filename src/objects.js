@@ -570,6 +570,9 @@ var makeObject = function (type, options, objectArray) {
 	sprite.width = options.width;
 	sprite.height = options.height;
 
+	if (options.bottom && !options.y)
+		options.y = options.bottom - options.height;
+
 	var object = new type(options.x, options.y, options.width, options.height, options.solid, options.hideable, sprite);
 	objectArray.push(object);
 

@@ -308,7 +308,7 @@ function makeLevels (whaleHeight, go) {
     }),
     wallL2F3P4 = wall({
         x:ladderL2F2N2.x + ladderL2F2N2.width + 80,
-        y: floorL2F3P3.y,
+        y: floorL2F3P3.y + 1,
         height: floorL2F2P8.y - floorL2F3P3.y,
     }),
 
@@ -342,7 +342,7 @@ function makeLevels (whaleHeight, go) {
     //second floor is small
     floorL3F2P1 = floor({
         x: 400,
-        y: floorL3F1 - ladderHeight,
+        y: floorL3F1.y - ladderHeight,
         width: 100
     }),
     floorL3F2P2 = floor({
@@ -355,13 +355,15 @@ function makeLevels (whaleHeight, go) {
         x: floorL3F2P2.x + floorL3F2P2.width,
         y: floorL3F2P1.y,
         width: 400 - ladderWidth
-    }),
+    })
+
+    console.log(floorL3F2P1);
 
 
     //floor 3 goes across all floating boxes
-    floorL3F3P1 = floor({
+    var floorL3F3P1 = floor({
         x: floorL3F2P1.x,
-        y: floorL3F1 - (2 * ladderHeight),
+        y: floorL3F1.y - (2 * ladderHeight),
         width: 500 - npcWidth - ladderHeight
     }),
     floorL3F3P2 = floor({
@@ -395,19 +397,102 @@ function makeLevels (whaleHeight, go) {
         y: floorL3F1.y - (3 * ladderHeight),
         width: npcWidth
     }),
-
-    //TODO: 6 more floor segmnents
+    floorL3F4P2 = floor({
+        x: floorL3F4P1.x + floorL3F4P1.width,
+        y: floorL3F4P1.y,
+        width: ladderWidth,
+        transparent: true
+    }),
+    floorL3F4P3 = floor({
+        x: floorL3F4P2.x + floorL3F4P2.width,
+        y: floorL3F4P1.y,
+        width: 2 * (500 - ladderWidth - npcWidth)
+    }),
+    floorL3F4P4 = floor({
+        x: floorL3F4P3.x + floorL3F4P3.width,
+        y: floorL3F4P1.y,
+        width: ladderWidth,
+        transparent: true
+    }),
+    floorL3F4P5 = floor({
+        x: floorL3F4P4.x + floorL3F4P4.width,
+        y: floorL3F4P1.y,
+        width: 500 - ladderWidth
+    }),
+    floorL3F4P6 = floor({
+        x: floorL3F4P5.x + floorL3F4P5.width,
+        y: floorL3F4P1.y,
+        width: ladderWidth,
+        transparent: true
+    }),
+    floorL3F4P7 = floor({
+        x: floorL3F4P6.x + floorL3F4P6.width,
+        y: floorL3F4P1.y,
+        width: npcWidth
+    });
 
     //floor 5 has 2 ladders, one from each upper box
-    //TODO: floor 5
+    var floorL3F5P1 = floor({
+        x: floorL3F2P1.x + 500,
+        y: floorL3F1.y - (4 * ladderHeight),
+        width: npcWidth
+    }),
+    floorL3F5P2 = floor({
+        x: floorL3F5P1.x + floorL3F5P1.width,
+        y: floorL3F5P1.y,
+        width: ladderWidth,
+        transparent: true
+    }),
+    floorL3F5P3 = floor({
+        x: floorL3F5P2.x + floorL3F5P2.width,
+        y: floorL3F5P1.y,
+        width: 500 - ladderWidth
+    }),
+    floorL3F5P4 = floor({
+        x: floorL3F5P3.x + floorL3F5P3.width,
+        y: floorL3F5P1.y,
+        width: ladderWidth,
+        transparent: true
+    }),
+    floorL3F5P5 = floor({
+        x: floorL3F5P4.x + floorL3F5P4.width,
+        y: floorL3F5P1.y,
+        width: 500 - ladderWidth - npcWidth
+    }),
 
     //floor 6 has 2 ladders coming up from floor 5
-    //TODO: floor 6
+    floorL3F6P1 = floor({
+        x: floorL3F5P1.x,
+        y: floorL3F1.y - (5 * ladderHeight),
+        width: 500 - ladderWidth - npcWidth
+    }),
+    floorL3F6P2 = floor({
+        x: floorL3F6P1.x + floorL3F6P1.width,
+        y: floorL3F6P1.y,
+        width: ladderWidth,
+        transparent: true
+    }),
+    floorL3F6P3 = floor({
+        x: floorL3F6P2.x + floorL3F6P2.width,
+        y: floorL3F6P1.y,
+        width: 500 - ladderWidth
+    }),
+    floorL3F6P4 = floor({
+        x: floorL3F6P3.x + floorL3F6P3.width,
+        y: floorL3F6P1.y,
+        width: ladderWidth,
+        transparent: true
+    }),
+    floorL3F6P5 = floor({
+        x: floorL3F6P4.x + floorL3F6P4.width,
+        y: floorL3F6P1.y,
+        width: npcWidth
+    }),
 
     //top floor - just the big ladder, otherwise covers the whole screen
     floorL3F7P1 = floor({
         x: leftWall.width,
-        y: floorL3F1 - (6 * ladderHeight),
+        y: floorL3F1.y - (6 * ladderHeight),
         width: npcWidth
     }),
     floorL3F7P2 = floor({
@@ -420,10 +505,27 @@ function makeLevels (whaleHeight, go) {
         x: floorL3F7P2.x + floorL3F7P2.width,
         y: floorL3F7P1.y,
         width: rightWall.x - (floorL3F7P2.x + floorL3F7P2.width)
-    })
+    }),
 
 
-    //TODO: 4 walls for level 3
+    //4 walls for level 3
+    //left and right sides of leftmost boxes
+    wallL3F2N1 = wall({
+        x: floorL3F4P1.x - wallWidth,
+        y: floorL3F4P1.y + 1,
+        height: 2 * ladderHeight + floorHeight
+    }),
+    wallL3F2N2 = wall({
+        x: floorL3F4P1.x - wallWidth + 500,
+        y: floorL3F4P1.y + 1,
+        height: 2 * ladderHeight + floorHeight - 1
+    }),
+    //one splitting floor 4 into two pieces
+    wallL3F4N1 = wall({
+        x: floorL3F5P1.x + 500,
+        y: floorL3F5P1.y + 1,
+        height: ladderHeight + floorHeight - 1
+    }),
 
     //big ladder up the left
     ladderL3F8N1 = ladder({
