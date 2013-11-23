@@ -545,8 +545,10 @@ function makeLevels (whaleHeight, go) {
 
     //TODO: 5 hiding spots for level 3
 
+    //TODO: 10 NPCs for level 3
+
     //TODO: Make this up to L3F5
-    //TODO: add HItler assets for item
+    //TODO: add Hitler assets for item
     //TODO: add real Hitler on L3F7
     var hitler = item({
         x: ladderL2F3N1.x + ladderL2F3N1.width + 10,
