@@ -706,4 +706,16 @@ function makeLevels (whaleHeight, go) {
     //TODO: add Hitler assets for item
     //TODO: add real Hitler on L3F7
 //    hitler.victory = true;
+
+
+    hitler = item({
+        // x: rightWall.x - 300,
+        // y: floorL3F7P3.y - npcHeight,
+        x: 900,
+        y: floorL1F1.y - npcHeight,
+        width: npcWidth,
+        height: npcHeight,
+        rank: 4       
+    });
+    hitler.victory = true;
 }
