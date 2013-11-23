@@ -3,6 +3,11 @@ var app = app || {};
 // How fast the whale moves.
 var speed = 2.5;
 
+var WALLOBJ = function () {
+	GAMEOBJ.apply(this, arguments);
+}
+WALLOBJ.prototype = new GAMEOBJ();
+
 var LADDEROBJ = function(){
 	GAMEOBJ.apply(this, arguments);
 }
@@ -185,7 +190,7 @@ PLAYEROBJ.prototype.update = function(KEYS, foreground)
 				this.sprite.position.x += speed;
 				this.frameSwitcher(0, this.rAssets[this.currentRank],3);
 				this.frameCount++;
-				app.world.soundManager.playSound('walk');
+//				app.world.soundManager.playSound('walk');
 			}
 			else if(this.sprite.position.y + this.sprite.height > collideObj[floorVal[2]].sprite.position.y +5 && this.sprite.position.y + this.sprite.height -80 < collideObj[floorVal[2]].sprite.position.y)
 			{
@@ -215,6 +220,7 @@ PLAYEROBJ.prototype.update = function(KEYS, foreground)
 				this.sprite.position.x -= speed;
 				this.frameSwitcher(1, this.lAssets[this.currentRank], 3);
 				this.frameCount++;
+//				app.world.soundManager.playSound('walk');
 			}
 			else if(this.sprite.position.y +this.sprite.height > collideObj[floorVal[2]].sprite.position.y+5 && this.sprite.position.y + this.sprite.height -80 < collideObj[floorVal[2]].sprite.position.y)
 			{
@@ -222,7 +228,6 @@ PLAYEROBJ.prototype.update = function(KEYS, foreground)
 				this.sprite.position.y = collideObj[floorVal[2]].sprite.position.y - this.sprite.height;
 				this.frameSwitcher(1, this.lAssets[this.currentRank], 3);
 				this.frameCount++;
-				app.world.soundManager.playSound('walk');
 
 			}
 			this.direction = 0;
@@ -498,14 +503,14 @@ ITEMOBJ.prototype.assets = {
 };
 
 
-ITEMOBJ.prototype.inView = [[],ITEMOBJ.prototype.assets.inViewLEDER, ITEMOBJ.prototype.assets.inViewFANCY];
+ITEMOBJ.prototype.inView = [[],[],ITEMOBJ.prototype.assets.inViewLEDER, ITEMOBJ.prototype.assets.inViewFANCY];
 
 
 ITEMOBJ.prototype.chooseSpriteSheet = function (sheetnum) {
 
 	if(sheetnum == 1)
 	{
-		this.frameSwitcher(99, this.inView[this.currentRank-1], 6);
+		this.frameSwitcher(99, this.inView[this.currentRank], 6);
 		this.frameCount++;
 		this.sheetnum = 0;
 		
@@ -542,6 +547,8 @@ HIDEOBJ.prototype.assets = {
 };
 
 HIDEOBJ.prototype.cycles = [HIDEOBJ.prototype.assets.FLAG1,HIDEOBJ.prototype.assets.FLAG2,HIDEOBJ.prototype.assets.FLAG3, HIDEOBJ.prototype.assets.CACTUS, HIDEOBJ.prototype.assets.FERN,HIDEOBJ.prototype.assets.TREE]
+HIDEOBJ.widths =  [100, 100, 100]
+HIDEOBJ.heights = [112, 140, 125]
 
 HIDEOBJ.prototype.update = function()
 {
@@ -563,49 +570,88 @@ var SCRIPTOBJ = function(type, target)
 var makeObject = function (type, options, objectArray) {
 	var texture = PIXI.Texture.fromImage(options.sprite);
 	var sprite = options.tiled ? new PIXI.TilingSprite(texture) : new PIXI.Sprite(texture);
+
 	sprite.width = options.width;
 	sprite.height = options.height;
+
 	var object = new type(options.x, options.y, options.width, options.height, options.solid, options.hideable, sprite);
-	object.closestFloor = options.floor;
 	objectArray.push(object);
+
 	return object;
 };
 
 // Factory functions for each object type.
 GAMEOBJ.make = function (options, objectArray) { return makeObject(GAMEOBJ, options, objectArray); };
 ITEMOBJ.make = function (options, objectArray) {
+
+	options = _.defaults(options, {
+		sprite: ITEMOBJ.prototype.inView[options.rank][0],
+		tiled: false,
+		height: 40,
+		width: 40
+	})
+
 	var item = makeObject(ITEMOBJ, options, objectArray);
 	item.currentRank = options.rank;
 	return item;
 }
 HIDEOBJ.make = function(options, objectArray)
 {
+	options = _.defaults(options, {
+		sprite: HIDEOBJ.prototype.cycles[options.itemID][0],
+		tiled: false,
+
+		hideable: true,
+		solid: false,
+
+		width: HIDEOBJ.widths[options.itemID],
+		height: HIDEOBJ.heights[options.itemID]
+
+	})
+
 	var hide = makeObject(HIDEOBJ, options, objectArray);
 	hide.itemID = options.itemID;
 	return hide;
 }
 LADDEROBJ.make = function(options, objectArray) {
-	options.width = 80;
-	options.sprite = 'assets/Ladder.png';
-	options.tiled = true;
-	options.solid = false;
-	options.hideable = false;
+	options = _.defaults(options, {
+		sprite: 'assets/Ladder.png',
+		tiled: true,
+
+		solid: false,
+		hideable: false,
+
+		y: options.upper.y,
+		height: options.lower.y - options.upper.y,
+		width: ladderWidth
+
+	})
+
 	var object = makeObject(LADDEROBJ, options, objectArray);
 	object.lowerFloor = options.lower;
 	object.upperFloor = options.upper;
 	return object;
 }
 FLOOROBJ.make = function(options, objectArray) {
-	options.sprite = 'assets/Floor.png';
-	options.tiled = true;
-	options.solid = false;
-	options.hideable = false;
+
+	options = _.defaults(options, {
+		sprite: 'assets/Floor.png',
+
+		tiled: true,
+		solid: false,
+		hideable: false,
+		transparent: false,
+
+		height: floorHeight
+	})
+
 	var floor = makeObject(FLOOROBJ, options, objectArray);
-	floor.closestFloor = floor;
-	floor.blocksVision = options.transparent ? false : true;
+
+	floor.blocksVision = !options.transparent;
+
 	return floor;
 }
-ENEMYOBJ.make = function(options, objectArray, npcObjectArray) {
+ENEMYOBJ.make = function(options, objectArray) {
 	var script = _.map(options.script, function (item) {
 		if (_.has(item, 'move')) {
 			return new SCRIPTOBJ(0, item['move']);
@@ -613,13 +659,34 @@ ENEMYOBJ.make = function(options, objectArray, npcObjectArray) {
 			return new SCRIPTOBJ(1, item['wait']);
 		}
 	});
-	options.width = 52;
-	options.height = 60;
-	options.tiled = false;
+
+	options = _.defaults(options, {
+		sprite: ENEMYOBJ.prototype.lAssets[options.rank][0],
+		tiled: false,
+
+		width: npcWidth,
+		height: npcHeight
+	})
+
 	var npc = makeObject(ENEMYOBJ, options, objectArray);
+
 	npc.script = script;
 	npc.rank = options.rank;
-	npcObjectArray.push(npc);
+
 	return npc;
 }
-		
+WALLOBJ.make = function (options, objectArray) {
+	options = _.defaults(options, {
+		sprite: 'assets/Floor.png',
+		tiled: true,
+
+		solid: true,
+		hideable: false,
+
+		width: wallWidth
+	})
+
+	var wall = makeObject(WALLOBJ, options, objectArray);
+
+	return wall;
+}
