@@ -130,6 +130,7 @@ PLAYEROBJ.prototype.floorCheck = function(collideObj)
 
 				this.currentRank = collideObj[i].currentRank;
 				app.world.playMusic(this.disguiseMusic[this.currentRank]);
+				app.world.soundManager.playSound('clothes');
 				this.right =0;
 				this.left =0;
 			}
@@ -188,7 +189,6 @@ PLAYEROBJ.prototype.update = function(KEYS, foreground)
 				this.sprite.position.x += speed;
 				this.frameSwitcher(0, this.rAssets[this.currentRank],3);
 				this.frameCount++;
-//				app.world.soundManager.playSound('walk');
 			}
 			else if(this.sprite.position.y + this.sprite.height > collideObj[floorVal[2]].sprite.position.y +5 && this.sprite.position.y + this.sprite.height -80 < collideObj[floorVal[2]].sprite.position.y)
 			{
@@ -218,7 +218,6 @@ PLAYEROBJ.prototype.update = function(KEYS, foreground)
 				this.sprite.position.x -= speed;
 				this.frameSwitcher(1, this.lAssets[this.currentRank], 3);
 				this.frameCount++;
-//				app.world.soundManager.playSound('walk');
 			}
 			else if(this.sprite.position.y +this.sprite.height > collideObj[floorVal[2]].sprite.position.y+5 && this.sprite.position.y + this.sprite.height -80 < collideObj[floorVal[2]].sprite.position.y)
 			{

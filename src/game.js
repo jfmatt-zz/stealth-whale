@@ -7,7 +7,9 @@ app.SoundManager = function () {
     this.loaded = false;
     this.sounds = {
         'walk': {'index': 0, 'playing': false, 'sounds': ['sound/WhaleWalk-01.mp3', 'sound/WhaleWalk-02.mp3', 'sound/WhaleWalk-03.mp3']},
-        'nein': {'index': 0, 'playing': false, 'sounds': ['sound/Nein-01.mp3', 'sound/Nein-02.mp3', 'sound/Nein-03.mp3', 'sound/Nein-04.mp3', 'sound/Nein-05.mp3']}
+        'nein': {'index': 0, 'playing': false, 'sounds': ['sound/Nein-01.mp3', 'sound/Nein-02.mp3', 'sound/Nein-03.mp3', 'sound/Nein-04.mp3', 'sound/Nein-05.mp3']},
+        'climb': {'index': 0, 'playing': false, 'sounds': ['sound/Ladder-01.mp3', 'sound/Ladder-02.mp3', 'sound/Ladder-03.mp3', 'sound/Ladder-04.mp3']},
+        'clothes': {'index': 0, 'playing': false, 'sounds': ['sound/Get Clothes.mp3']}
     }
 };
 
