@@ -279,7 +279,7 @@ app.World.prototype.update = function()
     } else if (this.gameState == 'LOST') {
         this.showGameOver('assets/screen_gameover.png', 'sound/FinGameOver.mp3');
     } else if (this.gameState == 'WON') {
-        this.showGameOver('assets/screen_youwin.png', 'sound/TheDukeofWhales.mp3');
+        this.showGameOver('assets/screen_youwin.png', 'sound/FinGameOver.mp3');
     }
 }
 
