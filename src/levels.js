@@ -314,8 +314,8 @@ function makeLevels (whaleHeight, go) {
 
     npcL2F3N1Script = [
         {'wait': 3000},
-        {'move': ladderL2F2N3.x - 49},
-        {'move': ladderL2F2N3.x - 50}
+        {'move': ladderL2F2N3.x - 50},
+        {'move': ladderL2F2N3.x - 49}
     ],
     npcL2F3N1 = npc({
         x: ladderL2F2N3.x - 49,
