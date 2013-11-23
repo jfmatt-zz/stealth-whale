@@ -49,7 +49,7 @@ app.World.prototype.playMusic = function (music) {
     }
     this.music = new buzz.sound(music);
     this.music.bind('ended', function () { this.playMusic(music); }.bind(this));
-    this.music.fadeIn(2000);
+    this.music.fadeIn(1000);
     this.music.play();
 };
 
@@ -132,7 +132,7 @@ app.World.prototype.startGame = function () {
     this.gameState = 'PLAYING';
 
     // Start the naked whale music.
-    // this.playMusic(PLAYEROBJ.prototype.disguiseMusic[0]);
+    this.playMusic(PLAYEROBJ.prototype.disguiseMusic[0]);
 
     this.game();
     this.camera.update();
