@@ -701,7 +701,7 @@ function makeLevels (whaleHeight, go) {
             {'move': floorL3F6P1.x},
             {'move': floorL3F6P5.x + floorL3F6P5.width - npcWidth}
         ]
-    })
+    }),
 
     //TODO: add Hitler assets for item
     //TODO: add real Hitler on L3F7
@@ -709,10 +709,8 @@ function makeLevels (whaleHeight, go) {
 
 
     hitler = item({
-        // x: rightWall.x - 300,
-        // y: floorL3F7P3.y - npcHeight,
         x: 900,
-        y: floorL1F1.y - npcHeight,
+        bottom: floorL3F7P1.y,
         width: npcWidth,
         height: npcHeight,
         rank: 4       

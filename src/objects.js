@@ -495,7 +495,7 @@ ITEMOBJ.prototype.assets = {
 	'assets/item_fedora_7.png','assets/item_fedora_8.png','assets/item_fedora_9.png','assets/item_fedora_10.png'],
 	inViewFANCY: ['assets/item_tophat_1.png','assets/item_tophat_2.png','assets/item_tophat_3.png','assets/item_tophat_4.png','assets/item_tophat_5.png','assets/item_tophat_6.png',
 	'assets/item_tophat_7.png', 'assets/item_tophat_8.png','assets/item_tophat_9.png','assets/item_tophat_10.png'],
-	inViewHITLER: ['assets/hitler_L_salute_2.png']
+	inViewHITLER: ['assets/hitler_L_salute_2.png', 'assets/hitler_L_salute_1.png']
 };
 
 
