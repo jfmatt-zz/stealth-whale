@@ -83,9 +83,6 @@ app.World.prototype.showTitleScreen = function () {
         var levelAssetLoader = new PIXI.AssetLoader(assets);
         levelAssetLoader.onComplete = levelAssetsLoaded;
         levelAssetLoader.load();
-
-        // Play the title music.
-        this.playMusic('sound/BlubberBlues.mp3');
     }.bind(this);
 
     // Set the subtitle and listen for a spacebar keypress.
@@ -93,6 +90,9 @@ app.World.prototype.showTitleScreen = function () {
         subtitle.setText('Press space to play.');
         this.renderer.render(stage);
         $(document).bind('keypress', 'space', hideTitleScreen);
+
+        // Play the title music.
+        this.playMusic('sound/BlubberBlues.mp3');
     }.bind(this);
 
     // When space is pressed, fade the title screen out and start the game.
@@ -132,7 +132,7 @@ app.World.prototype.startGame = function () {
     this.gameState = 'PLAYING';
 
     // Start the naked whale music.
-    this.playMusic(PLAYEROBJ.prototype.disguiseMusic[0]);
+    // this.playMusic(PLAYEROBJ.prototype.disguiseMusic[0]);
 
     this.game();
     this.camera.update();
