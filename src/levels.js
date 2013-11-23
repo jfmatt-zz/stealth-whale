@@ -343,7 +343,7 @@ function makeLevels (whaleHeight, go) {
     floorL3F2P1 = floor({
         x: 400,
         y: floorL3F1.y - ladderHeight,
-        width: 100
+        width: npcWidth
     }),
     floorL3F2P2 = floor({
         x: floorL3F2P1.x + floorL3F2P1.width,
@@ -351,20 +351,17 @@ function makeLevels (whaleHeight, go) {
         width: ladderWidth,
         transparent: true
     }),
-    floorL3F2F3 = floor({
+    floorL3F2P3 = floor({
         x: floorL3F2P2.x + floorL3F2P2.width,
         y: floorL3F2P1.y,
-        width: 400 - ladderWidth
+        width: 500 - ladderWidth - npcWidth
     })
-
-    console.log(floorL3F2P1);
-
 
     //floor 3 goes across all floating boxes
     var floorL3F3P1 = floor({
         x: floorL3F2P1.x,
         y: floorL3F1.y - (2 * ladderHeight),
-        width: 500 - npcWidth - ladderHeight
+        width: 500 - npcWidth - ladderWidth
     }),
     floorL3F3P2 = floor({
         x: floorL3F3P1.x + floorL3F3P1.width,
@@ -520,6 +517,12 @@ function makeLevels (whaleHeight, go) {
         y: floorL3F4P1.y + 1,
         height: 2 * ladderHeight + floorHeight - 1
     }),
+    //far right side of boxes
+    wallL3F3N1 = wall({
+        x: floorL3F5P5.x + floorL3F5P5.width,
+        y: floorL3F5P5.y,
+        height: 2 * ladderHeight + floorHeight - 1
+    }),
     //one splitting floor 4 into two pieces
     wallL3F4N1 = wall({
         x: floorL3F5P1.x + 500,
@@ -533,15 +536,63 @@ function makeLevels (whaleHeight, go) {
         upper: floorL3F7P1,
         lower: floorL3F1
     }),
-
     //bottom-left floating box has a ladder going up to it
     ladderL3F2 = ladder({
         x: floorL3F2P2.x,
         upper: floorL3F2P2,
         lower: floorL3F1
+    }),
+    //ladder inside bottom box
+    ladderL3F3N1 = ladder({
+        x: floorL3F3P2.x,
+        upper: floorL3F3P2,
+        lower: floorL3F2P3
+    }),
+    //tall ladder directly to level 3
+    ladderL3F3N2 = ladder({
+        x: floorL3F3P4.x,
+        upper: floorL3F3P4,
+        lower: floorL3F1
+    }),
+    //one ladder in lower-left box (smaller)
+    ladderL3F4N1 = ladder({
+        x: floorL3F4P2.x,
+        upper: floorL3F4P2,
+        lower: floorL3F3P1
+    }),
+    //two in the lower-right box (wider)
+    ladderL3F4N2 = ladder({
+        x: floorL3F4P4.x,
+        upper: floorL3F4P4,
+        lower: floorL3F3P5
+    }),
+    ladderL3F4N3 = ladder({
+        x: floorL3F4P6.x,
+        upper: floorL3F4P6,
+        lower: floorL3F3P5
+    }),
+    //two from floor 4 up to floor 5, one in each box
+    ladderL3F5N1 = ladder({
+        x: floorL3F5P2.x,
+        upper: floorL3F5P2,
+        lower: floorL3F4P3
+    }),
+    ladderL3F5N2 = ladder({
+        x: floorL3F5P4.x,
+        upper: floorL3F5P4,
+        lower: floorL3F4P5
+    }),
+    //two from 5 up to 6, even with the 2 rightmost ones from 3 to 4
+    ladderL3F6N1 = ladder({
+        x: floorL3F6P2.x,
+        upper: floorL3F6P2,
+        lower: floorL3F5P3
+    }),
+    ladderL3F6N2 = ladder({
+        x: floorL3F6P4.x,
+        upper: floorL3F6P4,
+        lower: floorL3F5P5
     })
-
-    //TODO: 9 ladders for level 3
 
     //TODO: 5 hiding spots for level 3
 
