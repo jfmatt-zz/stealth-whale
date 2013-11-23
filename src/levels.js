@@ -689,7 +689,7 @@ function makeLevels (whaleHeight, go) {
         rank: 2, //lederhosen
         script: [
             {'move': floorL3F5P1.x},
-            {'move': floorL3F3P5.x + floorL3F3P5.width - npcWidth }
+            {'move': floorL3F3P5.x + floorL3F3P5.width - npcWidth - 20 }
         ]
     }),
     //1 pacing fancy at the top
