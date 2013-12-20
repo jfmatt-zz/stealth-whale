@@ -10,7 +10,7 @@ app.SoundManager = function () {
         'nein': {'index': 0, 'playing': false, 'sounds': ['sound/Nein-01.mp3', 'sound/Nein-02.mp3', 'sound/Nein-03.mp3', 'sound/Nein-04.mp3', 'sound/Nein-05.mp3']},
         'climb': {'index': 0, 'playing': false, 'sounds': ['sound/Ladder-01.mp3', 'sound/Ladder-02.mp3', 'sound/Ladder-03.mp3', 'sound/Ladder-04.mp3']},
         'clothes': {'index': 0, 'playing': false, 'sounds': ['sound/Get Clothes.mp3']}
-    }
+    };
 };
 
 // Play a sound in the given sound rotation if one is not already playing. 
@@ -47,7 +47,7 @@ app.World.prototype.playMusic = function (music) {
         this.music.unbind('ended');
         this.music.fadeOut(2000);
     }
-    this.music = new buzz.sound(music);
+    this.music = new buzz.sound(music, {formats: ['mp3', 'ogg']});
     this.music.bind('ended', function () { this.playMusic(music); }.bind(this));
     this.music.fadeIn(1000);
     this.music.play();
@@ -80,7 +80,7 @@ app.World.prototype.showTitleScreen = function () {
         levelAssetLoader.load();
 
         // Play the title music.
-        this.playMusic('sound/BlubberBlues.mp3');
+        this.playMusic('sound/BlubberBlues');
     }.bind(this);
 
     // Set the subtitle and listen for a spacebar keypress.
@@ -277,9 +277,9 @@ app.World.prototype.update = function()
         this.renderer.render(this.stage);
         requestAnimFrame(this.update.bind(this));
     } else if (this.gameState == 'LOST') {
-        this.showGameOver('assets/screen_gameover.png', 'sound/FinGameOver.mp3');
+        this.showGameOver('assets/screen_gameover.png', 'sound/FinGameOver');
     } else if (this.gameState == 'WON') {
-        this.showGameOver('assets/screen_youwin.png', 'sound/FinGameOver.mp3');
+        this.showGameOver('assets/screen_youwin.png', 'sound/FinGameOver');
     }
 }
 
